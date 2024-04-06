@@ -1,5 +1,6 @@
 ﻿using HarmonyLib;
 using Photon.Pun;
+using SpookSuite.Menu.Core;
 using SpookSuite.Util;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,8 @@ namespace SpookSuite
     {
         private List<Cheat> cheats;
         private Harmony harmony;
+        private SpookSuiteMenu menu;
+
         private static SpookSuite instance;
         public static SpookSuite Instance
         {
@@ -27,6 +30,7 @@ namespace SpookSuite
         public void Start()
         {
             instance = this;
+            ThemeUtil.LoadTheme("Default");
             LoadCheats();
             DoPatching();
         }
@@ -41,6 +45,7 @@ namespace SpookSuite
         private void LoadCheats()
         {
             cheats = new List<Cheat>();
+            menu = new SpookSuiteMenu();
             foreach (Type type in Assembly.GetExecutingAssembly().GetTypes().Where(t => String.Equals(t.Namespace, "SpookSuite.Cheats", StringComparison.Ordinal) && t.IsSubclassOf(typeof(Cheat))))
             {
                 cheats.Add((Cheat)Activator.CreateInstance(type));
@@ -82,7 +87,7 @@ namespace SpookSuite
                     if (PhotonNetwork.InRoom) cheats.ForEach(cheat => cheat.OnGui());
                 }
 
-                //draw menu
+                menu.Draw();
             }
             catch (Exception e)
             {

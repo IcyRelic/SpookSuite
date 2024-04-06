@@ -9,6 +9,9 @@
   <ItemGroup>
     <None Remove="Resources\0Harmony.dll" />
     <None Remove="Resources\Newtonsoft.Json.dll" />
+    <None Remove="Resources\Theme\Blue.skin" />
+    <None Remove="Resources\Theme\Default.skin" />
+    <None Remove="Resources\Theme\Green.skin" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,6 +20,9 @@
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\0Harmony.dll" />
+    <EmbeddedResource Include="Resources\Theme\Blue.skin" />
+    <EmbeddedResource Include="Resources\Theme\Default.skin" />
+    <EmbeddedResource Include="Resources\Theme\Green.skin" />
   </ItemGroup>
 
   <ItemGroup>
