@@ -33,6 +33,7 @@ namespace SpookSuite
             ThemeUtil.LoadTheme("Default");
             LoadCheats();
             DoPatching();
+            LoadKeybinds();
         }
 
         private void DoPatching()
@@ -52,6 +53,11 @@ namespace SpookSuite
             }
         }
 
+        private void LoadKeybinds()
+        {
+            
+        }
+
         public void FixedUpdate()
         {
             try
@@ -68,6 +74,8 @@ namespace SpookSuite
         {
             try
             {
+                if(Input.GetKeyDown(Settings.MenuToggleKey)) Settings.b_isMenuOpen = !Settings.b_isMenuOpen;
+
                 if (PhotonNetwork.InRoom) cheats.ForEach(cheat => cheat.Update());
             }
             catch (Exception e)

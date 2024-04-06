@@ -1,11 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using UnityEngine;
 
 namespace SpookSuite
 {
     internal class Settings
     {
+        /* *
+         * Keybinds
+         *  */
+        public static KeyCode MenuToggleKey = KeyCode.Insert;
 
         /* *    
          * Menu Settings
