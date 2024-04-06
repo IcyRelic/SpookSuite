@@ -361,3 +361,5 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/SpookSuite/Resources/0Harmony.dll
+/SpookSuite/Resources/Newtonsoft.Json.dll
