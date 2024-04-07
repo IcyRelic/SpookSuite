@@ -29,5 +29,9 @@ namespace SpookSuite
          * Color Settings
          * */
         public static RGBAColor c_espPlayers = new RGBAColor(0, 255, 0, 1f);
+        public static RGBAColor c_espItems = new RGBAColor(255, 255, 255, 1f);
+        public static RGBAColor c_espMonsters = new RGBAColor(255, 0, 0, 1f);
+        public static RGBAColor c_espDivingBells = new RGBAColor(0, 0, 255, 1f);
+
     }
 }
