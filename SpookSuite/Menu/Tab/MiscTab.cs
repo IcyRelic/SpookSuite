@@ -32,8 +32,9 @@ namespace SpookSuite.Menu.Tab
 
         private void MenuContent()
         {
-            GUILayout.BeginScrollView(scrollPos);
+            scrollPos = GUILayout.BeginScrollView(scrollPos);
 
+            GUILayout.BeginHorizontal();
 
             GUILayout.Label("Monster Spawner");
             GUILayout.BeginScrollView(monsterScrollPos);        
@@ -43,22 +44,26 @@ namespace SpookSuite.Menu.Tab
                     selectedMonsterName = monster;
             }
             GUILayout.EndScrollView();
-            if(GUILayout.Button("Spawn " + selectedMonsterName))
-                MonsterSpawner.SpawnMonster(selectedMonsterName);
 
-            GUILayout.BeginScrollView(monstersScrollPos);
+
+            monstersScrollPos = GUILayout.BeginScrollView(monstersScrollPos);
 
             foreach (Bot monster in GameObjectManager.monsters)
             {
                 switch (monster)
                 {
-                    if(typeof(Bot_Angler) == monster)
+                    //if(typeof(Bot_Angler) == monster)
                 }
                 if (GUILayout.Button(monster.name))
                     selectedMonster = monster;
             }
 
             GUILayout.EndScrollView();
+
+            GUILayout.EndHorizontal();
+
+            if (GUILayout.Button("Spawn " + selectedMonsterName))
+                MonsterSpawner.SpawnMonster(selectedMonsterName);
 
             GUILayout.EndScrollView();
         }
