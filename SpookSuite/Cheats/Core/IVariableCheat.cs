@@ -4,8 +4,10 @@ using System.Text;
 
 namespace SpookSuite.Cheats.Core
 {
-    internal class ExecutableCheat : Cheat
+    internal interface IVariableCheat<T>
     {
-        public static void Execute() { }
+       T Value { get; set; }
+
+
     }
 }
