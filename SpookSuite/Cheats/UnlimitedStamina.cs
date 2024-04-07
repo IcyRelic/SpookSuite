@@ -16,14 +16,5 @@ namespace SpookSuite.Cheats
             Player.localPlayer.data.currentStamina = Player.localPlayer.gameObject.GetComponent<PlayerController>().maxStamina;
         }
 
-        [HarmonyPostfix]
-        [HarmonyPatch(typeof(PlayerController), "LateUpdate")]
-        public static void PlayerControllerLateUpdate(PlayerController __instance)
-        {
-            if (Player.localPlayer is null) return;
-
-            Player.localPlayer.data.currentStamina = __instance.maxStamina;
-        }
-
     }
 }
