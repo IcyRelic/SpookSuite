@@ -9,7 +9,7 @@ namespace SpookSuite.Cheats
         [HarmonyPatch(typeof(Player), "Ragdoll")]
         public static bool TakeDamage(Player __instance)
         {
-            if (Instance.Enabled)
+            if (Instance<NoRagdoll>().Enabled)
                 return false;
             return true;
         }

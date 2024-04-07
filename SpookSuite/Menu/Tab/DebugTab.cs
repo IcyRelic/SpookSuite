@@ -29,19 +29,6 @@ namespace SpookSuite.Menu.Tab
             GUILayout.Label(PhotonNetwork.IsMasterClient ? "Yes" : "No");
             GUILayout.EndHorizontal();
 
-
-            GUILayout.BeginHorizontal();
-            GUILayout.Label("Become Master Client");
-            GUILayout.FlexibleSpace();
-            if (GUILayout.Button("Execute"))
-            {
-                //PhotonNetwork.SetMasterClient(PhotonNetwork.LocalPlayer);
-
-                PhotonNetwork.CurrentRoom.SetMasterClient(PhotonNetwork.LocalPlayer);
-
-            }
-            GUILayout.EndHorizontal();
-
             GUILayout.BeginHorizontal();
             GUILayout.Label("Add $1000");
             GUILayout.FlexibleSpace();
