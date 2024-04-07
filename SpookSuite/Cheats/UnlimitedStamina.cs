@@ -1,4 +1,5 @@
 ﻿using HarmonyLib;
+using SpookSuite.Cheats.Core;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -6,7 +7,7 @@ using System.Text;
 namespace SpookSuite.Cheats
 {
     [HarmonyPatch]
-    internal class UnlimitedStamina : Cheat
+    internal class UnlimitedStamina : ToggleCheat
     {
 
         public override void Update()
