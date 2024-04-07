@@ -2,8 +2,6 @@
 using SpookSuite.Handler;
 using SpookSuite.Manager;
 using SpookSuite.Menu.Core;
-using SpookSuite.Util;
-using System.ComponentModel;
 using System;
 using UnityEngine;
 
@@ -43,7 +41,7 @@ namespace SpookSuite.Menu.Tab
         {
             GUILayout.Label("Selected Player Actions");
             if (GUILayout.Button("TP To"))
-                Player.localPlayer.transform.position = selectedPlayer.transform.position;
+                Player.localPlayer.transform.position = selectedPlayer.refs.IK_Hand_L.transform.position;
             if (GUILayout.Button("Bring"))
                 selectedPlayer.transform.position = Player.localPlayer.HeadPosition();
             if (GUILayout.Button("Nearest Monster Attack"))
