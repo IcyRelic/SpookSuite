@@ -6,6 +6,17 @@ using Vector3 = UnityEngine.Vector3;
 
 namespace SpookSuite
 {
+    public class basefeature
+    {
+    }
+
+    public class looped_feature : basefeature
+    { }
+
+    public class button_feature : basefeature
+    { }
+
+
     public class Cheat : MonoBehaviour
     {
         protected static bool WorldToScreen(Vector3 world, out Vector3 screen)
