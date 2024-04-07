@@ -24,10 +24,8 @@ namespace SpookSuite.Menu.Tab
         private void MenuContent()
         {
             scrollPos = GUILayout.BeginScrollView(scrollPos);
-            if (GUILayout.Button("Suicide"))
+            if(GUILayout.Button("Suicide"))
                 Player.localPlayer.refs.view.RPC("RPCA_PlayerDie", RpcTarget.All, Array.Empty<object>());
-            if (GUILayout.Button("Revive"))
-                Player.localPlayer.refs.view.RPC("RPCA_PlayerRevive", RpcTarget.All, Array.Empty<object>());
             UI.Checkbox("Godmode", ref Cheat.Instance<Godmode>().Enabled);
             UI.Checkbox("Infinte Jump", ref Cheat.Instance<InfiniteJump>().Enabled);
             UI.Checkbox("No Ragdoll", ref Cheat.Instance<NoRagdoll>().Enabled);

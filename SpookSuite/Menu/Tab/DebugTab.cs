@@ -74,9 +74,6 @@ namespace SpookSuite.Menu.Tab
             }
             GUILayout.EndHorizontal();
 
-           
-
-
 
             GUILayout.EndScrollView();
         }

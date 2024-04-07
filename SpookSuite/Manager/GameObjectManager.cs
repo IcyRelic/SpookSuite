@@ -51,37 +51,5 @@ namespace SpookSuite.Manager
             list.AddRange(filter == null ? Object.FindObjectsOfType<T>() : Object.FindObjectsOfType<T>().Where(filter));
             Debug.Log($"Collected {list.Count} objects of type {typeof(T).Name}");
         }
-
-        public Bot GetClosestMonsterToPoint(Vector3 point)
-        {
-            float num = float.MaxValue;
-            Bot result = null;
-            foreach (Bot m in monsters)
-            {
-                float num2 = Vector3.Distance(m.centerTransform.position, point);
-                if (num2 < num)
-                {
-                    num = num2;
-                    result = m;
-                }
-            }
-            return result;
-        }
-
-        public Bot GetClosestMonsterToPlayer(Player p)
-        {
-            float num = float.MaxValue;
-            Bot result = null;
-            foreach (Bot m in monsters)
-            {
-                float num2 = Vector3.Distance(m.centerTransform.position, p.transform.position);
-                if (num2 < num)
-                {
-                    num = num2;
-                    result = m;
-                }
-            }
-            return result;
-        }
     }
 }
