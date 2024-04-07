@@ -5,7 +5,7 @@ using System;
 
 namespace SpookSuite.Cheats
 {
-    internal class InfiniteJump : ToggleCheat
+    internal class InfiniteJump : ToggleCheat //doesnt work
     {
         [HarmonyPrefix]
         [HarmonyPatch(typeof(PlayerController), "TryJump")]

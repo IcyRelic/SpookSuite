@@ -10,9 +10,6 @@ namespace SpookSuite.Menu.Tab
     internal class VisualTab : MenuTab
     {
         public VisualTab() : base("Visual") { }
-        byte selectedid;
-        string pid;
-        string sname;
         private Vector2 scrollPos = Vector2.zero;
         public override void Draw()
         {
@@ -30,33 +27,12 @@ namespace SpookSuite.Menu.Tab
 
             UI.CheatToggleSlider(Cheat.Instance<FOV>(), "FOV", Cheats.FOV.Value.ToString(), ref Cheats.FOV.Value, 1, 170);
 
-            foreach (Item i in UnityEngine.Object.FindObjectsOfType<Item>())
-            {
-                if(GUILayout.Button($"{i.displayName}, id: {i.id}, pid: {i.persistentID}"))
-                {
-                    pid = i.persistentID;
-                    selectedid = i.id;
-                    name = i.displayName;
-                }
-            }
-
-
             GUILayout.EndScrollView();
         }
 
         private void ESPContent()
         {
             scrollPos = GUILayout.BeginScrollView(scrollPos);
-
-            GUILayout.Label($"{selectedid}");
-            GUILayout.Label(sname);
-            GUILayout.Label(pid);
-            if (GUILayout.Button("Spawn " + sname))
-            {
-                Pickup component = PhotonNetwork.Instantiate("PickupHolder", Player.localPlayer.transform.position, UnityEngine.Random.rotation, 0, null).GetComponent<Pickup>();
-                component.ConfigurePickup(selectedid, new ItemInstanceData(Guid.NewGuid()));
-            }
-
 
             GUILayout.Label("Player ESP");
             //UI.Checkbox("Enabled", ref Cheats.PlayerESP.enabled);
