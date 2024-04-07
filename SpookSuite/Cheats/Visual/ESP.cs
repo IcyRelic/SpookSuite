@@ -10,7 +10,6 @@ namespace SpookSuite.Cheats
 {
     internal class ESP : ToggleCheat
     {
-
         public override void OnGui()
         {
             //if (!Cheat.Instance<ESP>().Enabled) return;
@@ -58,6 +57,6 @@ namespace SpookSuite.Cheats
         private void DisplayMonsters()
         {
             DisplayObjects(GameObjectManager.monsters, monster => monster.name, monster => Settings.c_espMonsters);
-        }   
+        }
     }
 }

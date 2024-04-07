@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Cheats\World\" />
     <Folder Include="Resources\BaseGame\" />
   </ItemGroup>
 

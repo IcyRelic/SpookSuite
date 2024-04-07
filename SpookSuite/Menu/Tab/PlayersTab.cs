@@ -1,4 +1,5 @@
 ﻿using Photon.Pun;
+using SpookSuite.Manager;
 using SpookSuite.Menu.Core;
 using UnityEngine;
 
@@ -39,7 +40,10 @@ namespace SpookSuite.Menu.Tab
                 Player.localPlayer.transform.position = selectedPlayer.transform.position.normalized;
             if (GUILayout.Button("Bring"))
                 selectedPlayer.transform.position = Player.localPlayer.HeadPosition();
-
+            if (GUILayout.Button("Nearest Monster Attack"))
+                GameObjectManager.Instance.GetClosestMonsterToPlayer(selectedPlayer).SetTargetPlayer(selectedPlayer);
+            if (GUILayout.Button("All Monsters Attack"))
+                GameObjectManager.monsters.ForEach(m => m.SetTargetPlayer(selectedPlayer));
             GUILayout.EndScrollView();
         }
     }
