@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using Photon.Pun;
 using SpookSuite.Cheats.Core;
+using SpookSuite.Manager;
 using SpookSuite.Menu.Core;
 using SpookSuite.Util;
 using System;
@@ -35,6 +36,7 @@ namespace SpookSuite
             LoadCheats();
             DoPatching();
             LoadKeybinds();
+            this.StartCoroutine(GameObjectManager.Instance.CollectObjects());
         }
 
         private void DoPatching()

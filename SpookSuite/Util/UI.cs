@@ -9,12 +9,6 @@ namespace SpookSuite
     {
         public static void Checkbox(string header, ref bool value)
         {
-            if (value)
-            {
-                Debug.Log("toggle is null");
-                return;
-            }
-
             GUILayout.BeginHorizontal();
             GUILayout.Label(header); //dont wanna add langauge shit yet
             GUILayout.FlexibleSpace();

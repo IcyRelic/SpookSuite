@@ -1,4 +1,6 @@
-﻿using SpookSuite.Menu.Core;
+﻿using SpookSuite.Cheats;
+using SpookSuite.Cheats.Core;
+using SpookSuite.Menu.Core;
 using UnityEngine;
 
 namespace SpookSuite.Menu.Tab
@@ -20,9 +22,9 @@ namespace SpookSuite.Menu.Tab
         private void MenuContent()
         {
             scrollPos = GUILayout.BeginScrollView(scrollPos);
-            UI.Checkbox("Godmode", ref Cheats.Godmode.Instance.Enabled);
-            UI.Checkbox("Unlimited Oxygen", ref Cheats.UnlimitedOxygen.Instance.Enabled);
-            UI.Checkbox("Unlimited Stamina", ref Cheats.UnlimitedStamina.Instance.Enabled);
+            UI.Checkbox("Godmode", ref Cheat.Instance<Godmode>().Enabled);
+            UI.Checkbox("Unlimited Oxygen", ref Cheat.Instance<UnlimitedOxygen>().Enabled);
+            UI.Checkbox("Unlimited Stamina", ref Cheat.Instance<UnlimitedStamina>().Enabled);
             //UI.CheatToggleSlider(Cheats.SuperSpeed.Instance, "Super Speed", Cheats.SuperSpeed.Value.ToString("#"), ref Cheats.SuperSpeed.Value, 10f, 100f);
       
             GUILayout.EndScrollView();
