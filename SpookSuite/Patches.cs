@@ -7,7 +7,7 @@ namespace SpookSuite
     {
         public class PlayerPatches
         {
-
+            
         }
     }
 }

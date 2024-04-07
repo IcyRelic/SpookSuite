@@ -10,6 +10,5 @@ namespace SpookSuite.Cheats
 
             Player.localPlayer.data.remainingOxygen = Player.localPlayer.data.maxOxygen;
         }
-
     }
 }

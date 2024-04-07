@@ -62,7 +62,18 @@ namespace SpookSuite
             GUILayout.EndHorizontal();
         }
 
-        public static void InputNum<T>(string label, ref object var)
+        public static void InputInt(string label, ref int var)
+        {
+            int newvar = var;
+            GUILayout.Space(20);
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(label);
+            if (int.TryParse(GUILayout.TextField(var.ToString()), out newvar))
+                var = newvar;
+            GUILayout.EndHorizontal();
+        }
+
+        public static void InputNum(string label, ref object var)
         {
             float fnewval;
             int inewval;

@@ -38,12 +38,12 @@ namespace SpookSuite.Cheats
 
         private void DisplayPlayers()
         {
-            DisplayObjects(GameObjectManager.players, player => player.name, player => Settings.c_espPlayers);
+            DisplayObjects(GameObjectManager.players, player => player.refs.view.Owner.NickName, player => Settings.c_espPlayers);
         }
 
         private void DisplayItems()
         {
-            DisplayObjects(GameObjectManager.items, item => item.name, item => Settings.c_espItems);
+            DisplayObjects(GameObjectManager.items, item => item.item.displayName, item => Settings.c_espItems);
         }
 
         private void DisplayDivingBells()

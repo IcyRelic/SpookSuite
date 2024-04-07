@@ -5,7 +5,7 @@ namespace SpookSuite.Cheats
 {
     internal class Godmode : ToggleCheat
     {
-        [HarmonyPostfix]
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(Player), "TakeDamage")]
         public static bool TakeDamage(Player __instance)
         {
@@ -14,7 +14,7 @@ namespace SpookSuite.Cheats
             return true;
         }
 
-        [HarmonyPostfix]
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(Player), "Die")]
         public static bool Die(Player __instance)
         {

@@ -41,7 +41,6 @@ namespace SpookSuite.Manager
                 CollectObjects(divingBells);
                 CollectObjects(lasers);
 
-
                 yield return new WaitForSeconds(collectInterval);
             }
         }
