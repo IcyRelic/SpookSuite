@@ -1,5 +1,6 @@
 ﻿using SpookSuite.Util;
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 using Vector3 = UnityEngine.Vector3;
@@ -11,10 +12,16 @@ namespace SpookSuite.Cheats.Core
         public bool Enabled = false;
         private static ToggleCheat instance;
 
+        public ToggleCheat()
+        {
+            instance = this;
+        }
+
         public static ToggleCheat Instance
         {
             get
             {
+                
                 return instance;
             }
         }
@@ -23,9 +30,5 @@ namespace SpookSuite.Cheats.Core
         public virtual void Update() { }
         public virtual void FixedUpdate() { }
 
-        public void Start()
-        {
-            instance = this;
-        }
     }
 }

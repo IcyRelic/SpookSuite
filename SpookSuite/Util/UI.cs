@@ -9,6 +9,12 @@ namespace SpookSuite
     {
         public static void Checkbox(string header, ref bool value)
         {
+            if (value)
+            {
+                Debug.Log("toggle is null");
+                return;
+            }
+
             GUILayout.BeginHorizontal();
             GUILayout.Label(header); //dont wanna add langauge shit yet
             GUILayout.FlexibleSpace();
@@ -33,6 +39,11 @@ namespace SpookSuite
 
         public static void CheatToggleSlider(ToggleCheat toggle, string header, string displayValue, ref float value, float min, float max, params object[] param)
         {
+            if (toggle is null)
+            {
+                Debug.Log("toggle is null");
+                return;
+            }
             GUILayout.BeginHorizontal();
             GUILayout.Label(header + " ( " + displayValue + " )");
             GUILayout.FlexibleSpace();
@@ -41,7 +52,7 @@ namespace SpookSuite
 
             value = GUILayout.HorizontalSlider(value, min, max, slider, GUI.skin.horizontalSliderThumb);
 
-            toggle.enabled = GUILayout.Toggle(toggle.enabled, "");
+            toggle.Enabled = GUILayout.Toggle(toggle.Enabled, "");
 
             GUILayout.EndHorizontal();
         }
