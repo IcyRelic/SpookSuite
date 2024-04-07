@@ -11,32 +11,32 @@ namespace SpookSuite.Menu.Tab
         public PlayersTab() : base("Players") { }
 
         private Vector2 scrollPos = Vector2.zero;
-        private Vector2 playerListPos = Vector2.zero;
+        private Vector2 scrollPos2 = Vector2.zero;
         public Player selectedPlayer = null;
         public override void Draw()
         {
-            GUILayout.BeginVertical();
-            GUILayout.Label(name); //doing it like this so we could just copy paste it over
-            MenuContent();
+            GUILayout.BeginVertical(GUILayout.Width(SpookSuiteMenu.Instance.contentWidth * 0.3f - SpookSuiteMenu.Instance.spaceFromLeft));
+            PlayersList();
+            GUILayout.EndVertical();
+
+            GUILayout.BeginVertical(GUILayout.Width(SpookSuiteMenu.Instance.contentWidth * 0.7f - SpookSuiteMenu.Instance.spaceFromLeft));
+            scrollPos2 = GUILayout.BeginScrollView(scrollPos2);
+            GeneralActions();
+            PlayerActions();
+            GUILayout.EndScrollView();
             GUILayout.EndVertical();
         }
 
-        private void MenuContent()
+        private void GeneralActions()
         {
-            scrollPos = GUILayout.BeginScrollView(scrollPos);
-
             GUILayout.Label("ALL Players");
-            if(GUILayout.Button("Kick All (NonHost)"))
+            if (GUILayout.Button("Kick All (NonHost)"))
                 Cheats.KickAll.Execute();
+        }
 
-            playerListPos = GUILayout.BeginScrollView(playerListPos);
-            foreach (Player p in PlayerHandler.instance.players)//PlayerHandler.instance.players
-            {
-                if (GUILayout.Button(p.refs.view.Owner.NickName))
-                    selectedPlayer = p;
-            }
-            GUILayout.EndScrollView();
-
+        private void PlayerActions()
+        {
+            GUILayout.Label("Selected Player Actions");
             if (GUILayout.Button("TP To"))
                 Player.localPlayer.transform.position = selectedPlayer.transform.position.normalized;
             if (GUILayout.Button("Bring"))
@@ -45,7 +45,36 @@ namespace SpookSuite.Menu.Tab
                 selectedPlayer.GetClosestMonster().SetTargetPlayer(selectedPlayer);
             if (GUILayout.Button("All Monsters Attack"))
                 GameObjectManager.monsters.ForEach(m => m.SetTargetPlayer(selectedPlayer));
+        }
+
+        private void PlayersList()
+        {
+            float width = SpookSuiteMenu.Instance.contentWidth * 0.3f - SpookSuiteMenu.Instance.spaceFromLeft * 2;
+            float height = SpookSuiteMenu.Instance.contentHeight - 20;
+
+            Rect rect = new Rect(0, 0, width, height);
+            GUI.Box(rect, "Player List");
+
+            GUILayout.BeginVertical(GUILayout.Width(width), GUILayout.Height(height));
+
+            GUILayout.Space(25);
+            scrollPos = GUILayout.BeginScrollView(scrollPos);
+
+            foreach (Player player in GameObjectManager.players)
+            {
+                //if (player.disconnectedMidGame || !player.IsSpawned) continue;
+
+                if (selectedPlayer is null) selectedPlayer = player;
+
+                if (selectedPlayer.GetInstanceID() == player.GetInstanceID()) GUI.contentColor = Settings.c_espPlayers.GetColor();
+
+                if (GUILayout.Button(player.refs.view.Owner.NickName, GUI.skin.label)) selectedPlayer = player;
+
+                GUI.contentColor = Settings.c_menuText.GetColor();
+            }
+
             GUILayout.EndScrollView();
+            GUILayout.EndVertical();
         }
     }
 }
