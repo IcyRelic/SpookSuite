@@ -4,7 +4,6 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using SpookSuite.Manager;
-using Unity.VisualScripting;
 
 namespace SpookSuite.Cheats
 {
@@ -38,7 +37,14 @@ namespace SpookSuite.Cheats
 
         private void DisplayPlayers()
         {
-            DisplayObjects(GameObjectManager.players, player => player.refs.view.Owner.NickName, player => Settings.c_espPlayers);
+            foreach(Player p in GameObjectManager.players)
+            {
+                float distance = GetDistanceToPlayer(p.data.groundPos);
+
+                if (!WorldToScreen(p.data.groundPos, out Vector3 screen)) continue;
+
+                VisualUtil.DrawDistanceString(screen, p.refs.view.Owner.NickName, Settings.c_espPlayers, distance);
+            }
         }
 
         private void DisplayItems()
