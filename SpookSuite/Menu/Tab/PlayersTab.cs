@@ -23,6 +23,10 @@ namespace SpookSuite.Menu.Tab
         {
             scrollPos = GUILayout.BeginScrollView(scrollPos);
 
+            GUILayout.Label("ALL Players");
+            if(GUILayout.Button("Kick All (NonHost)"))
+                Cheats.KickAll.Execute();
+
             playerListPos = GUILayout.BeginScrollView(playerListPos);
             foreach (Photon.Realtime.Player p in PhotonNetwork.PlayerList)//PlayerHandler.instance.players
             {
@@ -31,7 +35,7 @@ namespace SpookSuite.Menu.Tab
             }
             GUILayout.EndScrollView();
 
-            if (GUILayout.Button("TP TO"))
+            if (GUILayout.Button("TP To"))
                 Player.localPlayer.transform.position = selectedPlayer.HeadPosition();
             if (GUILayout.Button("Bring"))
                 selectedPlayer.transform.position = Player.localPlayer.HeadPosition();

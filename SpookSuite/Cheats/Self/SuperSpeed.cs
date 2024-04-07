@@ -4,7 +4,7 @@ namespace SpookSuite.Cheats
 {
     internal class SuperSpeed : ToggleCheat, IVariableCheat<float>
     {
-        public float Value { get; set; } = 60f;
+        public static float Value = 60f;
 
         public override void Update()
         {

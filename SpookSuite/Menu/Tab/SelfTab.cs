@@ -23,6 +23,11 @@ namespace SpookSuite.Menu.Tab
 
             GUILayout.BeginHorizontal();
 
+            UI.Checkbox("Godmode", ref Cheats.Godmode.Enabled);
+            UI.Checkbox("Unlimited Oxygen", ref Cheats.UnlimitedOxygen.Enabled);
+            UI.Checkbox("Unlimited Stamina", ref Cheats.UnlimitedStamina.Enabled);
+            UI.ToggleSlider("Super Speed", "Speed", ref Cheats.SuperSpeed.Enabled, ref Cheats.SuperSpeed.Value, 10f, 100f);
+
         }
     }
 }
