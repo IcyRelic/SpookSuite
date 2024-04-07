@@ -10,7 +10,7 @@ namespace SpookSuite.Menu.Tab
 
         private Vector2 scrollPos = Vector2.zero;
         private Vector2 playerListPos = Vector2.zero;
-        public Player selectedPlayer = new Player();
+        public Player selectedPlayer = null;
         public override void Draw()
         {
             GUILayout.BeginVertical();

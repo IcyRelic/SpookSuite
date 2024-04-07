@@ -6,7 +6,6 @@ namespace SpookSuite.Menu.Core
 {
     internal class MenuTab : MenuFragment
     {
-
         public string name;
         
         public MenuTab(string name)

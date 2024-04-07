@@ -7,7 +7,6 @@ namespace SpookSuite.Cheats.Core
 {
     public class Cheat : MonoBehaviour
     {
-        public bool Enabled { get; set; }
         protected static bool WorldToScreen(Vector3 world, out Vector3 screen)
         {
             screen = MainCamera.instance.GetCamera().WorldToViewportPoint(world);

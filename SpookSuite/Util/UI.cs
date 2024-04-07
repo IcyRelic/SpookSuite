@@ -31,6 +31,21 @@ namespace SpookSuite
             GUILayout.EndHorizontal();
         }
 
+        public static void CheatToggleSlider(ToggleCheat toggle, string header, string displayValue, ref float value, float min, float max, params object[] param)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(header + " ( " + displayValue + " )");
+            GUILayout.FlexibleSpace();
+
+            GUIStyle slider = new GUIStyle(GUI.skin.horizontalSlider) { alignment = TextAnchor.MiddleCenter, fixedWidth = Settings.i_sliderWidth };
+
+            value = GUILayout.HorizontalSlider(value, min, max, slider, GUI.skin.horizontalSliderThumb);
+
+            toggle.enabled = GUILayout.Toggle(toggle.enabled, "");
+
+            GUILayout.EndHorizontal();
+        }
+
         public static void ExecuteSlider(string header, string displayValue, Action executable, ref float value, float min, float max, params object[] param)
         {
             GUILayout.BeginHorizontal();

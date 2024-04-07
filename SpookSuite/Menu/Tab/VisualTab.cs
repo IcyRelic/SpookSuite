@@ -3,25 +3,33 @@ using UnityEngine;
 
 namespace SpookSuite.Menu.Tab
 {
-    internal class EspTab : MenuTab
+    internal class VisualTab : MenuTab
     {
-        public EspTab() : base("Esp") { }
+        public VisualTab() : base("Visual") { }
 
         private Vector2 scrollPos = Vector2.zero;
-
         public override void Draw()
         {
-            GUILayout.BeginVertical();
-            GUILayout.Label(name); //doing it like this so we could just copy paste it over
-            MenuContent();
+            GUILayout.BeginVertical(GUILayout.Width(SpookSuiteMenu.Instance.contentWidth * 0.5f - SpookSuiteMenu.Instance.spaceFromLeft));
+            VisualContent();
+            GUILayout.EndVertical();
+            GUILayout.BeginVertical(GUILayout.Width(SpookSuiteMenu.Instance.contentWidth * 0.5f - SpookSuiteMenu.Instance.spaceFromLeft));
+            ESPContent();
             GUILayout.EndVertical();
         }
 
-        private void MenuContent()
+        private void VisualContent()
         {
             scrollPos = GUILayout.BeginScrollView(scrollPos);
 
-            GUILayout.BeginHorizontal();
+            UI.CheatToggleSlider(Cheats.FOV.Instance, "FOV", Cheats.FOV.Value.ToString(), ref Cheats.FOV.Value, 1, 300);
+        }
+
+        private void ESPContent()
+        {
+            scrollPos = GUILayout.BeginScrollView(scrollPos);
+
+
             GUILayout.Label("Player ESP");
             //UI.Checkbox("Enabled", ref Cheats.PlayerESP.enabled);
             //UI.Checkbox("Skeleton", ref Cheats.PlayerESP.skeletonESP); //Player.refs.ik bones
@@ -29,6 +37,7 @@ namespace SpookSuite.Menu.Tab
             //UI.Checkbox("Looking Radius", ref Cheats.PlayerESP.LookingRadius);//make a semicircle based off their rotation and field of view in front of em on the ground.
             GUILayout.Label("Enemy ESP");
 
+            GUILayout.EndScrollView();
         }
     }
 }
