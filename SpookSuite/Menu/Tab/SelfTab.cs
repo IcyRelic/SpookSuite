@@ -1,4 +1,6 @@
-﻿using Photon.Pun;
+using Photon.Pun;
+using SpookSuite.Cheats;
+using SpookSuite.Cheats.Core;
 using SpookSuite.Menu.Core;
 using System;
 using UnityEngine;
@@ -24,11 +26,11 @@ namespace SpookSuite.Menu.Tab
             scrollPos = GUILayout.BeginScrollView(scrollPos);
             if(GUILayout.Button("Suicide"))
                 Player.localPlayer.refs.view.RPC("RPCA_PlayerDie", RpcTarget.All, Array.Empty<object>());
-            UI.Checkbox("Godmode", ref Cheats.Godmode.Instance.Enabled);
-            UI.Checkbox("No Ragdoll", ref Cheats.NoRagdoll.Instance.Enabled);
-            UI.Checkbox("Unlimited Oxygen", ref Cheats.UnlimitedOxygen.Instance.Enabled);
-            UI.Checkbox("Unlimited Stamina", ref Cheats.UnlimitedStamina.Instance.Enabled);
-            //UI.CheatToggleSlider(Cheats.SuperSpeed.Instance, "Super Speed", Cheats.SuperSpeed.Value.ToString("#"), ref Cheats.SuperSpeed.Value, 10f, 100f);
+            UI.Checkbox("Godmode", ref Cheat.Instance<Godmode>().Enabled);
+            UI.Checkbox("No Ragdoll", ref Cheat.Instance<NoRagdoll>().Enabled);
+            UI.Checkbox("Unlimited Oxygen", ref Cheat.Instance<UnlimitedOxygen>().Enabled);
+            UI.Checkbox("Unlimited Stamina", ref Cheat.Instance<UnlimitedStamina>().Enabled);
+            UI.CheatToggleSlider(Cheat.Instance<SuperSpeed>(), "Super Speed", Cheats.SuperSpeed.Value.ToString("#"), ref Cheats.SuperSpeed.Value, 10f, 100f);
       
             GUILayout.EndScrollView();
         }

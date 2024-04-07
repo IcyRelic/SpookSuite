@@ -1,12 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace SpookSuite.Cheats.Core
 {
     public class Cheat : MonoBehaviour
     {
+        private static List<Cheat> instances = new List<Cheat>();
+
+        public static T? Instance<T>() where T : Cheat => instances.Find(x => x is T) as T;
+        public Cheat()
+        {
+            instances.Add(this);
+        }
+
         protected static bool WorldToScreen(Vector3 world, out Vector3 screen)
         {
             screen = MainCamera.instance.GetCamera().WorldToViewportPoint(world);

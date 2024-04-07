@@ -1,4 +1,6 @@
-﻿using SpookSuite.Menu.Core;
+﻿using SpookSuite.Cheats;
+using SpookSuite.Cheats.Core;
+using SpookSuite.Menu.Core;
 using UnityEngine;
 
 namespace SpookSuite.Menu.Tab
@@ -22,7 +24,7 @@ namespace SpookSuite.Menu.Tab
         {
             scrollPos = GUILayout.BeginScrollView(scrollPos);
 
-            UI.CheatToggleSlider(Cheats.FOV.Instance, "FOV", Cheats.FOV.Value.ToString(), ref Cheats.FOV.Value, 1, 300);
+            UI.CheatToggleSlider(Cheat.Instance<FOV>(), "FOV", Cheats.FOV.Value.ToString(), ref Cheats.FOV.Value, 1, 170);
 
             GUILayout.EndScrollView();
         }
