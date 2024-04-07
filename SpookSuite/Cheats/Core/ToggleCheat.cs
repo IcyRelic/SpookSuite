@@ -8,7 +8,7 @@ namespace SpookSuite.Cheats.Core
 {
     public class ToggleCheat : Cheat
     {
-        public bool Enabled { get; set; }
+        public static bool Enabled { get; set; }
 
         public virtual void OnGui() { }
         public virtual void Update() { }

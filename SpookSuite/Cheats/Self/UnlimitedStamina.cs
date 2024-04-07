@@ -6,13 +6,12 @@ using System.Text;
 
 namespace SpookSuite.Cheats
 {
-    [HarmonyPatch]
     internal class UnlimitedStamina : ToggleCheat
     {
 
         public override void Update()
         {
-            if (Player.localPlayer is null) return;
+            if (Player.localPlayer is null && !enabled) return;
 
             Player.localPlayer.data.currentStamina = Player.localPlayer.gameObject.GetComponent<PlayerController>().maxStamina;
         }

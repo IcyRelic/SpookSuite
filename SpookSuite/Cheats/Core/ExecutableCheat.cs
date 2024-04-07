@@ -6,6 +6,6 @@ namespace SpookSuite.Cheats.Core
 {
     internal class ExecutableCheat : Cheat
     {
-        public static virtual void Execute() { }
+        public static void Execute() { }
     }
 }
