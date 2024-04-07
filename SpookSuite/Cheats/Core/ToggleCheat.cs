@@ -4,28 +4,21 @@ using UnityEngine;
 
 using Vector3 = UnityEngine.Vector3;
 
-namespace SpookSuite
+namespace SpookSuite.Cheats.Core
 {
-    public class basefeature
+    public class ToggleCheat : Cheat
     {
-    }
-
-    public class looped_feature : basefeature
-    { }
-
-    public class button_feature : basefeature
-    { }
+        public bool Enabled { get; set; }
 
 
-    public class Cheat : MonoBehaviour
-    {
+
         protected static bool WorldToScreen(Vector3 world, out Vector3 screen)
         {
             screen = MainCamera.instance.GetCamera().WorldToViewportPoint(world);
-            screen.x *= (float)Screen.width;
-            screen.y *= (float)Screen.height;
-            screen.y = (float)Screen.height - screen.y;
-            return (double)screen.z > 0.0;
+            screen.x *= Screen.width;
+            screen.y *= Screen.height;
+            screen.y = Screen.height - screen.y;
+            return screen.z > 0.0;
         }
         protected float GetDistanceToPlayer(Vector3 position)
         {
