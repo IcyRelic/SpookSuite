@@ -1,6 +1,5 @@
 ﻿using HarmonyLib;
 using Photon.Pun;
-using SpookSuite.Cheats.Core;
 using SpookSuite.Menu.Core;
 using SpookSuite.Util;
 using System;
@@ -14,7 +13,7 @@ namespace SpookSuite
 {
     public class SpookSuite : MonoBehaviour
     {
-        private List<ToggleCheat> cheats;
+        private List<Cheat> cheats;
         private Harmony harmony;
         private SpookSuiteMenu menu;
 
@@ -46,11 +45,11 @@ namespace SpookSuite
 
         private void LoadCheats()
         {
-            cheats = new List<ToggleCheat>();
+            cheats = new List<Cheat>();
             menu = new SpookSuiteMenu();
-            foreach (Type type in Assembly.GetExecutingAssembly().GetTypes().Where(t => String.Equals(t.Namespace, "SpookSuite.Cheats", StringComparison.Ordinal) && t.IsSubclassOf(typeof(ToggleCheat))))
+            foreach (Type type in Assembly.GetExecutingAssembly().GetTypes().Where(t => String.Equals(t.Namespace, "SpookSuite.Cheats", StringComparison.Ordinal) && t.IsSubclassOf(typeof(Cheat))))
             {
-                cheats.Add((ToggleCheat)Activator.CreateInstance(type));
+                cheats.Add((Cheat)Activator.CreateInstance(type));
             }
         }
 
