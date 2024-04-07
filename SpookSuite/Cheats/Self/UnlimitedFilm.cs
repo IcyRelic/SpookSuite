@@ -1,15 +1,10 @@
 ﻿using SpookSuite.Cheats.Core;
 using SpookSuite.Util;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using UnityEngine;
 
 namespace SpookSuite.Cheats
 {
     internal class UnlimitedFilm : ToggleCheat
     {
-        private float defaultMaxTime = 90;
 
         public override void Update()
         {
@@ -23,7 +18,7 @@ namespace SpookSuite.Cheats
 
             VideoInfoEntry videoInfoEntry = camera.Reflect().GetValue<VideoInfoEntry>("m_recorderInfoEntry");
 
-            videoInfoEntry.timeLeft = videoInfoEntry.maxTime;
+            videoInfoEntry.timeLeft = videoInfoEntry.maxTime;  
         }
 
     }

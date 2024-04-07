@@ -50,10 +50,6 @@ namespace SpookSuite.Menu.Tab
 
             foreach (Bot monster in GameObjectManager.monsters)
             {
-                switch (monster)
-                {
-                    if(typeof(Bot_Angler) == monster)
-                }
                 if (GUILayout.Button(monster.name))
                     selectedMonster = monster;
             }
