@@ -28,15 +28,15 @@ namespace SpookSuite.Menu.Tab
                 Cheats.KickAll.Execute();
 
             playerListPos = GUILayout.BeginScrollView(playerListPos);
-            foreach (Photon.Realtime.Player p in PhotonNetwork.PlayerList)//PlayerHandler.instance.players
+            foreach (Player p in PlayerHandler.instance.players)//PlayerHandler.instance.players
             {
-                if (GUILayout.Button(p.NickName))
-                    selectedPlayer = PlayerHandler.instance.players[p.ActorNumber];
+                if (GUILayout.Button(p.refs.view.Owner.NickName))
+                    selectedPlayer = p;
             }
             GUILayout.EndScrollView();
 
             if (GUILayout.Button("TP To"))
-                Player.localPlayer.transform.position = selectedPlayer.HeadPosition();
+                Player.localPlayer.transform.position = selectedPlayer.transform.position.normalized;
             if (GUILayout.Button("Bring"))
                 selectedPlayer.transform.position = Player.localPlayer.HeadPosition();
 

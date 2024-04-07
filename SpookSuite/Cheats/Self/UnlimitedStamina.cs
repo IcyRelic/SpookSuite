@@ -11,7 +11,7 @@ namespace SpookSuite.Cheats
 
         public override void Update()
         {
-            if (Player.localPlayer is null && !enabled) return;
+            if (Player.localPlayer is null && !Enabled) return;
 
             Player.localPlayer.data.currentStamina = Player.localPlayer.gameObject.GetComponent<PlayerController>().maxStamina;
         }

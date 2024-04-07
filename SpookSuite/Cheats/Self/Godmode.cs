@@ -9,7 +9,7 @@ namespace SpookSuite.Cheats
         [HarmonyPatch(typeof(Player), "TakeDamage")]
         public static bool TakeDamage(Player __instance)
         {
-            if (Instance.enabled)
+            if (Instance.Enabled)
                 return false;
             return true;
         }
@@ -18,7 +18,7 @@ namespace SpookSuite.Cheats
         [HarmonyPatch(typeof(Player), "Die")]
         public static bool Die(Player __instance)
         {
-            if (Instance.enabled)
+            if (Instance.Enabled)
                 return false;
             return true;
         }

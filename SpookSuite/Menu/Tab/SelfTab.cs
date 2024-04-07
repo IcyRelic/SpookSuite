@@ -1,4 +1,6 @@
-﻿using SpookSuite.Menu.Core;
+﻿using Photon.Pun;
+using SpookSuite.Menu.Core;
+using System;
 using UnityEngine;
 
 namespace SpookSuite.Menu.Tab
@@ -20,7 +22,10 @@ namespace SpookSuite.Menu.Tab
         private void MenuContent()
         {
             scrollPos = GUILayout.BeginScrollView(scrollPos);
+            if(GUILayout.Button("Suicide"))
+                Player.localPlayer.refs.view.RPC("RPCA_PlayerDie", RpcTarget.All, Array.Empty<object>());
             UI.Checkbox("Godmode", ref Cheats.Godmode.Instance.Enabled);
+            UI.Checkbox("No Ragdoll", ref Cheats.NoRagdoll.Instance.Enabled);
             UI.Checkbox("Unlimited Oxygen", ref Cheats.UnlimitedOxygen.Instance.Enabled);
             UI.Checkbox("Unlimited Stamina", ref Cheats.UnlimitedStamina.Instance.Enabled);
             //UI.CheatToggleSlider(Cheats.SuperSpeed.Instance, "Super Speed", Cheats.SuperSpeed.Value.ToString("#"), ref Cheats.SuperSpeed.Value, 10f, 100f);

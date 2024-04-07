@@ -14,13 +14,10 @@ namespace SpookSuite
 
         public static void Init()
         {
-
             LoadHarmony();
             Loader.Load = new GameObject();
             Load.AddComponent<SpookSuite>();
             Object.DontDestroyOnLoad(Loader.Load);
-
-
         }
 
         public static void LoadHarmony()

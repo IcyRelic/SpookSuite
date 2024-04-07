@@ -23,6 +23,8 @@ namespace SpookSuite.Menu.Tab
             scrollPos = GUILayout.BeginScrollView(scrollPos);
 
             UI.CheatToggleSlider(Cheats.FOV.Instance, "FOV", Cheats.FOV.Value.ToString(), ref Cheats.FOV.Value, 1, 300);
+
+            GUILayout.EndScrollView();
         }
 
         private void ESPContent()

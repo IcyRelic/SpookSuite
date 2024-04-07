@@ -1,7 +1,4 @@
 ﻿using SpookSuite.Menu.Core;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
 namespace SpookSuite.Menu.Tab
