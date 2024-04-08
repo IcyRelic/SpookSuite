@@ -35,12 +35,14 @@ namespace SpookSuite.Menu.Tab
         {
             scrollPos = GUILayout.BeginScrollView(scrollPos);
 
-            helemtText = GUILayout.TextField(helemtText);
+            GUILayout.BeginHorizontal();
+            UI.Textbox("Helmet Text", ref helemtText);
             if (GUILayout.Button("Apply Text"))
-                Player.localPlayer.refs.visor.RPCA_SetVisorText(helemtText);
+                Player.localPlayer.refs.visor.visorFaceText.text = helemtText;
+            GUILayout.EndHorizontal();
 
             GUILayout.Label("Monster Spawner");
-            monsterScrollPos = GUILayout.BeginScrollView(monsterScrollPos);        
+            monsterScrollPos = GUILayout.BeginScrollView(monsterScrollPos);
             foreach(string monster in monsterNames)
             {
                 if (GUILayout.Button(monster))

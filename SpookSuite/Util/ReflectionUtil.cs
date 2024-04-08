@@ -46,9 +46,6 @@ namespace SpookSuite.Util
 
         private T? Invoke<T>(string methodName, BindingFlags flags, params object[] args)
         {
-
-
-
             try {
                 //return (T)this.type.GetMethod(methodName, flags).Invoke(this.@object, args);
 
