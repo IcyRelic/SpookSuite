@@ -50,7 +50,7 @@ namespace SpookSuite.Manager
         {
             list.Clear();
             list.AddRange(filter == null ? Object.FindObjectsOfType<T>() : Object.FindObjectsOfType<T>().Where(filter));
-            Debug.Log($"Collected {list.Count} objects of type {typeof(T).Name}");
+            //Debug.Log($"Collected {list.Count} objects of type {typeof(T).Name}");
         }
     }
 }
