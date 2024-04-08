@@ -33,8 +33,9 @@ namespace SpookSuite.Menu.Tab
             UI.Checkbox("No Ragdoll", ref Cheat.Instance<NoRagdoll>().Enabled);
             UI.Checkbox("Unlimited Oxygen", ref Cheat.Instance<UnlimitedOxygen>().Enabled);
             UI.Checkbox("Unlimited Stamina", ref Cheat.Instance<UnlimitedStamina>().Enabled);
-            UI.CheatToggleSlider(Cheat.Instance<SuperSpeed>(), "Super Speed", Cheats.SuperSpeed.Value.ToString("#"), ref Cheats.SuperSpeed.Value, 10f, 100f);
-      
+            UI.CheatToggleSlider(Cheat.Instance<SuperSpeed>(), "Super Speed", SuperSpeed.Value.ToString("#"), ref SuperSpeed.Value, 10f, 100f);
+            UI.CheatToggleSlider(Cheat.Instance<SuperJump>(), "Super Jump", SuperJump.Value.ToString("#.#"), ref SuperJump.Value, 0.6f, 20f);
+
             GUILayout.EndScrollView();
         }
     }

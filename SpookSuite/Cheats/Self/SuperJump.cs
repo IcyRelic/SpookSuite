@@ -10,7 +10,7 @@ namespace SpookSuite.Cheats
 {
     internal class SuperJump : ToggleCheat, IVariableCheat<float>
     {
-        public float Value = 10f;
+        public static float Value = 10f;
 
         public override void Update()
         {

@@ -2,6 +2,8 @@
 using SpookSuite.Menu.Core;
 using Zorro.Core;
 using Random = UnityEngine.Random;
+using Photon.Pun;
+using System;
 
 namespace SpookSuite.Menu.Tab
 {
