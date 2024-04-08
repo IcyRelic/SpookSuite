@@ -70,9 +70,6 @@ namespace SpookSuite.Menu.Tab
                 propertiesToSet.Add((object)"s", (object)GameAPI.seed);
                 propertiesToSet.Add((object)"cu", (object)SurfaceNetworkHandler.RoomStats.CurrentCamera.GetUpgradeData());
                 PhotonNetwork.CurrentRoom.SetCustomProperties(propertiesToSet);
-
-
-
             }
             GUILayout.EndHorizontal();
 

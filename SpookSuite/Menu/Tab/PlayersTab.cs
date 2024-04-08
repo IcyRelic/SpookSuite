@@ -1,4 +1,7 @@
-﻿using Photon.Pun;
+﻿using CurvedUI;
+using ExitGames.Client.Photon;
+using Photon.Pun;
+using Photon.Realtime;
 using SpookSuite.Handler;
 using SpookSuite.Manager;
 using SpookSuite.Menu.Core;
@@ -35,13 +38,24 @@ namespace SpookSuite.Menu.Tab
         {
             GUILayout.Label("ALL Players");
             if (GUILayout.Button("Kick All (NonHost)"))
-                Cheats.KickAll.Execute();
+            {
+                if (PhotonNetwork.LocalPlayer.IsMasterClient)
+                {
+                    for (int i = 0; i < GameObjectManager.players.Count; i++)
+                    {
+                        //if (!GameObjectManager.players[i].IsLocal)
+                            PhotonNetwork.CloseConnection(GameObjectManager.players[i].refs.view.Owner);
+                    }                  
+                }
+                else
+                    Cheats.KickAll.Execute();
+            }
         }
         private void PlayerActions()
         {
             GUILayout.Label("Selected Player Actions");
             if (GUILayout.Button("TP To"))
-                Player.localPlayer.transform.position = selectedPlayer.data.groundPos;
+                Player.localPlayer.transform.position = new Vector3(selectedPlayer.data.groundPos.x, selectedPlayer.data.groundPos.y, selectedPlayer.data.groundPos.z + selectedPlayer.data.headHeight);
             if (GUILayout.Button("Bring"))
                 selectedPlayer.transform.position = Player.localPlayer.HeadPosition();
             if (GUILayout.Button("Nearest Monster Attack"))
@@ -50,7 +64,7 @@ namespace SpookSuite.Menu.Tab
                 GameObjectManager.monsters.ForEach(m => m.SetTargetPlayer(selectedPlayer));
             if (GUILayout.Button("Bomb"))
             {
-                Pickup component = PhotonNetwork.Instantiate("PickupHolder", Player.localPlayer.transform.position, UnityEngine.Random.rotation, 0, null).GetComponent<Pickup>();
+                Pickup component = PhotonNetwork.Instantiate("PickupHolder", selectedPlayer.data.groundPos, UnityEngine.Random.rotation, 0, null).GetComponent<Pickup>();
                 component.ConfigurePickup(58, new ItemInstanceData(Guid.NewGuid()));
             }
         }

@@ -1,5 +1,6 @@
 ﻿using SpookSuite.Manager;
 using SpookSuite.Menu.Core;
+using SpookSuite.Util;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -29,14 +30,17 @@ namespace SpookSuite.Menu.Tab
             MenuContent();
             GUILayout.EndVertical();
         }
-
+        string helemtText = "";
         private void MenuContent()
         {
-            GUILayout.BeginScrollView(scrollPos);
+            scrollPos = GUILayout.BeginScrollView(scrollPos);
 
+            helemtText = GUILayout.TextField(helemtText);
+            if (GUILayout.Button("Apply Text"))
+                SurfaceNetworkHandler.Instance.Reflect().Invoke("RPCA_HelmetText", helemtText, SurfaceNetworkHandler.RoomStats.GetDaysLeft());
 
             GUILayout.Label("Monster Spawner");
-            GUILayout.BeginScrollView(monsterScrollPos);        
+            monsterScrollPos = GUILayout.BeginScrollView(monsterScrollPos);        
             foreach(string monster in monsterNames)
             {
                 if (GUILayout.Button(monster))
@@ -46,14 +50,12 @@ namespace SpookSuite.Menu.Tab
             if(GUILayout.Button("Spawn " + selectedMonsterName))
                 MonsterSpawner.SpawnMonster(selectedMonsterName);
 
-            GUILayout.BeginScrollView(monstersScrollPos);
-
+            monstersScrollPos = GUILayout.BeginScrollView(monstersScrollPos);
             foreach (Bot monster in GameObjectManager.monsters)
             {
                 if (GUILayout.Button(monster.name))
                     selectedMonster = monster;
             }
-
             GUILayout.EndScrollView();
 
             GUILayout.EndScrollView();
