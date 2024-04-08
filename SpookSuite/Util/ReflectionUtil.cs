@@ -46,7 +46,31 @@ namespace SpookSuite.Util
 
         private T? Invoke<T>(string methodName, BindingFlags flags, params object[] args)
         {
-            try { return (T)this.type.GetMethod(methodName, flags).Invoke(this.@object, args); } catch (InvalidCastException) { return default; }
+
+
+
+            try {
+                //return (T)this.type.GetMethod(methodName, flags).Invoke(this.@object, args);
+
+                MethodInfo[] methods = this.type.GetMethods(flags);
+                
+                //find the method that matches the name and args
+                methods = Array.FindAll(methods, method => method.Name == methodName && method.GetParameters().Length == args.Length);
+                
+                //now find the method that matches the exact arg types
+                MethodInfo method = Array.Find(methods, method =>
+                {
+                    ParameterInfo[] parameters = method.GetParameters();
+                    for (int i = 0; i < parameters.Length; i++)
+                    {
+                        if (parameters[i].ParameterType != args[i].GetType()) return false;
+                    }
+                    return true;
+                });
+
+                return (T) method.Invoke(this.@object, args);
+            }
+            catch (InvalidCastException) { return default; }
         }
 
 
