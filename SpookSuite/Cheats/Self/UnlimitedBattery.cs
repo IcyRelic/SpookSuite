@@ -11,7 +11,7 @@ namespace SpookSuite.Cheats
 
         public override void Update()
         {
-            if (Player.localPlayer is null && !Enabled) return;
+            if (Player.localPlayer is null || !Enabled) return;
 
             ItemInstance item = Player.localPlayer.data.currentItem;
             BatteryEntry battery = null;

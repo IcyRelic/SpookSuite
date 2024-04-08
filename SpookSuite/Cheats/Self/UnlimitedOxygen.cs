@@ -6,7 +6,7 @@ namespace SpookSuite.Cheats
     {
         public override void Update()
         {
-            if (Player.localPlayer is null && !Enabled) return;
+            if (Player.localPlayer is null || !Enabled) return;
 
             Player.localPlayer.data.remainingOxygen = Player.localPlayer.data.maxOxygen;
         }

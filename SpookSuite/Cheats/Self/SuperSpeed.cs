@@ -8,9 +8,9 @@ namespace SpookSuite.Cheats
 
         public override void Update()
         {
-            if (Player.localPlayer is null || !Enabled) return;
+            if (Player.localPlayer is null) return;
 
-            Player.localPlayer.gameObject.GetComponent<PlayerController>().movementForce = Value;
+            Player.localPlayer.gameObject.GetComponent<PlayerController>().movementForce = Enabled ? Value : 10;
         }
 
     }

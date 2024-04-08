@@ -84,7 +84,7 @@ namespace SpookSuite.Util
             BindingFlags flags = isProperty ? isStatic ? staticProp : privateProp : isStatic ? staticField : privateField;
             return isProperty ? this.SetProperty(fieldName, value, flags) : this.SetValue(fieldName, value, flags);
         }
-        private T? Invoke<T>(string methodName, bool isStatic = false, params object[] args) => this.Invoke<T>(methodName, isStatic ? ReflectionUtil<R>.staticMethod : ReflectionUtil<R>.privateMethod, args);
+        public T? Invoke<T>(string methodName, bool isStatic = false, params object[] args) => this.Invoke<T>(methodName, isStatic ? ReflectionUtil<R>.staticMethod : ReflectionUtil<R>.privateMethod, args);
 
         public object? GetValue(string fieldName, bool isStatic = false, bool isProperty = false) => this.GetValue<R>(fieldName, isStatic, isProperty);
         public ReflectionUtil<R>? Invoke(string methodName, bool isStatic = false, params object[] args) => this.Invoke<R>(methodName, isStatic, args)?.Reflect();

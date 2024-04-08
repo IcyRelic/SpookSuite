@@ -39,6 +39,7 @@ namespace SpookSuite.Menu.Core
             tabs.Add(new VisualTab());
             tabs.Add(new PlayersTab());
             tabs.Add(new MiscTab());
+            tabs.Add(new ItemTab());
         }
 
         public void Resize()

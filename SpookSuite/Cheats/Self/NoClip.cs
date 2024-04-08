@@ -18,23 +18,23 @@ namespace SpookSuite.Cheats
         {
             if (Player.localPlayer is null) return;
 
-            Collider[] colliders = Player.localPlayer.GetComponentsInParent<Collider>();
+            //SphereCollider collider = Player.localPlayer.refs.Reflect().GetValue<SphereCollider>("simpleCollider");
             PlayerRagdoll ragdoll = Player.localPlayer.refs.ragdoll;
             if (Enabled)
             {
                 if (movement is null) movement = Player.localPlayer.gameObject.AddComponent<KBInput>();
 
-                colliders.ToList().ForEach(collider => collider.enabled = false);
-                Player.localPlayer.GetComponent<PlayerController>().transform.position = movement.transform.position;
+                //collider.enabled = false;
 
-                //AddForce(Vector3 force, ForceMode forceMode)
+                Bodypart hip = Player.localPlayer.refs.ragdoll.Reflect().Invoke<Bodypart>("GetBodypart", args: BodypartType.Hip);
+                Rigidbody rig = hip.Reflect().GetValue<Rigidbody>("rig");
 
-                //ragdoll.Reflect().Invoke("AddForce", movement.movement, ForceMode.Force);
-                Player.localPlayer.transform.position = movement.transform.position;
+                rig.transform.position = movement.transform.position;
+                
             }
             else
             {
-                colliders.ToList().ForEach(collider => collider.enabled = true);
+                //collider.enabled = true;
                 Destroy(movement);
                 movement = null;
             }
