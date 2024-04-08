@@ -93,6 +93,24 @@ namespace SpookSuite
             GUILayout.EndHorizontal();
         }
 
+        public static void Button(string header, Action action, string btnText = "Execute")
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(header);
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button(btnText)) action();
+            GUILayout.EndHorizontal();
+        }
+
+        public static void Slider(string header, string displayValue, ref float value, float min, float max)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(header + " ( " + displayValue + " )");
+            GUILayout.FlexibleSpace();
+            value = GUILayout.HorizontalSlider(value, min, max, GUILayout.Width(Settings.i_sliderWidth));
+            GUILayout.EndHorizontal();
+        }
+
         public static void InputInt(string label, ref int var)
         {
             int newvar = var;
@@ -124,6 +142,17 @@ namespace SpookSuite
             else
                 Debug.Log($"Input num couldnt convert the type of {label}");
 
+            GUILayout.EndHorizontal();
+        }
+
+        public static void NumSelect(string header, ref int value, int min, int max)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(header);
+            GUILayout.FlexibleSpace();
+            GUILayout.Label(value.ToString());
+            if (GUILayout.Button("-")) value = Mathf.Clamp(value - 1, min, max);
+            if (GUILayout.Button("+")) value = Mathf.Clamp(value + 1, min, max);
             GUILayout.EndHorizontal();
         }
 
