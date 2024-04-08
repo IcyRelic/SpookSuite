@@ -5,9 +5,9 @@ namespace SpookSuite.Cheats
 {
     internal class NoRagdoll : ToggleCheat
     {
-        [HarmonyPostfix]
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(Player), "Ragdoll")]
-        public static bool TakeDamage(Player __instance)
+        public static bool Ragdoll(Player __instance)
         {
             if (Instance<NoRagdoll>().Enabled)
                 return false;

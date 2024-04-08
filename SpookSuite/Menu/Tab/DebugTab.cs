@@ -1,6 +1,9 @@
 ﻿using ExitGames.Client.Photon;
 using Photon.Pun;
 using SpookSuite.Menu.Core;
+using SpookSuite.Util;
+using System;
+using System.ComponentModel;
 using UnityEngine;
 
 namespace SpookSuite.Menu.Tab
@@ -24,10 +27,28 @@ namespace SpookSuite.Menu.Tab
             scrollPos = GUILayout.BeginScrollView(scrollPos);
 
             GUILayout.BeginHorizontal();
-            GUILayout.Label("Master Client: ");
+            GUILayout.Label("Masterclient: ");
             GUILayout.FlexibleSpace();
             GUILayout.Label(PhotonNetwork.IsMasterClient ? "Yes" : "No");
             GUILayout.EndHorizontal();
+                
+
+            if (GUILayout.Button("RPCA_BombThrowAttack"))
+            {
+                Pickup component = PhotonNetwork.Instantiate("PickupHolder", Player.localPlayer.transform.position, UnityEngine.Random.rotation, 0, null).GetComponent<Pickup>();
+                component.ConfigurePickup(58, new ItemInstanceData(Guid.NewGuid()));
+            }
+
+            foreach (Item i in UnityEngine.Object.FindObjectsOfType<Item>())
+            {
+                GUILayout.Button($"{i.displayName}, id: {i.id}, pid: {i.persistentID}");
+            }
+
+
+
+            //PickupHandler.CreatePickup(this.itemToSpawn.id, new ItemInstanceData(Guid.NewGuid()), 
+            //    this.player.refs.ragdoll.GetBodypart(BodypartType.Elbow_R).rig.transform.GetChild(0).position,
+            //    Random.rotation, vel, Random.onUnitSphere * 5f);
 
             GUILayout.BeginHorizontal();
             GUILayout.Label("Add $1000");

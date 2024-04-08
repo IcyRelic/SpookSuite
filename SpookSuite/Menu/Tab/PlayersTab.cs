@@ -2,6 +2,7 @@
 using SpookSuite.Handler;
 using SpookSuite.Manager;
 using SpookSuite.Menu.Core;
+using System;
 using UnityEngine;
 
 namespace SpookSuite.Menu.Tab
@@ -13,6 +14,9 @@ namespace SpookSuite.Menu.Tab
         private Vector2 scrollPos = Vector2.zero;
         private Vector2 scrollPos2 = Vector2.zero;
         public Player selectedPlayer = null;
+
+        public int num;
+
         public override void Draw()
         {
             GUILayout.BeginVertical(GUILayout.Width(SpookSuiteMenu.Instance.contentWidth * 0.3f - SpookSuiteMenu.Instance.spaceFromLeft));
@@ -33,18 +37,22 @@ namespace SpookSuite.Menu.Tab
             if (GUILayout.Button("Kick All (NonHost)"))
                 Cheats.KickAll.Execute();
         }
-
         private void PlayerActions()
         {
             GUILayout.Label("Selected Player Actions");
             if (GUILayout.Button("TP To"))
-                Player.localPlayer.transform.position = selectedPlayer.transform.position.normalized;
+                Player.localPlayer.transform.position = selectedPlayer.refs.IK_Hand_L.transform.position;
             if (GUILayout.Button("Bring"))
                 selectedPlayer.transform.position = Player.localPlayer.HeadPosition();
             if (GUILayout.Button("Nearest Monster Attack"))
                 selectedPlayer.GetClosestMonster().SetTargetPlayer(selectedPlayer);
             if (GUILayout.Button("All Monsters Attack"))
                 GameObjectManager.monsters.ForEach(m => m.SetTargetPlayer(selectedPlayer));
+            if (GUILayout.Button("Bomb"))
+            {
+                Pickup component = PhotonNetwork.Instantiate("PickupHolder", Player.localPlayer.transform.position, UnityEngine.Random.rotation, 0, null).GetComponent<Pickup>();
+                component.ConfigurePickup((byte)num, new ItemInstanceData(Guid.NewGuid()));
+            }
         }
 
         private void PlayersList()

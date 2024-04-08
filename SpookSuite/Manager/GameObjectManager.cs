@@ -27,6 +27,7 @@ namespace SpookSuite.Manager
 
         public static List<Bot> monsters = new List<Bot>();
         public static List<Player> players = new List<Player>();
+        public static List<PlayerRagdoll> playerRagdolls = new List<PlayerRagdoll>();
         public static List<ItemInstance> items = new List<ItemInstance>();
         public static List<UseDivingBellButton> divingBells = new List<UseDivingBellButton>();
         public static List<Laser> lasers = new List<Laser>();
@@ -37,10 +38,10 @@ namespace SpookSuite.Manager
             {
                 CollectObjects(monsters);
                 CollectObjects(players);
+                CollectObjects(playerRagdolls);
                 CollectObjects(items);
                 CollectObjects(divingBells);
                 CollectObjects(lasers);
-
 
                 yield return new WaitForSeconds(collectInterval);
             }

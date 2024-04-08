@@ -1,6 +1,8 @@
-﻿using SpookSuite.Cheats;
+﻿using Photon.Pun;
+using SpookSuite.Cheats;
 using SpookSuite.Cheats.Core;
 using SpookSuite.Menu.Core;
+using System;
 using UnityEngine;
 
 namespace SpookSuite.Menu.Tab
@@ -8,7 +10,6 @@ namespace SpookSuite.Menu.Tab
     internal class VisualTab : MenuTab
     {
         public VisualTab() : base("Visual") { }
-
         private Vector2 scrollPos = Vector2.zero;
         public override void Draw()
         {
@@ -32,7 +33,6 @@ namespace SpookSuite.Menu.Tab
         private void ESPContent()
         {
             scrollPos = GUILayout.BeginScrollView(scrollPos);
-
 
             GUILayout.Label("Player ESP");
             //UI.Checkbox("Enabled", ref Cheats.PlayerESP.enabled);
