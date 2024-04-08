@@ -35,10 +35,10 @@ namespace SpookSuite.Menu.Tab
             foreach (Item item in ItemDatabase.Instance.Objects)
             {
                 GUILayout.BeginHorizontal();
-                if (GUILayout.Button(item.displayName))
+                if (GUILayout.Button(item.displayName == "" ? item.name : item.displayName))
                 {
                     selectedItem = item;
-                    selectedItemName = item.displayName;
+                    selectedItemName = item.displayName == "" ? item.name : item.displayName;
                 }
 
                 GUILayout.EndHorizontal();
