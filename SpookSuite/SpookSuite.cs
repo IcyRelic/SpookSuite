@@ -77,7 +77,6 @@ namespace SpookSuite
         {
             try
             {
-                ShowCursor();
                 if (Input.GetKeyDown(Settings.MenuToggleKey)) 
                 { 
                     if (Settings.b_isMenuOpen)
