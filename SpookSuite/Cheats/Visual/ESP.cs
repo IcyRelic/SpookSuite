@@ -37,8 +37,9 @@ namespace SpookSuite.Cheats
 
         private void DisplayPlayers()
         {
-            foreach(Player p in GameObjectManager.players)
+            foreach (Player p in GameObjectManager.players)
             {
+                if (p.ai) continue;
                 float distance = GetDistanceToPlayer(p.data.groundPos);
 
                 if (!WorldToScreen(p.data.groundPos, out Vector3 screen)) continue;

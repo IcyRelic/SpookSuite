@@ -85,6 +85,7 @@ namespace SpookSuite.Menu.Tab
             foreach (Player player in GameObjectManager.players)
             {
                 //if (player.disconnectedMidGame || !player.IsSpawned) continue;
+                if (player.ai) continue;
 
                 if (selectedPlayer is null) selectedPlayer = player;
 
