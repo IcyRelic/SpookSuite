@@ -8,7 +8,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using UnityEngine;
 
 namespace SpookSuite
@@ -77,12 +76,12 @@ namespace SpookSuite
         {
             try
             {
+                if (!Settings.b_isMenuOpen)
+                    HideCursor();
+                else
+                    ShowCursor();
                 if (Input.GetKeyDown(Settings.MenuToggleKey)) 
                 { 
-                    if (Settings.b_isMenuOpen)
-                        HideCursor();
-                    else
-                        ShowCursor();
 
                     Settings.b_isMenuOpen = !Settings.b_isMenuOpen;
                 }
@@ -125,6 +124,7 @@ namespace SpookSuite
         {
             FindObjectOfType<CursorHandler>().defaultCursorVisible = false;
             Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
         }
     }
 }
