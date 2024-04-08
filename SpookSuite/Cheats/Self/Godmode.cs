@@ -1,8 +1,10 @@
 ﻿using HarmonyLib;
 using SpookSuite.Cheats.Core;
+using UnityEngine;
 
 namespace SpookSuite.Cheats
 {
+    [HarmonyPatch]
     internal class Godmode : ToggleCheat
     {
         [HarmonyPrefix]

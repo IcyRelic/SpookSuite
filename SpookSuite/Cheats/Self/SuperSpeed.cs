@@ -10,7 +10,7 @@ namespace SpookSuite.Cheats
         {
             if (Player.localPlayer is null) return;
 
-            Player.localPlayer.gameObject.GetComponent<PlayerController>().movementForce = Enabled ? Value : 10;
+            Player.localPlayer.gameObject.GetComponent<PlayerController>().movementForce = Enabled ? Value : 10f;
         }
 
     }

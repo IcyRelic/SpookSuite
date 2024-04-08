@@ -16,10 +16,7 @@ namespace SpookSuite.Cheats
         {
             if (Player.localPlayer is null) return;
            
-
             Player.localPlayer.gameObject.GetComponent<PlayerController>().jumpForceOverTime = Enabled ? Value : 0.6f;
-
-
         }
     }
 }
