@@ -41,7 +41,7 @@ namespace SpookSuite.Menu.Tab
         {
             GUILayout.Label("Selected Player Actions");
             if (GUILayout.Button("TP To"))
-                Player.localPlayer.transform.position = selectedPlayer.refs.IK_Hand_L.transform.position;
+                Player.localPlayer.transform.position = selectedPlayer.data.groundPos;
             if (GUILayout.Button("Bring"))
                 selectedPlayer.transform.position = Player.localPlayer.HeadPosition();
             if (GUILayout.Button("Nearest Monster Attack"))
@@ -51,7 +51,7 @@ namespace SpookSuite.Menu.Tab
             if (GUILayout.Button("Bomb"))
             {
                 Pickup component = PhotonNetwork.Instantiate("PickupHolder", Player.localPlayer.transform.position, UnityEngine.Random.rotation, 0, null).GetComponent<Pickup>();
-                component.ConfigurePickup((byte)num, new ItemInstanceData(Guid.NewGuid()));
+                component.ConfigurePickup(58, new ItemInstanceData(Guid.NewGuid()));
             }
         }
 
