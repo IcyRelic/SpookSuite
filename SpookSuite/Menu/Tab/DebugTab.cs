@@ -1,5 +1,7 @@
 ﻿using ExitGames.Client.Photon;
 using Photon.Pun;
+using SpookSuite.Cheats;
+using SpookSuite.Cheats.Core;
 using SpookSuite.Menu.Core;
 using SpookSuite.Util;
 using System;
@@ -73,6 +75,8 @@ namespace SpookSuite.Menu.Tab
 
             }
             GUILayout.EndHorizontal();
+
+            UI.Checkbox("No CLip", ref Cheat.Instance<NoClip>().Enabled);
 
 
             GUILayout.EndScrollView();

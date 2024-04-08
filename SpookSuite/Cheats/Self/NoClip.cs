@@ -29,8 +29,8 @@ namespace SpookSuite.Cheats
 
                 //AddForce(Vector3 force, ForceMode forceMode)
 
-                ragdoll.Reflect().Invoke("AddForce", movement.movement, ForceMode.Force);
-                Player.localPlayer.tele
+                //ragdoll.Reflect().Invoke("AddForce", movement.movement, ForceMode.Force);
+                Player.localPlayer.transform.position = movement.transform.position;
             }
             else
             {
