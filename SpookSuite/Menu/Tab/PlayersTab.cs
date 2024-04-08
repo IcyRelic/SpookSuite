@@ -39,15 +39,15 @@ namespace SpookSuite.Menu.Tab
             GUILayout.Label("ALL Players");
             if (GUILayout.Button("Kick All (NonHost)"))
             {
-                if (PhotonNetwork.LocalPlayer.IsMasterClient)
-                {
-                    for (int i = 0; i < GameObjectManager.players.Count; i++)
-                    {
-                        //if (!GameObjectManager.players[i].IsLocal)
-                            PhotonNetwork.CloseConnection(GameObjectManager.players[i].refs.view.Owner);
-                    }                  
-                }
-                else
+                //if (PhotonNetwork.LocalPlayer.IsMasterClient) // need fixing
+                //{
+                //    for (int i = 0; i < GameObjectManager.players.Count; i++)
+                //    {
+                //        //if (!GameObjectManager.players[i].IsLocal)
+                //            PhotonNetwork.CloseConnection(GameObjectManager.players[i].refs.view.Owner);
+                //    }                  
+                //}
+                //else
                     Cheats.KickAll.Execute();
             }
         }

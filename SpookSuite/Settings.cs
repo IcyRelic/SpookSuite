@@ -23,7 +23,7 @@ namespace SpookSuite
         public static int i_textboxWidth = 85;
         public static float f_menuAlpha = 1f;
         public static bool b_isMenuOpen = false;
-        public static bool b_godmode = false;
+        public static bool b_displayDead = false;
 
         /* *    
          * Color Settings
