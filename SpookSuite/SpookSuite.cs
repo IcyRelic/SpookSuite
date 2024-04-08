@@ -76,15 +76,11 @@ namespace SpookSuite
         {
             try
             {
-                if (!Settings.b_isMenuOpen)
-                    HideCursor();
-                else
+                if (Settings.b_isMenuOpen)
                     ShowCursor();
-                if (Input.GetKeyDown(Settings.MenuToggleKey)) 
-                { 
 
+                if (Input.GetKeyDown(Settings.MenuToggleKey)) 
                     Settings.b_isMenuOpen = !Settings.b_isMenuOpen;
-                }
 
                 if (PhotonNetwork.InRoom) cheats.ForEach(cheat => cheat.Update());
             }
@@ -118,13 +114,6 @@ namespace SpookSuite
             FindObjectOfType<CursorHandler>().defaultCursorVisible = true;
             Cursor.visible = true;
             Cursor.lockState = CursorLockMode.None;
-        }
-
-        public static void HideCursor()
-        {
-            FindObjectOfType<CursorHandler>().defaultCursorVisible = false;
-            Cursor.visible = false;
-            Cursor.lockState = CursorLockMode.Locked;
         }
     }
 }
