@@ -76,11 +76,19 @@ namespace SpookSuite
         {
             try
             {
-                if (Settings.b_isMenuOpen)
-                    ShowCursor();
-
-                if (Input.GetKeyDown(Settings.MenuToggleKey)) 
+                if (Input.GetKeyDown(Settings.MenuToggleKey))
+                {
                     Settings.b_isMenuOpen = !Settings.b_isMenuOpen;
+
+                    if(Settings.b_isMenuOpen)
+                    {
+                        MenuUtil.ShowCursor();
+                    }
+                    else
+                    {
+                        MenuUtil.HideCursor();
+                    }
+                }
 
                 if (PhotonNetwork.InRoom) cheats.ForEach(cheat => cheat.Update());
             }
@@ -98,6 +106,15 @@ namespace SpookSuite
                 {
                     VisualUtil.DrawString(new Vector2(5f, 2f), "SpookSuite", new RGBAColor(128, 0, 255, 1f), centered: false, bold: true, fontSize: 16);
 
+                    if (MenuUtil.resizing)
+                    {
+                        string rTitle = $"Resizing Menu\nLeft Click to Confirm, Right Click to Cancel\n{SpookSuiteMenu.Instance.windowRect.width}x{SpookSuiteMenu.Instance.windowRect.height}";
+
+
+                        VisualUtil.DrawString(new Vector2(Screen.width / 2, 35f), rTitle, Settings.c_espPlayers, true, true, true, 22);
+                        MenuUtil.ResizeMenu();
+                    }
+
                     if (PhotonNetwork.InRoom) cheats.ForEach(cheat => cheat.OnGui());
                 }
 
@@ -107,13 +124,6 @@ namespace SpookSuite
             {
                 Debug.Log($"Error in OnGUI: {e}");
             }
-        }
-
-        public static void ShowCursor()
-        {
-            FindObjectOfType<CursorHandler>().defaultCursorVisible = true;
-            Cursor.visible = true;
-            Cursor.lockState = CursorLockMode.None;
         }
     }
 }
