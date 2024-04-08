@@ -1,12 +1,43 @@
 ﻿using SpookSuite.Cheats.Core;
+using SpookSuite.Util;
 using System;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
 namespace SpookSuite
 {
-    internal class UI
+    public class UI
     {
+
+        public static void Header(string header, bool space = false)
+        {
+            if (space) GUILayout.Space(20);
+            GUILayout.Label(header, new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter, fontStyle = FontStyle.Bold });
+        }
+
+        public static void SubHeader(string header, bool space = false)
+        {
+            if (space) GUILayout.Space(20);
+            GUILayout.Label(header, new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold });
+        }
+
+        public static void Label(string header, string label, RGBAColor color = null)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(header);
+            GUILayout.FlexibleSpace();
+            GUILayout.Label(color is null ? label : color.AsString(label));
+            GUILayout.EndHorizontal();
+        }
+
+        public static void Label(string label, RGBAColor color = null)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(color is null ? label : color.AsString(label));
+            GUILayout.EndHorizontal();
+        }
         public static void Checkbox(string header, ref bool value)
         {
             GUILayout.BeginHorizontal();
@@ -94,6 +125,36 @@ namespace SpookSuite
                 Debug.Log($"Input num couldnt convert the type of {label}");
 
             GUILayout.EndHorizontal();
+        }
+
+        public static void Textbox(string label, ref string value, string regex = "", bool big = true)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(label);
+            GUILayout.FlexibleSpace();
+            value = GUILayout.TextField(value, GUILayout.Width(big ? Settings.i_textboxWidth * 3 : Settings.i_textboxWidth));
+            value = Regex.Replace(value, regex, "");
+            GUILayout.EndHorizontal();
+        }
+        public static void ButtonGrid<T>(List<T> objects, Func<T, string> textSelector, string search, Action<T> action, int numPerRow, int btnWidth = 175)
+        {
+            List<T> filtered = objects.FindAll(x => textSelector(x).ToLower().Contains(search.ToLower()));
+
+            int rows = Mathf.CeilToInt(filtered.Count / (float)numPerRow);
+
+            for (int i = 0; i < rows; i++)
+            {
+                GUILayout.BeginHorizontal();
+                for (int j = 0; j < numPerRow; j++)
+                {
+                    int index = i * numPerRow + j;
+                    if (index >= filtered.Count) break;
+                    var obj = filtered[index];
+
+                    if (GUILayout.Button(textSelector((T)obj), GUILayout.Width(btnWidth))) action((T)obj);
+                }
+                GUILayout.EndHorizontal();
+            }
         }
     }
 }

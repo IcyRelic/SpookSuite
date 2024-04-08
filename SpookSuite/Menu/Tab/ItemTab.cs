@@ -5,6 +5,8 @@ using Random = UnityEngine.Random;
 using Photon.Pun;
 using System;
 using System.Text;
+using System.Linq;
+using System.Collections.Generic;
 
 namespace SpookSuite.Menu.Tab
 {
@@ -13,15 +15,12 @@ namespace SpookSuite.Menu.Tab
         public ItemTab() : base("Item") { }
 
         private Vector2 scrollPos = Vector2.zero;
-        private Vector2 spawnableItemsPos = Vector2.zero;
-        private Vector2 spawnedItemsPos = Vector2.zero;
-        private Item selectedItem;
-        private string selectedItemName = ""; //required so it dont crash
+        private string searchText = "";
         private bool equipOnSpawn = false;
         public override void Draw()
         {
             GUILayout.BeginVertical();
-            GUILayout.Label(name); //doing it like this so we could just copy paste it over
+            
             MenuContent();
             GUILayout.EndVertical();
 
@@ -29,31 +28,33 @@ namespace SpookSuite.Menu.Tab
 
         private void MenuContent()
         {
+            GUILayout.BeginHorizontal();
+            
+            UI.Textbox("Search", ref searchText);
+            GUILayout.FlexibleSpace();
+            UI.Checkbox("Equip on Spawn", ref equipOnSpawn);
+
+            GUILayout.EndHorizontal();
+
             scrollPos = GUILayout.BeginScrollView(scrollPos);
 
-            spawnableItemsPos = GUILayout.BeginScrollView(spawnableItemsPos);
-            foreach (Item item in ItemDatabase.Instance.Objects)
-            {
-                GUILayout.BeginHorizontal();
-                if (GUILayout.Button(item.displayName == "" ? item.name : item.displayName))
-                {
-                    selectedItem = item;
-                    selectedItemName = item.displayName == "" ? item.name : item.displayName;
-                }
+            List<Item> items = ItemDatabase.Instance.Objects.ToList().OrderBy(x => String.IsNullOrEmpty(x.displayName) ? x.name : x.displayName).ToList();
 
-                GUILayout.EndHorizontal();
-            }
+            UI.ButtonGrid<Item>(items, item => String.IsNullOrEmpty(item.displayName) ? item.name : item.displayName, searchText, item => SpawnItem(item.id, equipOnSpawn), 4);
+            
             GUILayout.EndScrollView();
-            UI.Checkbox("Equip On Spawn", ref equipOnSpawn);
-            if (GUILayout.Button("Spawn " + selectedItemName))
-            {
-                Pickup component = PhotonNetwork.Instantiate("PickupHolder", Player.localPlayer.data.groundPos, Random.rotation, 0, null).GetComponent<Pickup>();
-                component.ConfigurePickup(selectedItem.id, new ItemInstanceData(Guid.NewGuid()));
-                if (equipOnSpawn)
-                    component.Interact(Player.localPlayer);         
-            }
+        }
 
-            GUILayout.EndScrollView();
+        private void SpawnItem(byte itemId, bool equip = false)
+        {
+            Vector3 spawnPos = Player.localPlayer.data.groundPos;
+            spawnPos += Player.localPlayer.transform.forward;
+            spawnPos.y += 1;
+
+            Pickup component = PhotonNetwork.Instantiate("PickupHolder", spawnPos, Random.rotation, 0, null).GetComponent<Pickup>();
+            component.ConfigurePickup(itemId, new ItemInstanceData(Guid.NewGuid()));
+
+            if (equip) component.Interact(Player.localPlayer);
         }
     }
 }
