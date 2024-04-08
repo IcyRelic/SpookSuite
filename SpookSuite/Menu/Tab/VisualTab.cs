@@ -34,11 +34,16 @@ namespace SpookSuite.Menu.Tab
             scrollPos = GUILayout.BeginScrollView(scrollPos);
 
             GUILayout.Label("Player ESP");
+            UI.Checkbox("Enable ESP", ref Cheat.Instance<ESP>().Enabled);
+            UI.Checkbox("Display Players", ref ESP.displayPlayers);
             //UI.Checkbox("Enabled", ref Cheats.PlayerESP.enabled);
             //UI.Checkbox("Skeleton", ref Cheats.PlayerESP.skeletonESP); //Player.refs.ik bones
             //UI.Checkbox("Box", ref Cheats.PlayerESP.box);
             //UI.Checkbox("Looking Radius", ref Cheats.PlayerESP.LookingRadius);//make a semicircle based off their rotation and field of view in front of em on the ground.
-            GUILayout.Label("Enemy ESP");
+            UI.Checkbox("Display Monsters", ref ESP.displayEnemies);
+            UI.Checkbox("Display Items", ref ESP.displayItems);
+            UI.Checkbox("Display Lasers", ref ESP.displayLasers);
+            UI.Checkbox("Display Diving Bell", ref ESP.displayDivingBell);
 
             GUILayout.EndScrollView();
         }

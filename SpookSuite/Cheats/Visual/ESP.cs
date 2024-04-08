@@ -9,14 +9,25 @@ namespace SpookSuite.Cheats
 {
     internal class ESP : ToggleCheat
     {
+        public static bool displayPlayers = false;
+        public static bool displayEnemies = false;
+        public static bool displayItems = false;
+        public static bool displayDivingBell = false;
+        public static bool displayLasers = false;
+
         public override void OnGui()
         {
-            //if (!Cheat.Instance<ESP>().Enabled) return;
-            DisplayPlayers();
-            DisplayItems();
-            DisplayDivingBells();
-            DisplayLasers();
-            DisplayMonsters();
+            if (!Cheat.Instance<ESP>().Enabled) return;
+            if (displayPlayers)
+                DisplayPlayers();
+            if (displayItems)
+                DisplayItems();
+            if(displayDivingBell)
+                DisplayDivingBells();
+            if (displayLasers)
+                DisplayLasers();
+            if (displayEnemies)
+                DisplayMonsters();
 
         }
 

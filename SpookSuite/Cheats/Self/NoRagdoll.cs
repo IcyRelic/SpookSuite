@@ -22,6 +22,12 @@ namespace SpookSuite.Cheats
         [HarmonyPatch(typeof(Player), "NoControl")]
         public static bool NoControl(Player __instance, ref bool __result)
         {
+            if (Settings.b_isMenuOpen)
+            {
+                __result = true;
+                return false;
+            }
+
             if (Instance<NoRagdoll>().Enabled && !__instance.data.dead)
             {
                 __result = false;
