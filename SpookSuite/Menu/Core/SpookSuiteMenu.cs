@@ -1,9 +1,8 @@
-﻿using SpookSuite.Menu.Tab;
+﻿using SpookSuite.Manager;
+using SpookSuite.Menu.Tab;
 using SpookSuite.Util;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace SpookSuite.Menu.Core
@@ -103,6 +102,16 @@ namespace SpookSuite.Menu.Core
             GUI.Label(new Rect(windowRect.width - watermark.CalcSize(new GUIContent(text)).x - 10, windowRect.height - watermark.CalcSize(new GUIContent(text)).y - 10, watermark.CalcSize(new GUIContent(text)).x, watermark.CalcSize(new GUIContent(text)).y), text, watermark);
 
             GUI.color = new Color(1f, 1f, 1f, Settings.f_menuAlpha);
+
+            foreach (Player p in GameObjectManager.players)
+            {
+                if (Settings.b_displayDead && p.data.dead)
+                {
+                    float yOffset = 30f;
+                    VisualUtil.DrawString(new Vector2(10f, yOffset), p.refs.view.Owner.NickName);
+                    yOffset += 10f;
+                }
+            }
 
             GUILayout.BeginVertical();
             GUILayout.BeginArea(new Rect(0, 25, windowRect.width, 25), style: "Toolbar");

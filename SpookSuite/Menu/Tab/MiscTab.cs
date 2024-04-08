@@ -37,7 +37,7 @@ namespace SpookSuite.Menu.Tab
 
             helemtText = GUILayout.TextField(helemtText);
             if (GUILayout.Button("Apply Text"))
-                SurfaceNetworkHandler.Instance.Reflect().Invoke("RPCA_HelmetText", helemtText, SurfaceNetworkHandler.RoomStats.GetDaysLeft());
+                Player.localPlayer.refs.visor.RPCA_SetVisorText(helemtText);
 
             GUILayout.Label("Monster Spawner");
             monsterScrollPos = GUILayout.BeginScrollView(monsterScrollPos);        
@@ -56,6 +56,8 @@ namespace SpookSuite.Menu.Tab
                 if (GUILayout.Button(monster.name))
                     selectedMonster = monster;
             }
+            //add stuff to do with selected
+
             GUILayout.EndScrollView();
 
             GUILayout.EndScrollView();
