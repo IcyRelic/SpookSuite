@@ -5,6 +5,7 @@ using Photon.Realtime;
 using SpookSuite.Handler;
 using SpookSuite.Manager;
 using SpookSuite.Menu.Core;
+using SpookSuite.Util;
 using System;
 using UnityEngine;
 
@@ -53,20 +54,15 @@ namespace SpookSuite.Menu.Tab
         }
         private void PlayerActions()
         {
-            GUILayout.Label("Selected Player Actions");
-            if (GUILayout.Button("TP To"))
-                Player.localPlayer.transform.position = new Vector3(selectedPlayer.data.groundPos.x, selectedPlayer.data.groundPos.y, selectedPlayer.data.groundPos.z + selectedPlayer.data.headHeight);
-            if (GUILayout.Button("Bring"))
-                selectedPlayer.transform.position = Player.localPlayer.HeadPosition();
-            if (GUILayout.Button("Nearest Monster Attack"))
-                selectedPlayer.GetClosestMonster().SetTargetPlayer(selectedPlayer);
-            if (GUILayout.Button("All Monsters Attack"))
-                GameObjectManager.monsters.ForEach(m => m.SetTargetPlayer(selectedPlayer));
-            if (GUILayout.Button("Bomb"))
-            {
-                Pickup component = PhotonNetwork.Instantiate("PickupHolder", selectedPlayer.data.groundPos, UnityEngine.Random.rotation, 0, null).GetComponent<Pickup>();
-                component.ConfigurePickup(58, new ItemInstanceData(Guid.NewGuid()));
-            }
+
+            UI.Header("Selected Player Actions");
+            UI.Button("Teleport", () => selectedPlayer.transform.position = Player.localPlayer.HeadPosition(), "Teleport");
+            UI.Button("Bring", () => selectedPlayer.transform.position = Player.localPlayer.HeadPosition(), "Bring");
+            UI.Button("Nearby Monsters Attack", () => selectedPlayer.GetClosestMonster().SetTargetPlayer(selectedPlayer), "Nearby Monsters Attack");
+            UI.Button("All Monsters Attack", () => GameObjectManager.monsters.ForEach(m => m.SetTargetPlayer(selectedPlayer)), "All Monsters Attack");
+            UI.Button("Spawn Bomb", () => GameUtil.SpawnItem(58, selectedPlayer.data.groundPos), "Bomb");
+            UI.Button("Kill", () => selectedPlayer.Reflect().Invoke("CallDie"), "Kill");
+            UI.Button("Revive", () => selectedPlayer.CallRevive(), "Kill");
         }
 
         private void PlayersList()

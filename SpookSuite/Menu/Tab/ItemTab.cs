@@ -7,6 +7,7 @@ using System;
 using System.Text;
 using System.Linq;
 using System.Collections.Generic;
+using SpookSuite.Util;
 
 namespace SpookSuite.Menu.Tab
 {
@@ -43,21 +44,11 @@ namespace SpookSuite.Menu.Tab
             int gridWidth = 4;
             int btnWidth = (int) (SpookSuiteMenu.Instance.contentWidth - (SpookSuiteMenu.Instance.spaceFromLeft*2)) / gridWidth;
 
-            UI.ButtonGrid<Item>(items, item => String.IsNullOrEmpty(item.displayName) ? item.name : item.displayName, searchText, item => SpawnItem(item.id, equipOnSpawn), gridWidth, btnWidth);
+            UI.ButtonGrid<Item>(items, item => String.IsNullOrEmpty(item.displayName) ? item.name : item.displayName, searchText, item => GameUtil.SpawnItem(item.id, equipOnSpawn), gridWidth, btnWidth);
             
             GUILayout.EndScrollView();
         }
 
-        private void SpawnItem(byte itemId, bool equip = false)
-        {
-            Vector3 spawnPos = Player.localPlayer.data.groundPos;
-            spawnPos += Player.localPlayer.transform.forward;
-            spawnPos.y += 1;
-
-            Pickup component = PhotonNetwork.Instantiate("PickupHolder", spawnPos, Random.rotation, 0, null).GetComponent<Pickup>();
-            component.ConfigurePickup(itemId, new ItemInstanceData(Guid.NewGuid()));
-
-            if (equip) component.Interact(Player.localPlayer);
-        }
+        
     }
 }
