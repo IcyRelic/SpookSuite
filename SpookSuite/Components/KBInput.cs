@@ -20,12 +20,12 @@ namespace SpookSuite.Components
 
             Vector3 input = new Vector3();
 
-            if(Input.GetKeyDown(KeyCode.W)) input += transform.forward;
-            if(Input.GetKeyDown(KeyCode.S)) input -= transform.forward;
-            if(Input.GetKeyDown(KeyCode.A)) input -= transform.right;
-            if(Input.GetKeyDown(KeyCode.D)) input += transform.right;
-            if(Input.GetKeyDown(KeyCode.Space)) input += transform.up;
-            if(Input.GetKeyDown(KeyCode.LeftControl)) input -= transform.up;
+            if(Input.GetKey(KeyCode.W)) input += transform.forward;
+            if(Input.GetKey(KeyCode.S)) input -= transform.forward;
+            if(Input.GetKey(KeyCode.A)) input -= transform.right;
+            if(Input.GetKey(KeyCode.D)) input += transform.right;
+            if(Input.GetKey(KeyCode.Space)) input += transform.up;
+            if(Input.GetKey(KeyCode.LeftControl)) input -= transform.up;
 
             if(input.Equals(Vector3.zero)) return;
 
