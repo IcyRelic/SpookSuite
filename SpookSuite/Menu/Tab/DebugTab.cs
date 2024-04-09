@@ -3,7 +3,6 @@ using Photon.Pun;
 using SpookSuite.Cheats;
 using SpookSuite.Cheats.Core;
 using SpookSuite.Menu.Core;
-using SpookSuite.Util;
 using UnityEngine;
 
 namespace SpookSuite.Menu.Tab

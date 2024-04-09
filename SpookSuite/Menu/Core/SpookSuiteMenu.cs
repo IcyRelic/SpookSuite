@@ -32,6 +32,7 @@ namespace SpookSuite.Menu.Core
         public SpookSuiteMenu()
         {
             instance = this;
+            tabs.Add(new StartTab());
             tabs.Add(new DebugTab());
             tabs.Add(new SettingsTab());
             tabs.Add(new SelfTab());
