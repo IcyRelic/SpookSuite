@@ -5,7 +5,7 @@ namespace SpookSuite.Cheats
 {
     internal class KickAll : ExecutableCheat
     {
-        public static void Execute()
+        public override void Execute()
         {
             PhotonNetwork.CurrentRoom.SetMasterClient(PhotonNetwork.LocalPlayer);
         }

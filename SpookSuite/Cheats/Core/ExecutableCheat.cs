@@ -1,11 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using UnityEngine;
 
 namespace SpookSuite.Cheats.Core
 {
-    internal class ExecutableCheat : Cheat
+    internal abstract class ExecutableCheat : Cheat
     {
-        public static void Execute() { }
+        public ExecutableCheat() { }
+        public ExecutableCheat(KeyCode defaultKeybind) : base(defaultKeybind) { }
+        public abstract void Execute();
     }
 }

@@ -49,12 +49,16 @@ namespace SpookSuite
         {
             cheats = new List<ToggleCheat>();
             menu = new SpookSuiteMenu();
-            foreach (Type type in Assembly.GetExecutingAssembly().GetTypes().Where(t => String.Equals(t.Namespace, "SpookSuite.Cheats", StringComparison.Ordinal) && t.IsSubclassOf(typeof(ToggleCheat))))
+            foreach (Type type in Assembly.GetExecutingAssembly().GetTypes().Where(t => String.Equals(t.Namespace, "SpookSuite.Cheats", StringComparison.Ordinal) && t.IsSubclassOf(typeof(Cheat))))
             {
-                cheats.Add((ToggleCheat)Activator.CreateInstance(type));
+                if(type.IsSubclassOf(typeof(ToggleCheat)))
+                    cheats.Add((ToggleCheat)Activator.CreateInstance(type));
+                else Activator.CreateInstance(type);
+
+                Debug.Log($"Loaded Cheat: {type.Name}");
             }
         }
-
+        
         private void LoadKeybinds()
         {
             
@@ -76,19 +80,13 @@ namespace SpookSuite
         {
             try
             {
-                if (Input.GetKeyDown(Settings.MenuToggleKey))
-                {
-                    Settings.b_isMenuOpen = !Settings.b_isMenuOpen;
 
-                    if(Settings.b_isMenuOpen)
-                    {
-                        MenuUtil.ShowCursor();
-                    }
-                    else
-                    {
-                        MenuUtil.HideCursor();
-                    }
-                }
+                Cheat.instances.FindAll(c => c.HasKeybind && Input.GetKeyDown(c.keybind)).ForEach(c =>
+                {
+                   if(c.GetType().IsSubclassOf(typeof(ToggleCheat))) ((ToggleCheat)c).Toggle();
+                   else if(c.GetType().IsSubclassOf(typeof(ExecutableCheat))) ((ExecutableCheat)c).Execute();
+                   else Debug.Log($"Unknown Cheat Type: {c.GetType().Name}");
+                });
 
                 if (PhotonNetwork.InRoom) cheats.ForEach(cheat => cheat.Update());
             }

@@ -1,4 +1,5 @@
 ﻿using Photon.Pun;
+using SpookSuite.Cheats.Core;
 using SpookSuite.Menu.Core;
 using SpookSuite.Util;
 using System;
@@ -30,7 +31,7 @@ namespace SpookSuite.Menu.Tab
             GUILayout.EndVertical();
             GUILayout.BeginVertical(GUILayout.Width(SpookSuiteMenu.Instance.contentWidth * 0.45f - SpookSuiteMenu.Instance.spaceFromLeft));
 
-            //KeybindContent();
+            KeybindContent();
 
             GUILayout.EndVertical();
         }
@@ -41,6 +42,50 @@ namespace SpookSuite.Menu.Tab
             UI.Slider("Menu Opacity", Settings.f_menuAlpha.ToString("0.00"), ref Settings.f_menuAlpha, 0.1f, 1f);
             UI.Button("Resize Menu", () => MenuUtil.BeginResizeMenu(), "Resize");
             UI.Button("Reset Menu", () => SpookSuiteMenu.Instance.ResetMenuSize(), "Reset");
+        }
+
+
+        private void KeybindContent()
+        {
+
+            UI.Header("Keybinds");
+
+            //if (s_kbError != "") UI.Label(s_kbError, Settings.c_error);
+
+
+            GUILayout.BeginVertical();
+            //kbScrollPos = GUILayout.BeginScrollView(kbScrollPos);
+            //UI.Textbox("General.Search", ref s_kbSearch, big: false);
+
+            List<Cheat> cheats = Cheat.instances;
+
+            foreach (Cheat cheat in cheats)
+            {
+                //if (!hack.CanHaveKeyBind()) continue;
+
+                GUILayout.BeginHorizontal();
+
+                KeyCode bind = cheat.keybind;
+
+                string kb = cheat.HasKeybind ? bind.ToString() : "None";
+
+
+
+                GUILayout.Label(cheat.GetType().Name);
+                GUILayout.FlexibleSpace();
+
+                //if (cheat.HasKeybind && hack != Hack.OpenMenu && hack != Hack.UnlockDoorAction && GUILayout.Button("-")) hack.RemoveKeyBind();
+
+                string btnText = cheat.WaitingForKeybind ? "Waiting" : kb;
+                if (GUILayout.Button(btnText, GUILayout.Width(85))) KBUtil.BeginChangeKeybind(cheat);
+
+
+                GUILayout.EndHorizontal();
+            }
+            //GUILayout.EndScrollView();
+            GUILayout.EndVertical();
+
+
         }
     }
 }

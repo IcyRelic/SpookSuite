@@ -2,6 +2,8 @@
 using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
+using SpookSuite.Cheats;
+using SpookSuite.Cheats.Core;
 using SpookSuite.Handler;
 using SpookSuite.Manager;
 using SpookSuite.Menu.Core;
@@ -49,7 +51,7 @@ namespace SpookSuite.Menu.Tab
                 //    }                  
                 //}
                 //else
-                    Cheats.KickAll.Execute();
+                    Cheat.Instance<KickAll>().Execute();
             }
         }
         private void PlayerActions()

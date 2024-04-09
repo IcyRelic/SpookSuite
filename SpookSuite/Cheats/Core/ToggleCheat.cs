@@ -11,6 +11,13 @@ namespace SpookSuite.Cheats.Core
     {
         public bool Enabled = false;
 
+        public ToggleCheat() { }
+        public ToggleCheat(KeyCode defaultKeybind) : base(defaultKeybind) { }
+
+        public void Toggle()
+        {
+            Enabled = !Enabled;
+        }
         public virtual void OnGui() { }
         public virtual void Update() { }
         public virtual void FixedUpdate() { }

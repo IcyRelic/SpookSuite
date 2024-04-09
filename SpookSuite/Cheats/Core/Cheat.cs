@@ -8,11 +8,21 @@ namespace SpookSuite.Cheats.Core
 {
     public class Cheat : MonoBehaviour
     {
-        private static List<Cheat> instances = new List<Cheat>();
-
+        public static List<Cheat> instances = new List<Cheat>();
         public static T? Instance<T>() where T : Cheat => instances.Find(x => x is T) as T;
+
+        public KeyCode keybind = KeyCode.None;
+        public bool HasKeybind => keybind != KeyCode.None;
+        public bool WaitingForKeybind = false;
+
         public Cheat()
         {
+            instances.Add(this);
+        }
+
+        public Cheat(KeyCode defaultKeybind)
+        {
+            keybind = defaultKeybind;
             instances.Add(this);
         }
 
