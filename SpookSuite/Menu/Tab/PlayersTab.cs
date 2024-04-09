@@ -56,15 +56,15 @@ namespace SpookSuite.Menu.Tab
         }
         private void PlayerActions()
         {
-
             UI.Header("Selected Player Actions");
-            UI.Button("Teleport", () => selectedPlayer.transform.position = Player.localPlayer.HeadPosition(), "Teleport");
-            UI.Button("Bring", () => selectedPlayer.transform.position = Player.localPlayer.HeadPosition(), "Bring");
+            UI.Button("Teleport", () => Player.localPlayer.data.groundPos = selectedPlayer.data.groundPos, "Teleport");
+            UI.Button("Bring", () => selectedPlayer.data.groundPos = Player.localPlayer.data.groundPos, "Bring");
             UI.Button("Nearby Monsters Attack", () => selectedPlayer.GetClosestMonster().SetTargetPlayer(selectedPlayer), "Nearby Monsters Attack");
             UI.Button("All Monsters Attack", () => GameObjectManager.monsters.ForEach(m => m.SetTargetPlayer(selectedPlayer)), "All Monsters Attack");
             UI.Button("Spawn Bomb", () => GameUtil.SpawnItem(58, selectedPlayer.data.groundPos), "Bomb");
             UI.Button("Kill", () => selectedPlayer.Reflect().Invoke("CallDie"), "Kill");
-            UI.Button("Revive", () => selectedPlayer.CallRevive(), "Kill");
+            UI.Button("Revive", () => selectedPlayer.CallRevive(), "Revive");
+            UI.Button("Kick", () => PlayerHandler.instance.RemovePlayer(selectedPlayer), "Kick");
         }
 
         private void PlayersList()

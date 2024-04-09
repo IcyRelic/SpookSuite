@@ -42,7 +42,7 @@ namespace SpookSuite.Menu.Tab
             List<Item> items = ItemDatabase.Instance.Objects.ToList().OrderBy(x => String.IsNullOrEmpty(x.displayName) ? x.name : x.displayName).ToList();
 
             int gridWidth = 4;
-            int btnWidth = (int) (SpookSuiteMenu.Instance.contentWidth - (SpookSuiteMenu.Instance.spaceFromLeft*2)) / gridWidth;
+            int btnWidth = (int) (SpookSuiteMenu.Instance.contentWidth - (SpookSuiteMenu.Instance.spaceFromLeft * 2)) / gridWidth;
 
             UI.ButtonGrid<Item>(items, item => String.IsNullOrEmpty(item.displayName) ? item.name : item.displayName, searchText, item => GameUtil.SpawnItem(item.id, equipOnSpawn), gridWidth, btnWidth);
             

@@ -3,7 +3,10 @@ using Photon.Pun;
 using SpookSuite.Cheats;
 using SpookSuite.Cheats.Core;
 using SpookSuite.Menu.Core;
+using SpookSuite.Util;
 using UnityEngine;
+using Zorro.Core.CLI;
+using Steamworks;
 
 namespace SpookSuite.Menu.Tab
 {
@@ -30,6 +33,27 @@ namespace SpookSuite.Menu.Tab
             GUILayout.Label(PhotonNetwork.IsMasterClient ? "Yes" : "No");
             GUILayout.EndHorizontal();
 
+            if (GUILayout.Button("Open Console"))
+            {
+                foreach (DebugUIHandler item in Object.FindObjectsOfType<DebugUIHandler>())
+                    item.Show();
+            }
+
+            if (GUILayout.Button("Close Console"))
+            {
+                foreach (DebugUIHandler item in Object.FindObjectsOfType<DebugUIHandler>())
+                    item.Hide();
+            }
+
+            UI.Button("Host Public", () => MainMenuHandler.Instance.SilentHost());
+            UI.Button("Host Private", () => MainMenuHandler.Instance.Host(1));
+
+            UI.Button("Set Lobby Public", () => SetPublic(true));
+            UI.Button("Set Lobby Private", () => SetPublic(false));
+
+            UI.Button("Set Lobby Joinable", () => SetJoinable(true));
+            UI.Button("Set Lobby NonJoinable", () => SetJoinable(false));
+
             GUILayout.BeginHorizontal();
             GUILayout.Label("Add $1000");
             GUILayout.FlexibleSpace();
@@ -55,5 +79,31 @@ namespace SpookSuite.Menu.Tab
 
             GUILayout.EndScrollView();
         }
+        internal static bool SetPublic(bool value)
+        {
+            CSteamID id = MainMenuHandler.SteamLobbyHandler.Reflect().GetValue<CSteamID>("m_CurrentLobby");
+            MainMenuHandler.SteamLobbyHandler.Reflect().Invoke("SetLobbyType", id, value ? ELobbyType.k_ELobbyTypePublic : ELobbyType.k_ELobbyTypeFriendsOnly);
+            return true;
+        }
+
+        internal static bool SetJoinable(bool value)
+        {
+            CSteamID id = MainMenuHandler.SteamLobbyHandler.Reflect().GetValue<CSteamID>("m_CurrentLobby");
+            MainMenuHandler.SteamLobbyHandler.Reflect().Invoke("SetLobbyJoinable", id, value);
+            if (PhotonNetwork.CurrentRoom != null)
+            {
+                PhotonNetwork.CurrentRoom.IsOpen = value;
+                PhotonNetwork.CurrentRoom.IsVisible = value;
+            }
+            return true;
+        }
+        //internal static bool IsJoinable()
+        //{
+        //    return PhotonNetwork.CurrentRoom.IsOpen && PhotonNetwork.CurrentRoom.IsVisible;
+        //}
+        //internal static bool IsPublic()
+        //{
+        //    return 
+        //}
     }
 }

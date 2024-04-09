@@ -33,7 +33,6 @@ namespace SpookSuite.Menu.Tab
         {
             scrollPos = GUILayout.BeginScrollView(scrollPos);
 
-            GUILayout.Label("Player ESP");
             UI.Checkbox("Enable ESP", ref Cheat.Instance<ESP>().Enabled);
             UI.Checkbox("Display Players", ref ESP.displayPlayers);
             //UI.Checkbox("Enabled", ref Cheats.PlayerESP.enabled);
