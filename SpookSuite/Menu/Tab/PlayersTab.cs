@@ -40,19 +40,20 @@ namespace SpookSuite.Menu.Tab
         private void GeneralActions()
         {
             GUILayout.Label("ALL Players");
-            if (GUILayout.Button("Kick All (NonHost)"))
+            UI.Button("Kick All (NonHost)", () =>
             {
-                //if (PhotonNetwork.LocalPlayer.IsMasterClient) // need fixing
-                //{
-                //    for (int i = 0; i < GameObjectManager.players.Count; i++)
-                //    {
-                //        //if (!GameObjectManager.players[i].IsLocal)
-                //            PhotonNetwork.CloseConnection(GameObjectManager.players[i].refs.view.Owner);
-                //    }                  
-                //}
-                //else
+                if (PhotonNetwork.LocalPlayer.IsMasterClient) // need fixing
+                {
+                    for (int i = 0; i < GameObjectManager.players.Count; i++)
+                    {
+                        if (!GameObjectManager.players[i].IsLocal)
+                            PhotonNetwork.NetworkingClient.CurrentRoom.Reflect().Invoke("RemovePlayer", GameObjectManager.players[i].refs.view.Owner);
+                    }
+                }
+                else
                     Cheat.Instance<KickAll>().Execute();
-            }
+            });
+
         }
         private void PlayerActions()
         {
@@ -64,7 +65,7 @@ namespace SpookSuite.Menu.Tab
             UI.Button("Spawn Bomb", () => GameUtil.SpawnItem(58, selectedPlayer.data.groundPos), "Bomb");
             UI.Button("Kill", () => selectedPlayer.Reflect().Invoke("CallDie"), "Kill");
             UI.Button("Revive", () => selectedPlayer.CallRevive(), "Revive");
-            UI.Button("Kick", () => PlayerHandler.instance.RemovePlayer(selectedPlayer), "Kick");
+            UI.Button("Kick", () => PhotonNetwork.NetworkingClient.CurrentRoom.Reflect().Invoke("RemovePlayer", selectedPlayer.refs.view.Owner), "Kick");
         }
 
         private void PlayersList()

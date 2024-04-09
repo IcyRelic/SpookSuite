@@ -75,8 +75,6 @@ namespace SpookSuite.Menu.Tab
             }
             GUILayout.EndHorizontal();
 
-            UI.Checkbox("No CLip", ref Cheat.Instance<NoClip>().Enabled);
-
             GUILayout.EndScrollView();
         }
         internal static bool SetPublic(bool value)
