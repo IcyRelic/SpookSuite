@@ -7,8 +7,8 @@ namespace SpookSuite.Components
 {
     internal class KBInput : MonoBehaviour
     {
-        private float sprintMultiplier = 1f;
-        private float movementSpeed = 10f;
+        public float sprintMultiplier = 1f;
+        public float movementSpeed = 10f;
 
         public Vector3 movement;
 

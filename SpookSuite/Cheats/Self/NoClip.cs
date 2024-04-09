@@ -9,8 +9,10 @@ using UnityEngine;
 
 namespace SpookSuite.Cheats
 {
-    internal class NoClip : ToggleCheat
+    internal class NoClip : ToggleCheat, IVariableCheat<int>
     {
+
+        public static int Value = 10;
 
         private KBInput movement = null;
 
@@ -23,7 +25,7 @@ namespace SpookSuite.Cheats
                 if (movement is null) movement = Player.localPlayer.gameObject.AddComponent<KBInput>();
 
                 movement.Configure(Player.localPlayer.data.lookDirection, Player.localPlayer.data.lookDirectionRight, Player.localPlayer.data.lookDirectionUp);
-
+                movement.movementSpeed = Value;
                 Player.localPlayer.refs.ragdoll.GetComponentsInChildren<Collider>().ToList().ForEach(c => c.enabled = false);
                 Player.localPlayer.refs.controller.gravity = 0;
                 Player.localPlayer.refs.controller.constantGravity = 0;
