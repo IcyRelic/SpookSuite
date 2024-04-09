@@ -9,10 +9,10 @@ using UnityEngine;
 
 namespace SpookSuite.Cheats
 {
-    internal class NoClip : ToggleCheat, IVariableCheat<int>
+    internal class NoClip : ToggleCheat, IVariableCheat<float>
     {
 
-        public static int Value = 10;
+        public static float Value = 10f;
 
         private KBInput movement = null;
 
