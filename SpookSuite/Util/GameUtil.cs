@@ -8,7 +8,7 @@ namespace SpookSuite.Util
     public class GameUtil
     {
 
-        public static void SpawnItem(byte itemId, bool equip = false) => SpawnItem(itemId, Player.localPlayer.transform.position, equip);
+        public static void SpawnItem(byte itemId, bool equip = false) => SpawnItem(itemId, Player.localPlayer.data.groundPos, equip);
         public static void SpawnItem(byte itemId, Vector3 spawnPos, bool equip = false)
         {
             spawnPos += Player.localPlayer.transform.forward;
