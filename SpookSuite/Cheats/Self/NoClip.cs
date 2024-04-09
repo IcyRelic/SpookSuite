@@ -18,25 +18,25 @@ namespace SpookSuite.Cheats
         {
             if (Player.localPlayer is null) return;
 
-            //SphereCollider collider = Player.localPlayer.refs.Reflect().GetValue<SphereCollider>("simpleCollider");
-            PlayerRagdoll ragdoll = Player.localPlayer.refs.ragdoll;
             if (Enabled)
             {
                 if (movement is null) movement = Player.localPlayer.gameObject.AddComponent<KBInput>();
 
-                //collider.enabled = false;
+                movement.Configure(Player.localPlayer.data.lookDirection, Player.localPlayer.data.lookDirectionRight, Player.localPlayer.data.lookDirectionUp);
 
-                Bodypart hip = Player.localPlayer.refs.ragdoll.Reflect().Invoke<Bodypart>("GetBodypart", args: BodypartType.Hip);
-                Rigidbody rig = hip.Reflect().GetValue<Rigidbody>("rig");
-
-                rig.transform.position = movement.transform.position;
-                
+                Player.localPlayer.refs.ragdoll.GetComponentsInChildren<Collider>().ToList().ForEach(c => c.enabled = false);
+                Player.localPlayer.refs.controller.gravity = 0;
+                Player.localPlayer.refs.controller.constantGravity = 0;
+                Player.localPlayer.refs.ragdoll.Reflect().Invoke("AddForce", movement.movement, ForceMode.Impulse);
             }
             else
             {
                 //collider.enabled = true;
                 Destroy(movement);
                 movement = null;
+                Player.localPlayer.refs.ragdoll.GetComponentsInChildren<Collider>().ToList().ForEach(c => c.enabled = true);
+                Player.localPlayer.refs.controller.gravity = 80;
+                Player.localPlayer.refs.controller.constantGravity = 2;
             }
         }
 
