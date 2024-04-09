@@ -9,7 +9,6 @@ namespace SpookSuite.Menu.Core
 {
     internal class SpookSuiteMenu : MenuFragment
     {
-
         public Rect windowRect = new Rect(50f, 50f, 700f, 450f);
 
         private Vector2 scrollPos = Vector2.zero;
@@ -95,7 +94,6 @@ namespace SpookSuite.Menu.Core
 
         private void DrawContent(int windowID)
         {
-
             GUI.color = new Color(1f, 1f, 1f, 0.1f);
             GUIStyle watermark = new GUIStyle(GUI.skin.label) { fontSize = 20, fontStyle = FontStyle.Bold };
             string text = "Placeholder Text";
