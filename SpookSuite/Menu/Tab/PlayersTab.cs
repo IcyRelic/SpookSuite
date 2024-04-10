@@ -19,7 +19,7 @@ namespace SpookSuite.Menu.Tab
 
         private Vector2 scrollPos = Vector2.zero;
         private Vector2 scrollPos2 = Vector2.zero;
-        public Player selectedPlayer = null;
+        public static Player selectedPlayer = new Player();
 
         public int num;
 
@@ -58,14 +58,22 @@ namespace SpookSuite.Menu.Tab
         private void PlayerActions()
         {
             UI.Header("Selected Player Actions");
-            UI.Button("Teleport", () => Player.localPlayer.data.groundPos = selectedPlayer.data.groundPos, "Teleport");
-            UI.Button("Bring", () => selectedPlayer.data.groundPos = Player.localPlayer.data.groundPos, "Bring");
+            UI.Button("Teleport", () => PhotonNetwork.Instantiate("Player", selectedPlayer.data.groundPos, new Quaternion(0f, 0f, 0f, 0f)), "Teleport");
+            UI.Button("Bring", () =>
+            {
+                if (!GameUtil.IsOverridingPhotonLocalPlayer())
+                { GameUtil.ToggleOverridePhotonLocalPlayer(); }
+                PhotonNetwork.Instantiate("Player", selectedPlayer.data.groundPos, new Quaternion(0f, 0f, 0f, 0f));
+                GameUtil.ToggleOverridePhotonLocalPlayer();
+            }, "Bring");
             UI.Button("Nearby Monsters Attack", () => selectedPlayer.GetClosestMonster().SetTargetPlayer(selectedPlayer), "Nearby Monsters Attack");
             UI.Button("All Monsters Attack", () => GameObjectManager.monsters.ForEach(m => m.SetTargetPlayer(selectedPlayer)), "All Monsters Attack");
             UI.Button("Spawn Bomb", () => GameUtil.SpawnItem(58, selectedPlayer.data.groundPos), "Bomb");
             UI.Button("Kill", () => selectedPlayer.Reflect().Invoke("CallDie"), "Kill");
             UI.Button("Revive", () => selectedPlayer.CallRevive(), "Revive");
             UI.Button("Kick", () => PhotonNetwork.NetworkingClient.CurrentRoom.Reflect().Invoke("RemovePlayer", selectedPlayer.refs.view.Owner), "Kick");
+            UI.Button("CallTakeDamageAndAddForceAndFall", () => selectedPlayer.Reflect().Invoke("CallTakeDamageAndAddForceAndFall", 0f, Vector3.zero, 2f), "CallTakeDamageAndAddForceAndFall");
+
         }
 
         private void PlayersList()
