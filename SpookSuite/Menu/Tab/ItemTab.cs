@@ -43,12 +43,15 @@ namespace SpookSuite.Menu.Tab
 
             int gridWidth = 4;
             int btnWidth = (int) (SpookSuiteMenu.Instance.contentWidth - (SpookSuiteMenu.Instance.spaceFromLeft * 2)) / gridWidth;
+            
 
-            UI.ButtonGrid<Item>(items, item => String.IsNullOrEmpty(item.displayName) ? item.name : item.displayName, searchText, item => GameUtil.SpawnItem(item.id, equipOnSpawn), gridWidth, btnWidth);
+
+            UI.ButtonGrid<Item>(items, item => item.GetName(), searchText, item => GameUtil.SpawnItem(item.id, equipOnSpawn), gridWidth, btnWidth);
             
             GUILayout.EndScrollView();
         }
 
-        
+
+    
     }
 }

@@ -7,6 +7,7 @@ using SpookSuite.Util;
 using UnityEngine;
 using Zorro.Core.CLI;
 using Steamworks;
+using System.Linq;
 
 namespace SpookSuite.Menu.Tab
 {
@@ -53,6 +54,23 @@ namespace SpookSuite.Menu.Tab
 
             UI.Button("Set Lobby Joinable", () => SetJoinable(true));
             UI.Button("Set Lobby NonJoinable", () => SetJoinable(false));
+
+            UI.Header("Debugging Cheats");
+
+            UI.Button("Count Enemies", () =>
+            {
+                GameObject[] prefabs = Resources.LoadAll<GameObject>("");
+
+                GameObject[] enemies = prefabs.Where(x => x.GetComponent<Player>() != null && x.GetComponent<Player>().ai).ToArray();
+
+                Debug.Log("Prefabs: " + enemies.Length);
+
+                foreach (var item in enemies)
+                {
+                    Debug.Log(item.name);
+
+                }
+            });
 
             GUILayout.BeginHorizontal();
             GUILayout.Label("Add $1000");

@@ -47,6 +47,7 @@ namespace SpookSuite
 
         private void LoadCheats()
         {
+            GameUtil.LoadMonterNames();
             cheats = new List<ToggleCheat>();
             menu = new SpookSuiteMenu();
             foreach (Type type in Assembly.GetExecutingAssembly().GetTypes().Where(t => String.Equals(t.Namespace, "SpookSuite.Cheats", StringComparison.Ordinal) && t.IsSubclassOf(typeof(Cheat))))

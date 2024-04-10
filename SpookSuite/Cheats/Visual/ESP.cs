@@ -61,7 +61,7 @@ namespace SpookSuite.Cheats
 
         private void DisplayItems()
         {
-            DisplayObjects(GameObjectManager.items, item => item.item.displayName, item => Settings.c_espItems);
+            DisplayObjects(GameObjectManager.items, item => item.item.GetName(), item => Settings.c_espItems);
         }
 
         private void DisplayDivingBells()
