@@ -1,4 +1,5 @@
-﻿using SpookSuite.Manager;
+﻿using Photon.Pun;
+using SpookSuite.Manager;
 using SpookSuite.Menu.Core;
 using SpookSuite.Util;
 using System.Collections.Generic;
@@ -28,6 +29,8 @@ namespace SpookSuite.Menu.Tab
             if (GUILayout.Button("Apply Text"))
                 Player.localPlayer.refs.visor.visorFaceText.text = helemtText;
             GUILayout.EndHorizontal();
+
+            UI.Button("Advance Day", () => GameUtil.AdvanceDay());
         }
     }
 }

@@ -67,5 +67,15 @@ namespace SpookSuite.Util
             OverridingPhotonLocalPlayer = !OverridingPhotonLocalPlayer;
         }
 
+        public static void AdvanceDay()
+        {
+            if (!SurfaceNetworkHandler.Instance) return;
+
+            if (!SurfaceNetworkHandler.Instance.Reflect().GetValue<bool>("m_Started", true))
+                SurfaceNetworkHandler.Instance.RequestStartGame();
+
+
+            SurfaceNetworkHandler.Instance.Reflect().GetValue<PhotonView>("m_View").RPC("RPCA_Sleep", RpcTarget.All);
+        }
     }
 }
