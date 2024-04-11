@@ -18,6 +18,7 @@ namespace SpookSuite.Menu.Tab
         private Vector2 scrollPos = Vector2.zero;
         private string searchText = "";
         private bool equipOnSpawn = false;
+        private bool droneDelivery = false;
         public override void Draw()
         {
             GUILayout.BeginVertical();
@@ -34,6 +35,8 @@ namespace SpookSuite.Menu.Tab
             UI.Textbox("Search", ref searchText);
             GUILayout.FlexibleSpace();
             UI.Checkbox("Equip on Spawn", ref equipOnSpawn);
+            GUILayout.FlexibleSpace();
+            UI.Checkbox("Drone Delivery", ref droneDelivery);
 
             GUILayout.EndHorizontal();
 
@@ -43,7 +46,7 @@ namespace SpookSuite.Menu.Tab
 
             int gridWidth = 4;
             int btnWidth = (int) (SpookSuiteMenu.Instance.contentWidth - (SpookSuiteMenu.Instance.spaceFromLeft * 2)) / gridWidth;
-            UI.ButtonGrid<Item>(items, item => item.GetName(), searchText, item => GameUtil.SpawnItem(item.id, equipOnSpawn), gridWidth, btnWidth);
+            UI.ButtonGrid<Item>(items, item => item.GetName(), searchText, item => GameUtil.SpawnItem(item.id, equipOnSpawn, droneDelivery), gridWidth, btnWidth);
             
             GUILayout.EndScrollView();
         }

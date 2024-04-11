@@ -26,28 +26,36 @@ namespace SpookSuite.Util
             enemies.ToList().ForEach(x => monterNames.Add(x.name));
             Debug.Log($"Loaded {monterNames.Count} monsters");
         }
-        public static void SpawnItem(byte itemId, bool equip = false) => SpawnItem(itemId, Player.localPlayer.data.groundPos, equip);
-        public static void SpawnItem(byte itemId, Vector3 spawnPos, bool equip = false)
+        public static void SpawnItem(byte itemId, bool equip = false, bool drone = false) => SpawnItem(itemId, Player.localPlayer.data.groundPos, equip, drone);
+        public static void SpawnItem(byte itemId, Vector3 spawnPos, bool equip = false, bool drone = false)
         {
-            spawnPos += Player.localPlayer.transform.forward;
-            spawnPos.y += 1;
-
-            Pickup component = PhotonNetwork.Instantiate("PickupHolder", spawnPos, Random.rotation, 0, null).GetComponent<Pickup>();
-
-            if(component == null)
+            if(drone)
             {
-                Debug.LogError("Failed to spawn item");
-                return;
+                if (!ShopHandler.Instance) return;
+                ShopHandler.Instance.GetComponent<PhotonView>().RPC("RPCA_SpawnDrone", RpcTarget.All, new byte[] {itemId});
             }
+            else
+            {
+                spawnPos += Player.localPlayer.transform.forward;
+                spawnPos.y += 1;
 
-            component.ConfigurePickup(itemId, new ItemInstanceData(Guid.NewGuid()));
+                Pickup component = PhotonNetwork.Instantiate("PickupHolder", spawnPos, Random.rotation, 0, null).GetComponent<Pickup>();
+
+                if (component == null)
+                {
+                    Debug.LogError("Failed to spawn item");
+                    return;
+                }
+
+                component.ConfigurePickup(itemId, new ItemInstanceData(Guid.NewGuid()));
 
 
 
-            if (equip) component.Interact(Player.localPlayer);
+                if (equip) component.Interact(Player.localPlayer);
+            }
         }
 
-        public static Item GetItemByName(String name)
+        public static Item GetItemByName(string name)
         {
             return ItemDatabase.Instance.Objects.ToList().Find(x => x.GetName().ToLower() == name.ToLower());
         }
