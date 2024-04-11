@@ -8,6 +8,10 @@ using UnityEngine;
 using Zorro.Core.CLI;
 using Steamworks;
 using System.Linq;
+using System.Reflection;
+using System;
+using Object = UnityEngine.Object;
+using SpookSuite.Handler;
 
 namespace SpookSuite.Menu.Tab
 {
@@ -57,39 +61,32 @@ namespace SpookSuite.Menu.Tab
 
             UI.Header("Debugging Cheats");
 
-            UI.Button("Count Enemies", () =>
-            {
-                GameObject[] prefabs = Resources.LoadAll<GameObject>("");
-
-                GameObject[] enemies = prefabs.Where(x => x.GetComponent<Player>() != null && x.GetComponent<Player>().ai).ToArray();
-
-                Debug.Log("Prefabs: " + enemies.Length);
-
-                foreach (var item in enemies)
-                {
-                    Debug.Log(item.name);
-
-                }
-            });
-
             GUILayout.BeginHorizontal();
-            GUILayout.Label("Add $1000");
+            GUILayout.Label("Chams?");
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Execute"))
             {
 
-                SurfaceNetworkHandler.RoomStats.AddMoney(1000);
+                foreach (ItemInstance player in Object.FindObjectsOfType<ItemInstance>())
+                {
+                    if (player == null)
+                    {
+                        continue;
+                    }
 
-                VerboseDebug.Log("Changing RoomStats: Money: " + SurfaceNetworkHandler.RoomStats.Money.ToString() + " Day: " + SurfaceNetworkHandler.RoomStats.CurrentDay.ToString());
-                Hashtable propertiesToSet = new Hashtable();
-                propertiesToSet.Add((object)"m", (object)SurfaceNetworkHandler.RoomStats.Money);
-                propertiesToSet.Add((object)"d", (object)SurfaceNetworkHandler.RoomStats.CurrentDay);
-                propertiesToSet.Add((object)"q", (object)SurfaceNetworkHandler.RoomStats.CurrentQuotaDay);
-                propertiesToSet.Add((object)"qs", (object)SurfaceNetworkHandler.RoomStats.QuotaToReach);
-                propertiesToSet.Add((object)"cq", (object)SurfaceNetworkHandler.RoomStats.CurrentQuota);
-                propertiesToSet.Add((object)"s", (object)GameAPI.seed);
-                propertiesToSet.Add((object)"cu", (object)SurfaceNetworkHandler.RoomStats.CurrentCamera.GetUpgradeData());
-                PhotonNetwork.CurrentRoom.SetCustomProperties(propertiesToSet);
+                    foreach (Renderer renderer in player?.gameObject?.GetComponentsInChildren<Renderer>())
+                    {
+                        renderer.material = ChamHandler.m_chamMaterial;
+                        //renderer.material = ;
+                    }
+
+                    /*Highlighter h = player.GetOrAddComponent<Highlighter>();
+
+                    if (h) {
+                        h.FlashingOff();
+                        h.ConstantOnImmediate(Color.red);
+                    }*/
+                }
             }
             GUILayout.EndHorizontal();
 

@@ -44,7 +44,7 @@ namespace SpookSuite.Util
             if (Input.GetMouseButtonDown(0))
             {
                 resizing = false;
-                //Settings.Config.SaveConfig();
+                Settings.Config.SaveConfig();
                 return;
             }
 
@@ -54,7 +54,7 @@ namespace SpookSuite.Util
                 Settings.i_menuWidth = oldWidth;
                 Settings.i_menuHeight = oldHeight;
 
-                //Settings.Config.SaveConfig();
+                Settings.Config.SaveConfig();
                 return;
             }
 
@@ -75,7 +75,7 @@ namespace SpookSuite.Util
             Object.FindObjectOfType<CursorHandler>().enabled = false;
             Cursor.visible = true;
             lockMode = Cursor.lockState;
-            Cursor.lockState = CursorLockMode.None;
+            Cursor.lockState = CursorLockMode.Confined;
         }
 
         public static void HideCursor()

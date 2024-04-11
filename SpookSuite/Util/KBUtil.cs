@@ -23,7 +23,7 @@ namespace SpookSuite.Util
                 cheat.keybind = key;
                 await Task.Delay(100);
                 cheat.WaitingForKeybind = false;
-                //Settings.Config.SaveConfig();
+                Settings.Config.SaveConfig();
             }
 
         }
@@ -41,6 +41,8 @@ namespace SpookSuite.Util
 
         public static void BeginChangeKeybind(Cheat cheat, params Action[] callbacks)
         {
+            if (Cheat.instances.Where(c => c.WaitingForKeybind).Count() > 0) return;
+
             cheat.WaitingForKeybind = true;
             _ = TryGetPressedKeyTask(new KBCallback(cheat).Invoke, callbacks);
         }

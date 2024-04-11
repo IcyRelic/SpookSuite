@@ -58,6 +58,9 @@ namespace SpookSuite
 
                 Debug.Log($"Loaded Cheat: {type.Name}");
             }
+
+            Settings.Config.SaveDefaultConfig();
+            Settings.Config.LoadConfig();
         }
         
         private void LoadKeybinds()
@@ -81,13 +84,13 @@ namespace SpookSuite
         {
             try
             {
-
-                Cheat.instances.FindAll(c => c.HasKeybind && Input.GetKeyDown(c.keybind)).ForEach(c =>
-                {
-                   if(c.GetType().IsSubclassOf(typeof(ToggleCheat))) ((ToggleCheat)c).Toggle();
-                   else if(c.GetType().IsSubclassOf(typeof(ExecutableCheat))) ((ExecutableCheat)c).Execute();
-                   else Debug.Log($"Unknown Cheat Type: {c.GetType().Name}");
-                });
+                if(Cheat.instances.Where(c => c.WaitingForKeybind).Count() == 0)
+                    Cheat.instances.FindAll(c => c.HasKeybind && Input.GetKeyDown(c.keybind)).ForEach(c =>
+                    {
+                       if(c.GetType().IsSubclassOf(typeof(ToggleCheat))) ((ToggleCheat)c).Toggle();
+                       else if(c.GetType().IsSubclassOf(typeof(ExecutableCheat))) ((ExecutableCheat)c).Execute();
+                       else Debug.Log($"Unknown Cheat Type: {c.GetType().Name}");
+                    });
 
                 if (PhotonNetwork.InRoom) cheats.ForEach(cheat => cheat.Update());
             }

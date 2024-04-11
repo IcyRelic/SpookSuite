@@ -27,8 +27,10 @@ namespace SpookSuite.Manager
 
         public static List<Bot> monsters = new List<Bot>();
         public static List<Player> players = new List<Player>();
+        public static List<Player> enemyPlayer = new List<Player>();
         public static List<PlayerRagdoll> playerRagdolls = new List<PlayerRagdoll>();
         public static List<ItemInstance> items = new List<ItemInstance>();
+        public static List<Pickup> pickups = new List<Pickup>();
         public static List<UseDivingBellButton> divingBells = new List<UseDivingBellButton>();
         public static List<Laser> lasers = new List<Laser>();
 
@@ -37,9 +39,11 @@ namespace SpookSuite.Manager
             while (true)
             {
                 CollectObjects(monsters);
-                CollectObjects(players);
+                CollectObjects(players, obj => !obj.ai);
+                CollectObjects(enemyPlayer, obj => obj.ai);
                 CollectObjects(playerRagdolls);
                 CollectObjects(items);
+                CollectObjects(pickups);
                 CollectObjects(divingBells);
                 CollectObjects(lasers);
 

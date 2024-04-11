@@ -1,9 +1,14 @@
 ﻿using HarmonyLib;
 using Photon.Pun;
+using Photon.Voice;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
+using System.Security.Cryptography;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
 namespace SpookSuite.Util
@@ -28,7 +33,16 @@ namespace SpookSuite.Util
             spawnPos.y += 1;
 
             Pickup component = PhotonNetwork.Instantiate("PickupHolder", spawnPos, Random.rotation, 0, null).GetComponent<Pickup>();
+
+            if(component == null)
+            {
+                Debug.LogError("Failed to spawn item");
+                return;
+            }
+
             component.ConfigurePickup(itemId, new ItemInstanceData(Guid.NewGuid()));
+
+
 
             if (equip) component.Interact(Player.localPlayer);
         }
@@ -36,7 +50,6 @@ namespace SpookSuite.Util
         public static Item GetItemByName(String name)
         {
             return ItemDatabase.Instance.Objects.ToList().Find(x => x.GetName().ToLower() == name.ToLower());
-
         }
 
         public static Item GetItemById(byte id)

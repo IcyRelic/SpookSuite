@@ -91,15 +91,7 @@ namespace SpookSuite.Menu.Core
             Stylize();
             GUI.color = new Color(1f, 1f, 1f, Settings.f_menuAlpha);
 
-            foreach (Player p in GameObjectManager.players)
-            {
-                if (Settings.b_displayDead && p.data.dead)
-                {
-                    float yOffset = 30f;
-                    VisualUtil.DrawString(new Vector2(10f, yOffset), p.refs.view.Owner.NickName);
-                    yOffset += 10f;
-                }
-            }
+            
 
             windowRect = GUILayout.Window(0, windowRect, new GUI.WindowFunction(DrawContent), "SpookSuite");
             GUI.color = Color.white;

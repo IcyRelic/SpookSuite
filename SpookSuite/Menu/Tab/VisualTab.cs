@@ -24,7 +24,7 @@ namespace SpookSuite.Menu.Tab
             scrollPos = GUILayout.BeginScrollView(scrollPos);
 
             UI.CheatToggleSlider(Cheat.Instance<FOV>(), "FOV", Cheats.FOV.Value.ToString(), ref Cheats.FOV.Value, 1, 170);
-            UI.Checkbox("Display Dead", ref Settings.b_displayDead);
+            UI.Checkbox("Display Dead", ref Cheat.Instance<DisplayDead>().Enabled);
 
             GUILayout.EndScrollView();
         }
@@ -32,17 +32,22 @@ namespace SpookSuite.Menu.Tab
         private void ESPContent()
         {
             scrollPos = GUILayout.BeginScrollView(scrollPos);
-
+            
             UI.Checkbox("Enable ESP", ref Cheat.Instance<ESP>().Enabled);
+            UI.Button("Toggle All ESP", () => ESP.ToggleAll());
             UI.Checkbox("Display Players", ref ESP.displayPlayers);
-            //UI.Checkbox("Enabled", ref Cheats.PlayerESP.enabled);
-            //UI.Checkbox("Skeleton", ref Cheats.PlayerESP.skeletonESP); //Player.refs.ik bones
-            //UI.Checkbox("Box", ref Cheats.PlayerESP.box);
-            //UI.Checkbox("Looking Radius", ref Cheats.PlayerESP.LookingRadius);//make a semicircle based off their rotation and field of view in front of em on the ground.
             UI.Checkbox("Display Monsters", ref ESP.displayEnemies);
             UI.Checkbox("Display Items", ref ESP.displayItems);
             UI.Checkbox("Display Lasers", ref ESP.displayLasers);
             UI.Checkbox("Display Diving Bell", ref ESP.displayDivingBell);
+
+            UI.SubHeader("Chams");
+            UI.CheatToggleSlider(Cheat.Instance<ChamESP>(), "Enable Chams", ChamESP.Value.ToString(), ref ChamESP.Value, 0, 170);
+            UI.Checkbox("Display Players", ref ChamESP.displayPlayers);
+            UI.Checkbox("Display Monsters", ref ChamESP.displayEnemies);
+            UI.Checkbox("Display Items", ref ChamESP.displayItems);
+            UI.Checkbox("Display Lasers", ref ChamESP.displayLasers);
+            UI.Checkbox("Display Diving Bell", ref ChamESP.displayDivingBell);
 
             GUILayout.EndScrollView();
         }

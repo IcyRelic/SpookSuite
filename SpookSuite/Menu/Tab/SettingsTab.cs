@@ -38,6 +38,12 @@ namespace SpookSuite.Menu.Tab
 
         private void MenuContent()
         {
+            UI.Actions(
+                new UIButton("Reset Settings", () => Settings.Config.RegenerateConfig()),
+                new UIButton("Save Settings", () => Settings.Config.SaveConfig()),
+                new UIButton("Reload Settings", () => Settings.Config.LoadConfig())
+            );
+
             UI.NumSelect("Font Size", ref Settings.i_menuFontSize, 5, 30);
             UI.Slider("Menu Opacity", Settings.f_menuAlpha.ToString("0.00"), ref Settings.f_menuAlpha, 0.1f, 1f);
             UI.Button("Resize Menu", () => MenuUtil.BeginResizeMenu(), "Resize");

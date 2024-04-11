@@ -2,12 +2,62 @@
 using SpookSuite.Util;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
 using static UnityEngine.Rendering.DebugUI;
 
 namespace SpookSuite
 {
+    public class UIButton
+    {
+        public string label;
+        public Action action;
+        private GUIStyle style = null;
+
+        public UIButton(string label, Action action, GUIStyle style = null)
+        {
+            this.label = label;
+            this.action = action;
+
+            this.style = style;
+        }
+
+        public void Draw()
+        {
+            if (style != null ? GUILayout.Button(label, style) : GUILayout.Button(label)) action.Invoke();
+        }
+    }
+
+    public class UIOption
+    {
+        public string label;
+        public object value;
+        public Action action;
+
+
+        public UIOption(string label, object value)
+        {
+            this.label = label;
+            this.value = value;
+        }
+
+        public UIOption(string label, Action action)
+        {
+            this.label = label;
+            this.action = action;
+        }
+
+        public void Draw(ref object refValue)
+        {
+            if (GUILayout.Button(label)) refValue = value;
+        }
+
+        public void Draw()
+        {
+            if (GUILayout.Button(label)) action.Invoke();
+        }
+    }
     public class UI
     {
 
@@ -163,6 +213,12 @@ namespace SpookSuite
             GUILayout.FlexibleSpace();
             value = GUILayout.TextField(value, GUILayout.Width(big ? Settings.i_textboxWidth * 3 : Settings.i_textboxWidth));
             value = Regex.Replace(value, regex, "");
+            GUILayout.EndHorizontal();
+        }
+        public static void Actions(params UIButton[] buttons)
+        {
+            GUILayout.BeginHorizontal();
+            buttons.ToList().ForEach(btn => btn.Draw());
             GUILayout.EndHorizontal();
         }
         public static void ButtonGrid<T>(List<T> objects, Func<T, string> textSelector, string search, Action<T> action, int numPerRow, int btnWidth = 175)

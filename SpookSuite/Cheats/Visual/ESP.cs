@@ -31,6 +31,14 @@ namespace SpookSuite.Cheats
 
         }
 
+        public static void ToggleAll()
+        {
+            displayPlayers = !displayPlayers;
+            displayEnemies = !displayEnemies;
+            displayItems = !displayItems;
+            displayDivingBell = !displayDivingBell;
+            displayLasers = !displayLasers;
+        }
         private void DisplayObjects<T>(IEnumerable<T> objects, Func<T, string> labelSelector, Func<T, RGBAColor> colorSelector) where T : Component
         {
             foreach (T obj in objects)
