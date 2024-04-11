@@ -221,7 +221,7 @@ namespace SpookSuite
 
                 }
 
-                    if (json.TryGetValue("MenuSettings", out JToken settingsToken))
+                if (json.TryGetValue("MenuSettings", out JToken settingsToken))
                 {
                     JObject settings = settingsToken.ToObject<JObject>();
 

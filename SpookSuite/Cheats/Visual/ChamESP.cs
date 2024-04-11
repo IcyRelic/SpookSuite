@@ -30,7 +30,6 @@ namespace SpookSuite.Cheats
             DisplayChams(GameObjectManager.enemyPlayer, _ => Settings.c_chams);
             DisplayChams(GameObjectManager.divingBells, _ => Settings.c_chams);
             DisplayChams(GameObjectManager.lasers, _ => Settings.c_chams);
-
         }
 
         private void DisplayChams<T>(IEnumerable<T> objects, Func<T, RGBAColor> colorSelector) where T : Object

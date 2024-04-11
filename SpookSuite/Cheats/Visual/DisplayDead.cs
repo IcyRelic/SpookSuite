@@ -17,7 +17,7 @@ namespace SpookSuite.Cheats
             GameObjectManager.players.Where(p => p.data.dead).ToList().ForEach(p =>
             {
                 VisualUtil.DrawString(new Vector2(5, y), p.refs.view.Owner.NickName, false);
-                y += 10f;
+                y += 15f;
             });
         }
 
