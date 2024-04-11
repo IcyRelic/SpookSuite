@@ -53,7 +53,8 @@ namespace SpookSuite.Menu.Tab
                 else
                     Cheat.Instance<KickAll>().Execute();
             });
-
+            UI.Button("Kill All", () => Cheat.Instance<KillAll>().Execute());
+            UI.Button("Revive All", () => Cheat.Instance<ReviveAll>().Execute());
         }
         private void PlayerActions()
         {
@@ -73,6 +74,7 @@ namespace SpookSuite.Menu.Tab
             UI.Button("Revive", () => selectedPlayer.CallRevive(), "Revive");
             UI.Button("Kick", () => PhotonNetwork.NetworkingClient.CurrentRoom.Reflect().Invoke("RemovePlayer", selectedPlayer.refs.view.Owner), "Kick");
             UI.Button("Ragdoll", () => selectedPlayer.Reflect().Invoke("CallTakeDamageAndAddForceAndFall", 0f, Vector3.zero, 2f), "Ragdoll");
+            UI.Button("Tase", () => selectedPlayer.Reflect().Invoke("CallTakeDamageAndTase", 1f, 5f));
         }
 
         private void PlayersList()
