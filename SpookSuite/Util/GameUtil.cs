@@ -37,28 +37,13 @@ namespace SpookSuite.Util
             }
             else
             {
-
-                
-
                 spawnPos += Player.localPlayer.transform.forward;
                 spawnPos.y += 1;
                 byte[] array = new ItemInstanceData(Guid.NewGuid()).Serialize(true);
 
-                Player.localPlayer.refs.view.RPC("RPC_RequestCreatePickup", RpcTarget.MasterClient, (object)itemId, (object)array, (object)spawnPos, (object)Random.rotation);
-                /**
-                Pickup component = PhotonNetwork.Instantiate("PickupHolder", spawnPos, Random.rotation, 0, null).GetComponent<Pickup>();
+                if(equip) Patches.waitingForItemSpawn.Add(itemId);
 
-                if (component == null)
-                {
-                    Debug.LogError("Failed to spawn item");
-                    return;
-                }
-
-                component.ConfigurePickup(itemId, new ItemInstanceData(Guid.NewGuid()));
-
-
-
-                if (equip) component.Interact(Player.localPlayer);**/
+                Player.localPlayer.refs.view.RPC("RPC_RequestCreatePickup", RpcTarget.MasterClient, (object)itemId, (object)array, (object)spawnPos, (object)Random.rotation);                
             }
         }
 
