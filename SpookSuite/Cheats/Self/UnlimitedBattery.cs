@@ -8,7 +8,6 @@ namespace SpookSuite.Cheats
 {
     internal class UnlimitedBattery : ToggleCheat
     {
-
         public override void Update()
         {
             if (Player.localPlayer is null || !Enabled) return;

@@ -61,21 +61,24 @@ namespace SpookSuite.Menu.Tab
 
             UI.Header("Debugging Cheats");
 
+            if (GUILayout.Button("drone test"))
+            {
+                ShopHandler.Instance.Reflect().Invoke("RPCA_SpawnDrone", GameUtil.GetItemByName("Camera")); //orders
+            }
+
             GUILayout.BeginHorizontal();
             GUILayout.Label("Chams?");
             GUILayout.FlexibleSpace();
             if (GUILayout.Button("Execute"))
             {
-
                 foreach (ItemInstance player in Object.FindObjectsOfType<ItemInstance>())
                 {
                     if (player == null)
-                    {
                         continue;
-                    }
 
                     foreach (Renderer renderer in player?.gameObject?.GetComponentsInChildren<Renderer>())
                     {
+
                         renderer.material = ChamHandler.m_chamMaterial;
                         //renderer.material = ;
                     }

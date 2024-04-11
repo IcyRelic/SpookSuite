@@ -8,16 +8,15 @@ namespace SpookSuite.Cheats
 {
     internal class DisplayDead : ToggleCheat
     {
-
         public override void OnGui()
         {
             if(!Enabled) return;
 
-            float y = 30f;
+            float y = 20f;
 
             GameObjectManager.players.Where(p => p.data.dead).ToList().ForEach(p =>
             {
-                VisualUtil.DrawString(new Vector2(10f, y), p.refs.view.Owner.NickName);
+                VisualUtil.DrawString(new Vector2(5, y), p.refs.view.Owner.NickName, false);
                 y += 10f;
             });
         }

@@ -28,7 +28,6 @@ namespace SpookSuite.Menu.Tab
 
         public override void Draw()
         {
-
             GUILayout.BeginVertical();
             GUILayout.BeginHorizontal();
             selectedTab = GUILayout.Toolbar(selectedTab, tabs, style: "TabBtn");

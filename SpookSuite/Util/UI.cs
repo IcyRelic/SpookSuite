@@ -145,11 +145,18 @@ namespace SpookSuite
 
         public static void Button(string header, Action action, string btnText = "Execute")
         {
-            GUILayout.BeginHorizontal();
-            GUILayout.Label(header);
-            GUILayout.FlexibleSpace();
-            if (GUILayout.Button(btnText)) action();
-            GUILayout.EndHorizontal();
+            if(!String.IsNullOrEmpty(btnText))
+            {
+                GUILayout.BeginHorizontal();
+                GUILayout.Label(header);
+                GUILayout.FlexibleSpace();
+                if (GUILayout.Button(btnText)) action();
+                GUILayout.EndHorizontal();
+            }
+            else
+            {
+                if (GUILayout.Button(header)) action();
+            }
         }
 
         public static void Slider(string header, string displayValue, ref float value, float min, float max)
