@@ -77,5 +77,13 @@ namespace SpookSuite.Util
 
             SurfaceNetworkHandler.Instance.Reflect().GetValue<PhotonView>("m_View").RPC("RPCA_Sleep", RpcTarget.All);
         }
+
+        public static void SendHospitalBill(int amount)
+        {
+            var p = PhotonNetwork.PlayerListOthers.ToList().Count > 0 ? PhotonNetwork.PlayerListOthers.ToList().First() : PhotonNetwork.LocalPlayer;
+            List<(int, int)> bill = [(p.ActorNumber, -1000)];
+
+            SurfaceNetworkHandler.Instance.Reflect().Invoke("SendHospitalBill", bill);
+        }
     }
 }
