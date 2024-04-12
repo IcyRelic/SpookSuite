@@ -36,15 +36,24 @@ namespace SpookSuite.Cheats
         {
             objects.ToList().ForEach(o =>
             {
-                Transform transform;
+                try
+                {
+                    if (o is null) return;
+                    Transform transform;
 
-                if (o is Component component) transform = component.transform;
-                else if (o is GameObject gameObject) transform = gameObject.transform;
-                else return;
+                    if (o is Component component && component.transform is not null) transform = component.transform;
+                    else if (o is GameObject gameObject && gameObject.transform is not null) transform = gameObject.transform;
+                    else return;
 
-                if (o == null) return;
-                float distance = GetDistanceToPlayer(transform.position);
-                o.GetChamHandler().ProcessCham(distance);
+                    if (transform is null) return;
+
+                    float distance = GetDistanceToPlayer(transform.position);
+                    o.GetChamHandler().ProcessCham(distance);
+                }
+                catch (Exception e)
+                {
+                    
+                }
             });
         }
     }
