@@ -16,6 +16,7 @@ namespace SpookSuite.Menu.Tab
         private Vector2 scrollPos = Vector2.zero;
         private Vector2 scrollPos2 = Vector2.zero;
         private string searchText = "";
+        private string spoofName = "";
 
         public override void Draw()
         {
@@ -39,6 +40,7 @@ namespace SpookSuite.Menu.Tab
                 Player.localPlayer.refs.visor.visorFaceText.text = helemtText;
             GUILayout.EndHorizontal();
 
+            UI.TextboxAction("Name Spoof", ref spoofName, "", 100, new UIButton("Set", () => PhotonNetwork.NickName = spoofName));
             UI.Button("Advance Day", () => GameUtil.AdvanceDay());
             UI.Button("Add $300", () => GameUtil.SendHospitalBill(-300));
             UI.Button("Remove $300", () => GameUtil.SendHospitalBill(300));

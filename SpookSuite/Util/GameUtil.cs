@@ -39,7 +39,10 @@ namespace SpookSuite.Util
             {
                 spawnPos += Player.localPlayer.transform.forward;
                 spawnPos.y += 1;
-                byte[] array = new ItemInstanceData(Guid.NewGuid()).Serialize(true);
+                ItemInstanceData data = new ItemInstanceData(Guid.NewGuid());
+                byte[] array = data.Serialize(false);
+
+                Patches.allowedBombs.Add(data.m_guid);
 
                 if(equip) Patches.waitingForItemSpawn.Add(itemId);
 
@@ -81,7 +84,7 @@ namespace SpookSuite.Util
         public static void SendHospitalBill(int amount)
         {
             var p = PhotonNetwork.PlayerListOthers.ToList().Count > 0 ? PhotonNetwork.PlayerListOthers.ToList().First() : PhotonNetwork.LocalPlayer;
-            List<(int, int)> bill = [(p.ActorNumber, -1000)];
+            List<(int, int)> bill = [(p.ActorNumber, amount)];
 
             SurfaceNetworkHandler.Instance.Reflect().Invoke("SendHospitalBill", bill);
         }

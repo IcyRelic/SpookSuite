@@ -43,9 +43,6 @@ namespace SpookSuite.Components
         private void Update()
         {
             if (Cursor.visible) return;
-
-            Debug.Log(transform.forward);
-
             Vector3 input = new Vector3();
 
             if(Input.GetKey(KeyCode.W)) input += Forward * movementSpeed;

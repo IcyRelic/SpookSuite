@@ -33,6 +33,7 @@ namespace SpookSuite.Manager
         public static List<Pickup> pickups = new List<Pickup>();
         public static List<UseDivingBellButton> divingBells = new List<UseDivingBellButton>();
         public static List<Laser> lasers = new List<Laser>();
+        public static DivingBell divingBell;
 
         public IEnumerator CollectObjects()
         {
@@ -46,6 +47,8 @@ namespace SpookSuite.Manager
                 CollectObjects(pickups);
                 CollectObjects(divingBells);
                 CollectObjects(lasers);
+
+                divingBell = Object.FindObjectOfType<DivingBell>();
 
                 yield return new WaitForSeconds(collectInterval);
             }
