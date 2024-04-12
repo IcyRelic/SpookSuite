@@ -24,5 +24,25 @@ namespace SpookSuite.Cheats
                 return false;
             return true;
         }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(Player), "RPCA_PlayerDie")]
+        public static void RPCA_PlayerDie(Player __instance)
+        {
+
+        }
+
+        [HarmonyPostfix]
+        [HarmonyPatch(typeof(Player), "RPCA_PlayerDie")]
+        public static void RPCA_PlayerDieRevive(Player __instance)
+        {
+            if (Instance<Godmode>().Enabled && __instance.data.isLocal)
+            {
+                Debug.LogWarning("Sending Revive");
+                __instance.CallRevive();
+            }
+        }
+
+
     }
 }
