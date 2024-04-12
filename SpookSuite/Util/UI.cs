@@ -222,6 +222,17 @@ namespace SpookSuite
             value = Regex.Replace(value, regex, "");
             GUILayout.EndHorizontal();
         }
+
+        public static void TextboxAction(string label, ref string value, string regex, int length, params UIButton[] buttons)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(label);
+            GUILayout.FlexibleSpace();
+            value = GUILayout.TextField(value, length, GUILayout.Width(Settings.i_textboxWidth));
+            value = Regex.Replace(value, regex, "");
+            buttons.ToList().ForEach(btn => btn.Draw());
+            GUILayout.EndHorizontal();
+        }
         public static void Actions(params UIButton[] buttons)
         {
             GUILayout.BeginHorizontal();
