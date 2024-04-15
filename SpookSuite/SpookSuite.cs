@@ -32,6 +32,7 @@ namespace SpookSuite
         {
             instance = this;
             ThemeUtil.LoadTheme("Default");
+            //PhotonNetwork.LogLevel = PunLogLevel.Full;
             LoadCheats();
             DoPatching();
             LoadKeybinds();
@@ -68,6 +69,7 @@ namespace SpookSuite
             
         }
 
+
         public void FixedUpdate()
         {
             try
@@ -76,7 +78,7 @@ namespace SpookSuite
             }
             catch (Exception e)
             {
-                Debug.Log($"Error in FixedUpdate: {e}");
+                //Debug.Log($"Error in FixedUpdate: {e}");
             }
         }
 
@@ -96,7 +98,7 @@ namespace SpookSuite
             }
             catch (Exception e)
             {
-                Debug.Log($"Error in Update: {e}");
+                //Debug.Log($"Error in Update: {e}");
             }
         }
 
