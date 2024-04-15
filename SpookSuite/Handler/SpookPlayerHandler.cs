@@ -4,8 +4,12 @@ using SpookSuite.Components;
 using SpookSuite.Manager;
 using SpookSuite.Util;
 using Steamworks;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Xml.Linq;
+using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace SpookSuite.Handler
@@ -63,25 +67,74 @@ namespace SpookSuite.Handler
         public int RPCsOnFile() => GetRPCHistory().Count;
 
         private List<RPCData> GetRecentRPCHistory(int seconds = 5) => GetRPCHistory().ToList().FindAll(r => r.IsRecent(seconds));
+        private List<RPCData> GetSuspectedRPCHistory(string rpc, int seconds = 5) => GetRPCHistory().ToList().FindAll(r => r.rpc.StartsWith(rpc) && r.suspected);
 
-        public bool HasSentRPCInLast(string rpc, int seconds) => GetRecentRPCHistory(seconds).FindAll(r => r.rpc == rpc).Count > 0;
-        public void OnReceivedRPC(string rpc, Hashtable rpcData)
+        public bool HasSentRPCInLast(string rpc, int seconds) => GetRecentRPCHistory(seconds).FindAll(r => r.rpc.StartsWith(rpc)).Count > 0;
+        public bool HasBeenSuspectedInLast(string rpc, int seconds) => GetRecentRPCHistory(seconds).FindAll(r => r.rpc.StartsWith(rpc) && r.suspected).Count > 0;
+        public void OnReceivedRPC(string rpc, Hashtable rpcHash)
         {
-            if (player is null) return;
+            if (player is null || player.IsLocal) return;
 
-            GetRPCHistory().Enqueue(new RPCData(photonPlayer, rpc, rpcData));
+            RPCData rpcData = new RPCData(photonPlayer, rpc, rpcHash);
+
             
+
+            object[] parameters = (object[])null;
+            if (rpcHash.ContainsKey(Patches.keyByteFour))
+                parameters = (object[])rpcHash[Patches.keyByteFour];
+
+    
             if (rpc.StartsWith("RPC_RequestCreatePickup") && !HasSentRPCInLast("RPC_ClearSlot", 3))
             {
-                Log.Warning($"{photonPlayer.NickName} is probably spawning items.");
+               
+                rpcData.SetSuspected(parameters[0]);
+                Log.Error($"{photonPlayer.NickName} is probably spawning items.");
             }
-
 
             if(rpc.Equals("RPCA_SpawnDrone") && !HasSentRPCInLast("RPCA_AddItemToCart", 60))
             {
-                Log.Warning($"{photonPlayer.NickName} is probably spawning items WITH DRONES.");
+                rpcData.SetSuspected(parameters[0]);
+                Log.Error($"{photonPlayer.NickName} is probably spawning items WITH DRONES.");
             }
 
+            if (rpc.Equals("RPC_ConfigurePickup"))
+            {
+                bool spawnSuspect = HasBeenSuspectedInLast("RPC_RequestCreatePickup", 3);
+                bool droneSuspect = HasBeenSuspectedInLast("RPCA_SpawnDrone", 10);
+
+                if (spawnSuspect || droneSuspect)
+                {
+                    ItemInstanceData data = new ItemInstanceData(Guid.Empty);
+                    data.Deserialize((byte[])parameters[1]);
+                    byte itemID = (byte)parameters[0];
+
+                    RPCData suspect = spawnSuspect ?
+                        GetSuspectedRPCHistory("RPC_RequestCreatePickup", 6).Find(r => (byte)r.suspectedData == itemID) :
+                        GetSuspectedRPCHistory("RPCA_SpawnDrone", 6).Find(r => ((byte[])r.suspectedData).Contains(itemID));
+
+                    if (suspect is not null)
+                    {
+                        //Spawned Item, Delete it
+                        rpcData.SetSuspected(data.m_guid);
+                        Log.Error("Spawned Item Detected. Sending RPC_Remove...");
+
+                        SpookSuite.Invoke(() =>
+                        {
+                            Pickup pickup = GameUtil.GetPickupByGuid(data.m_guid);
+                            pickup.m_photonView.RPC("RPC_Remove", RpcTarget.MasterClient);
+                        }, 1);
+                    }
+
+                }
+            }
+
+
+
+
+            
+
+            
+            GetRPCHistory().Enqueue(rpcData);
             CleanupRPCHistory();
         }
 
@@ -90,6 +143,13 @@ namespace SpookSuite.Handler
             var queue = GetRPCHistory();
             while(queue.Count > 0 && queue.Peek().IsExpired()) queue.Dequeue();
         }
+
+        public void TestRPC()
+        {
+            RPC("RPC_SS_TEST", RpcTarget.All, "This is a test", "Testing ARG TWO");
+            
+        }
+
     }
     public static class PlayerExtensions
     {
@@ -97,7 +157,17 @@ namespace SpookSuite.Handler
         public static SpookPlayerHandler Handle(this Player player) => new SpookPlayerHandler(player);
         public static Photon.Realtime.Player PhotonPlayer(this Player player) => player.refs.view.Owner;
 
+ 
+
         public static CSteamID GetSteamID(this Player player) => player.refs.view.Owner.GetSteamID();
+
+
+        [PunRPC]
+        public static void RPC_SS_TEST(this Player player, string arg1, string arg2)
+        {
+            Log.Info($"Spook Suite PunRPC Test!!! ({arg1}, {arg2})");
+        }
+
     }
 
     public static class PhotonPlayerExtensions

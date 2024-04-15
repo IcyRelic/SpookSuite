@@ -1,15 +1,8 @@
-﻿using HarmonyLib;
-using Newtonsoft.Json.Linq;
-using Photon.Pun;
-using Photon.Voice;
+﻿using Photon.Pun;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Security.Cryptography;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 using Random = UnityEngine.Random;
 
 namespace SpookSuite.Util
@@ -49,6 +42,8 @@ namespace SpookSuite.Util
                 Player.localPlayer.refs.view.RPC("RPC_RequestCreatePickup", RpcTarget.MasterClient, (object)itemId, (object)array, (object)spawnPos, (object)Random.rotation);                
             }
         }
+
+        public static Pickup GetPickupByGuid(Guid guid) => PickupHandler.Instance.Reflect().GetValue<List<Pickup>>("m_pickup").Find(p => p.itemInstance.m_guid.Value == guid);
 
         public static Item GetItemByName(string name)
         {

@@ -1,6 +1,7 @@
 ﻿using ExitGames.Client.Photon;
 using HarmonyLib;
 using Photon.Pun;
+using SpookSuite.Components;
 using SpookSuite.Handler;
 using SpookSuite.Manager;
 using SpookSuite.Util;
@@ -17,15 +18,15 @@ namespace SpookSuite
         public static List<byte> waitingForItemSpawn = new List<byte>();
         public static List<Guid> allowedBombs = new List<Guid>();
 
-        private static readonly object keyByteZero = (object)(byte)0;
-        private static readonly object keyByteOne = (object)(byte)1;
-        private static readonly object keyByteTwo = (object)(byte)2;
-        private static readonly object keyByteThree = (object)(byte)3;
-        private static readonly object keyByteFour = (object)(byte)4;
-        private static readonly object keyByteFive = (object)(byte)5;
-        private static readonly object keyByteSix = (object)(byte)6;
-        private static readonly object keyByteSeven = (object)(byte)7;
-        private static readonly object keyByteEight = (object)(byte)8;
+        internal static readonly object keyByteZero = (object)(byte)0;
+        internal static readonly object keyByteOne = (object)(byte)1;
+        internal static readonly object keyByteTwo = (object)(byte)2;
+        internal static readonly object keyByteThree = (object)(byte)3;
+        internal static readonly object keyByteFour = (object)(byte)4;
+        internal static readonly object keyByteFive = (object)(byte)5;
+        internal static readonly object keyByteSix = (object)(byte)6;
+        internal static readonly object keyByteSeven = (object)(byte)7;
+        internal static readonly object keyByteEight = (object)(byte)8;
 
 
         [HarmonyPostfix]
@@ -36,10 +37,12 @@ namespace SpookSuite
             SpookPlayerHandler.ClearRPCHistory();
         }
 
+        /**
         [HarmonyPostfix]
         [HarmonyPatch(typeof(Pickup), "RPC_ConfigurePickup")]
         public static void InteractWithPickups(Pickup __instance, byte itemID, byte[] data)
         {
+            Debug.Log($"Configure for: {__instance.itemInstance.m_guid.Value}");
             if(itemID == GameUtil.GetItemByName("bomb").id)
             {
                 Attacks_Bombs bombsEnemy = Object.FindAnyObjectByType<Attacks_Bombs>();
@@ -64,7 +67,7 @@ namespace SpookSuite
 
             __instance.Interact(Player.localPlayer);
             waitingForItemSpawn.Remove(itemID);
-        }
+        }**/
 
 
         [HarmonyPrefix]
@@ -82,14 +85,16 @@ namespace SpookSuite
                 return false;
             }
 
-            Debug.LogWarning($"[SpookSuite] Received RPC '{rpc}' From '{sender.NickName}'");
+            Log.Warning($"Received RPC '{rpc}' From '{sender.NickName}'");
+
             sender.GamePlayer().Handle().OnReceivedRPC(rpc, rpcData);
 
+
             return true;
-            //Debug.LogWarning($"[SpookSuite] Received RPC '{rpc}' From '{sender.NickName}'");
         }
 
- 
+
+
 
 
     }
