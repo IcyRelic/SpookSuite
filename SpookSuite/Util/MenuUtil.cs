@@ -4,8 +4,6 @@ using UnityEngine;
 
 namespace SpookSuite.Util
 {
-
-
     public class MenuUtil
     {
         [DllImport("user32.dll")]
@@ -57,9 +55,6 @@ namespace SpookSuite.Util
                 Settings.Config.SaveConfig();
                 return;
             }
-
-
-
 
             float currentX = SpookSuiteMenu.Instance.windowRect.x + SpookSuiteMenu.Instance.windowRect.width;
             float currentY = SpookSuiteMenu.Instance.windowRect.y + SpookSuiteMenu.Instance.windowRect.height;

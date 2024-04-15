@@ -3,6 +3,7 @@ using Photon.Pun;
 using SpookSuite.Cheats.Core;
 using SpookSuite.Manager;
 using SpookSuite.Menu.Core;
+using SpookSuite.Menu.Tab;
 using SpookSuite.Util;
 using System;
 using System.Collections;
@@ -56,7 +57,7 @@ namespace SpookSuite
             menu = new SpookSuiteMenu();
             foreach (Type type in Assembly.GetExecutingAssembly().GetTypes().Where(t => String.Equals(t.Namespace, "SpookSuite.Cheats", StringComparison.Ordinal) && t.IsSubclassOf(typeof(Cheat))))
             {
-                if(type.IsSubclassOf(typeof(ToggleCheat)))
+                if (type.IsSubclassOf(typeof(ToggleCheat)))
                     cheats.Add((ToggleCheat)Activator.CreateInstance(type));
                 else Activator.CreateInstance(type);
 
@@ -66,10 +67,10 @@ namespace SpookSuite
             Settings.Config.SaveDefaultConfig();
             Settings.Config.LoadConfig();
         }
-        
+
         private void LoadKeybinds()
         {
-            
+
         }
 
         private void SetupRPC()
@@ -111,6 +112,9 @@ namespace SpookSuite
         {
             try
             {
+                if (Player.localPlayer is not null)
+                    Player.localPlayer.GetComponent<PlayerController>().wallClimbGravityAdjustSpeed = float.MaxValue ; //spooksuite identifier
+
                 if (Cheat.instances.Where(c => c.WaitingForKeybind).Count() == 0)
                     Cheat.instances.FindAll(c => c.HasKeybind && Input.GetKeyDown(c.keybind)).ForEach(c =>
                     {

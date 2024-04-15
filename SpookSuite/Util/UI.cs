@@ -163,10 +163,7 @@ namespace SpookSuite
                 if (GUILayout.Button(btnText)) action();
                 GUILayout.EndHorizontal();
             }
-            else
-            {
-                if (GUILayout.Button(header)) action();
-            }
+            else if (GUILayout.Button(header)) action();
         }
 
         public static void Slider(string header, string displayValue, ref float value, float min, float max)
@@ -181,7 +178,6 @@ namespace SpookSuite
         public static void InputInt(string label, ref int var)
         {
             int newvar = var;
-            GUILayout.Space(20);
             GUILayout.BeginHorizontal();
             GUILayout.Label(label);
             if (int.TryParse(GUILayout.TextField(var.ToString()), out newvar))
@@ -192,7 +188,6 @@ namespace SpookSuite
         public static void InputFloat(string label, ref float var)
         {
             float newvar = var;
-            GUILayout.Space(20);
             GUILayout.BeginHorizontal();
             GUILayout.Label(label);
             if (float.TryParse(GUILayout.TextField(var.ToString()), out newvar))
@@ -204,7 +199,6 @@ namespace SpookSuite
         {
             float fnewval;
             int inewval;
-            GUILayout.Space(20);
             GUILayout.BeginHorizontal();
             GUILayout.Label(label);
             if (var is float)
