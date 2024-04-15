@@ -26,6 +26,7 @@ namespace SpookSuite.Menu.Tab
             UI.CheatToggleSlider(Cheat.Instance<FOV>(), "FOV", Cheats.FOV.Value.ToString(), ref Cheats.FOV.Value, 1, 170);
             UI.CheatToggleSlider(Cheat.Instance<ThirdPerson>(), "Third Person", Cheats.ThirdPerson.Value.ToString(), ref Cheats.ThirdPerson.Value, 0, 20);
             UI.Checkbox("Display Dead", ref Cheat.Instance<DisplayDead>().Enabled);
+            UI.Checkbox("Nameplates", ref Cheat.Instance<Nameplates>().Enabled);
 
             GUILayout.EndScrollView();
         }
