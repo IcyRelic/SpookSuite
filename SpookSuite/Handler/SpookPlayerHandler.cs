@@ -7,8 +7,6 @@ using Steamworks;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Xml.Linq;
-using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -127,13 +125,7 @@ namespace SpookSuite.Handler
 
                 }
             }
-
-
-
-
-            
-
-            
+   
             GetRPCHistory().Enqueue(rpcData);
             CleanupRPCHistory();
         }
@@ -143,13 +135,6 @@ namespace SpookSuite.Handler
             var queue = GetRPCHistory();
             while(queue.Count > 0 && queue.Peek().IsExpired()) queue.Dequeue();
         }
-
-        public void TestRPC()
-        {
-            RPC("RPC_SS_TEST", RpcTarget.All, "This is a test", "Testing ARG TWO");
-            
-        }
-
     }
     public static class PlayerExtensions
     {
@@ -157,17 +142,7 @@ namespace SpookSuite.Handler
         public static SpookPlayerHandler Handle(this Player player) => new SpookPlayerHandler(player);
         public static Photon.Realtime.Player PhotonPlayer(this Player player) => player.refs.view.Owner;
 
- 
-
         public static CSteamID GetSteamID(this Player player) => player.refs.view.Owner.GetSteamID();
-
-
-        [PunRPC]
-        public static void RPC_SS_TEST(this Player player, string arg1, string arg2)
-        {
-            Log.Info($"Spook Suite PunRPC Test!!! ({arg1}, {arg2})");
-        }
-
     }
 
     public static class PhotonPlayerExtensions
