@@ -5,6 +5,7 @@ using SpookSuite.Manager;
 using SpookSuite.Menu.Core;
 using SpookSuite.Util;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -128,6 +129,14 @@ namespace SpookSuite
             {
                 Debug.Log($"Error in OnGUI: {e}");
             }
+        }
+
+        public static void Invoke(Action action, int delay = 0) => instance.StartCoroutine(DoInvoke(action, delay));
+
+        private static IEnumerator DoInvoke(Action action, int delay = 0)
+        {
+            yield return new WaitForSeconds(delay);
+            action();
         }
     }
 }
