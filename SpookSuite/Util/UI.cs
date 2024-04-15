@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
-using static UnityEngine.Rendering.DebugUI;
 
 namespace SpookSuite
 {
@@ -60,6 +59,17 @@ namespace SpookSuite
     }
     public class UI
     {
+        public static void Image(Rect rect, Sprite image)
+        {
+            GUIUtility.RotateAroundPivot(180, image.pivot);
+            GUI.DrawTexture(rect, image.texture);
+            GUIUtility.RotateAroundPivot(180, image.pivot);
+        }
+
+        public static void Image(Rect rect, Texture image)
+        {
+            GUI.DrawTexture(rect, image);
+        }
 
         public static void Header(string header, bool space = false)
         {
@@ -179,6 +189,17 @@ namespace SpookSuite
             GUILayout.EndHorizontal();
         }
 
+        public static void InputFloat(string label, ref float var)
+        {
+            float newvar = var;
+            GUILayout.Space(20);
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(label);
+            if (float.TryParse(GUILayout.TextField(var.ToString()), out newvar))
+                var = newvar;
+            GUILayout.EndHorizontal();
+        }
+
         public static void InputNum(string label, ref object var)
         {
             float fnewval;
@@ -210,6 +231,21 @@ namespace SpookSuite
             GUILayout.Label(value.ToString());
             if (GUILayout.Button("-")) value = Mathf.Clamp(value - 1, min, max);
             if (GUILayout.Button("+")) value = Mathf.Clamp(value + 1, min, max);
+            GUILayout.EndHorizontal();
+        }
+
+        public static void Select(string header, ref int index, params UIOption[] options)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(header);
+            GUILayout.FlexibleSpace();
+
+            options[index].Draw();
+
+            if (GUILayout.Button("-")) index = Mathf.Clamp(index - 1, 0, options.Length - 1);
+            if (GUILayout.Button("+")) index = Mathf.Clamp(index + 1, 0, options.Length - 1);
+
+
             GUILayout.EndHorizontal();
         }
 

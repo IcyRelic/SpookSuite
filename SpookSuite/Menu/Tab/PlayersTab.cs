@@ -40,7 +40,7 @@ namespace SpookSuite.Menu.Tab
 
         private void GeneralActions()
         {
-            GUILayout.Label("ALL Players");
+            UI.Header("ALL Players");
             UI.Button("Kick All (NonHost)", () =>
             {
                 if (PhotonNetwork.LocalPlayer.IsMasterClient) // need fixing
@@ -57,13 +57,13 @@ namespace SpookSuite.Menu.Tab
             UI.Button("Kill All", () => Cheat.Instance<KillAll>().Execute());
             UI.Button("Revive All", () => Cheat.Instance<ReviveAll>().Execute());
         }
+
         private void PlayerActions()
         {
             if (selectedPlayer is null) return;
             UI.Header("Selected Player Actions");
 
             SteamAvatarHandler.TryGetSteamIDForPlayer(selectedPlayer.refs.view.Owner, out CSteamID steamid);
-
 
             UI.Label("SteamID", steamid.m_SteamID.ToString());
             UI.Label("RPC Count (Last 60s)", selectedPlayer.Handle().RPCsOnFile().ToString());
@@ -92,7 +92,7 @@ namespace SpookSuite.Menu.Tab
             }, "Bring");
             UI.Button("Nearby Monsters Attack", () => selectedPlayer.Handle().GetClosestMonster().SetTargetPlayer(selectedPlayer), "Nearby Monsters Attack");
             UI.Button("All Monsters Attack", () => GameObjectManager.monsters.ForEach(m => m.SetTargetPlayer(selectedPlayer)), "All Monsters Attack");
-            UI.Button("Spawn Bomb", () => GameUtil.SpawnItem(GameUtil.GetItemByName("bomb").id, selectedPlayer.data.groundPos), "Bomb");
+            UI.Button("Spawn Bomb", () => GameUtil.SpawnItem(GameUtil.GetItemByName("bomb").id, selectedPlayer.refs.cameraPos), "Bomb");
             UI.Button("Kill", () => selectedPlayer.Reflect().Invoke("CallDie"), "Kill");
             UI.Button("Revive", () => selectedPlayer.CallRevive(), "Revive");
             UI.Button("Kick", () => PhotonNetwork.NetworkingClient.CurrentRoom.Reflect().Invoke("RemovePlayer", selectedPlayer.refs.view.Owner), "Kick");

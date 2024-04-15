@@ -86,7 +86,7 @@ namespace SpookSuite
         {
             try
             {
-                if(Cheat.instances.Where(c => c.WaitingForKeybind).Count() == 0)
+                if (Cheat.instances.Where(c => c.WaitingForKeybind).Count() == 0)
                     Cheat.instances.FindAll(c => c.HasKeybind && Input.GetKeyDown(c.keybind)).ForEach(c =>
                     {
                        if(c.GetType().IsSubclassOf(typeof(ToggleCheat))) ((ToggleCheat)c).Toggle();
@@ -98,7 +98,7 @@ namespace SpookSuite
             }
             catch (Exception e)
             {
-                //Debug.Log($"Error in Update: {e}");
+                Debug.Log($"Error in Update: {e}");
             }
         }
 

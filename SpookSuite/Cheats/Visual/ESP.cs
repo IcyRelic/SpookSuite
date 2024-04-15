@@ -58,10 +58,11 @@ namespace SpookSuite.Cheats
         {
             foreach (Player p in GameObjectManager.players)
             {
-                if (p.ai) continue;
+                if (p.ai && !p.IsLocal) continue;
+
                 float distance = GetDistanceToPlayer(p.data.groundPos);
 
-                if (!WorldToScreen(p.data.groundPos, out Vector3 screen)) continue;
+                if (!WorldToScreen(p.refs.cameraPos.position, out Vector3 screen)) continue;
 
                 VisualUtil.DrawDistanceString(screen, p.refs.view.Owner.NickName, Settings.c_espPlayers, distance);
             }

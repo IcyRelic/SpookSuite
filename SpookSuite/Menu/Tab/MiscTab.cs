@@ -34,11 +34,7 @@ namespace SpookSuite.Menu.Tab
         string helemtText = "";
         private void MenuContent()
         {
-            GUILayout.BeginHorizontal();
-            UI.Textbox("Helmet Text", ref helemtText);
-            if (GUILayout.Button("Apply Text"))
-                Player.localPlayer.refs.visor.visorFaceText.text = helemtText;
-            GUILayout.EndHorizontal();
+            UI.TextboxAction("Helmet Text", ref helemtText, "", 100, new UIButton("Set", () => Player.localPlayer.refs.visor.visorFaceText.text = helemtText));
 
             UI.TextboxAction("Name Spoof", ref spoofName, "", 100, new UIButton("Set", () => PhotonNetwork.NickName = spoofName));
             UI.Button("Advance Day", () => GameUtil.AdvanceDay());
