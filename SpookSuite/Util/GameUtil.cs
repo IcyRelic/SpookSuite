@@ -20,26 +20,32 @@ namespace SpookSuite.Util
             enemies.ToList().ForEach(x => monterNames.Add(x.name));
             Debug.Log($"Loaded {monterNames.Count} monsters");
         }
-        public static void SpawnItem(byte itemId, bool equip = false, bool drone = false) => SpawnItem(itemId, Player.localPlayer.data.groundPos, equip, drone);
-        public static void SpawnItem(byte itemId, Vector3 spawnPos, bool equip = false, bool drone = false)
+        public static void SpawnItem(byte itemId, bool equip = false, bool drone = false, int amount = 1) => SpawnItem(itemId, Player.localPlayer.data.groundPos, equip, drone);
+        public static void SpawnItem(byte itemId, Vector3 spawnPos, bool equip = false, bool drone = false, int amount = 1)
         {
             if(drone)
             {
                 if (!ShopHandler.Instance) return;
-                ShopHandler.Instance.GetComponent<PhotonView>().RPC("RPCA_SpawnDrone", RpcTarget.All, new byte[] {itemId});
+
+                byte[] items = new byte[amount];
+
+                for(int i = 0; i < amount; i++) items[i] = (byte)itemId;
+
+                ShopHandler.Instance.GetComponent<PhotonView>().RPC("RPCA_SpawnDrone", RpcTarget.All, items);
             }
             else
             {
                 spawnPos += Player.localPlayer.transform.forward;
                 spawnPos.y += 1;
-                ItemInstanceData data = new ItemInstanceData(Guid.NewGuid());
-                byte[] array = data.Serialize(false);
 
-                Patches.allowedBombs.Add(data.m_guid);
-
-                if(equip) Patches.waitingForItemSpawn.Add(itemId);
-
-                Player.localPlayer.refs.view.RPC("RPC_RequestCreatePickup", RpcTarget.MasterClient, (object)itemId, (object)array, (object)spawnPos, (object)Random.rotation);                
+                for(int i = 0;i < amount; i++)
+                {
+                    ItemInstanceData data = new ItemInstanceData(Guid.NewGuid());
+                    byte[] array = data.Serialize(false);
+                    if (equip) Patches.waitingForItemSpawn.Add(itemId);
+                    Player.localPlayer.refs.view.RPC("RPC_RequestCreatePickup", RpcTarget.MasterClient, (object)itemId, (object)array, (object)spawnPos, (object)Random.rotation);
+                }
+                                    
             }
         }
 
