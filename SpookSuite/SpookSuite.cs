@@ -9,6 +9,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace SpookSuite
@@ -18,6 +19,7 @@ namespace SpookSuite
         private List<ToggleCheat> cheats;
         private Harmony harmony;
         private SpookSuiteMenu menu;
+        private PhotonView view;
 
         private static SpookSuite instance;
         public static SpookSuite Instance
@@ -33,7 +35,7 @@ namespace SpookSuite
         {
             instance = this;
             ThemeUtil.LoadTheme("Default");
-            //PhotonNetwork.LogLevel = PunLogLevel.Full;
+            SetupRPC();
             LoadCheats();
             DoPatching();
             LoadKeybinds();
@@ -70,6 +72,29 @@ namespace SpookSuite
             
         }
 
+        private void SetupRPC()
+        {
+            view = this.AddComponent<PhotonView>();
+            view.OwnershipTransfer = OwnershipOption.Fixed;
+            view.Synchronization = ViewSynchronization.Off;
+
+            PhotonNetwork.AllocateViewID(view);
+
+            PhotonNetwork.PhotonServerSettings.RpcList.Add("RPC_SS_Test");
+        }
+
+        public static void RPC(string name, RpcTarget target, params object[] args) => Instance.view.RPC(name, target, args);
+
+        public static void TestRPC()
+        {
+            RPC("RPC_SS_Test", RpcTarget.All, "Hello", "World");
+        }
+
+        [PunRPC]
+        public void RPC_SS_Test(string text, string text2)
+        {
+            Log.Info($"RPC Received: {text} {text2}");
+        }
 
         public void FixedUpdate()
         {
