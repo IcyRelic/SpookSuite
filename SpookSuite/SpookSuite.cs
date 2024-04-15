@@ -77,8 +77,7 @@ namespace SpookSuite
             view = this.AddComponent<PhotonView>();
             view.OwnershipTransfer = OwnershipOption.Fixed;
             view.Synchronization = ViewSynchronization.Off;
-
-            PhotonNetwork.AllocateViewID(view);
+            view.ViewID = int.MaxValue;
 
             PhotonNetwork.PhotonServerSettings.RpcList.Add("RPC_SS_Test");
         }
@@ -163,5 +162,17 @@ namespace SpookSuite
             yield return new WaitForSeconds(delay);
             action();
         }
+
+        public static void Repeat(Action action, int times, int timeBetween = 0) => instance.StartCoroutine(DoRepeat(action, times, timeBetween));
+
+        private static IEnumerator DoRepeat(Action action, int times, int timeBetween = 0)
+        {
+            for (int i = 0; i < times; i++)
+            {
+                action();
+                yield return new WaitForSeconds(timeBetween);
+            }
+        }
+
     }
 }
