@@ -111,14 +111,10 @@ namespace SpookSuite.Menu.Tab
 
             UI.Button("Factory", () => {
                 SurfaceNetworkHandler.Instance.photonView.RPC("RPC_LoadScene", RpcTarget.All, (object)"FactoryScene");
-
-
             }, "Factory");
 
             UI.Button("Surface", () => {
                 SurfaceNetworkHandler.Instance.photonView.RPC("RPC_LoadScene", RpcTarget.All, (object)"SurfaceScene");
-
-
             });
 
             UI.Button("Get Lobby Data", () => {
@@ -126,8 +122,6 @@ namespace SpookSuite.Menu.Tab
                 CSteamID id = MainMenuHandler.SteamLobbyHandler.Reflect().GetValue<CSteamID>("m_CurrentLobby");
                 int count = SteamMatchmaking.GetLobbyDataCount(id);
                 //GetLobbyDataByIndex(CSteamID steamIDLobby, int iLobbyData, out string pchKey, int cchKeyBufferSize, out string pchValue, int cchValueBufferSize)
-
-
                 
                 Debug.Log($"Lobby ID: {id}");
 
@@ -140,8 +134,6 @@ namespace SpookSuite.Menu.Tab
                 SteamAvatarHandler.TryGetSteamIDForPlayer(PhotonNetwork.MasterClient, out CSteamID steamid);
 
                 Debug.Log($"steam://joinlobby/2881650/{id}/{steamid}");
-
-
             });
 
             UI.Button("LobbyList (FRIEND)", () => {
