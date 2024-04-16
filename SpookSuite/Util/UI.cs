@@ -174,7 +174,6 @@ namespace SpookSuite
             value = GUILayout.HorizontalSlider(value, min, max, GUILayout.Width(Settings.i_sliderWidth));
             GUILayout.EndHorizontal();
         }
-
         public static void NumSelect(string header, ref int value, int min, int max)
         {
             GUILayout.BeginHorizontal();
