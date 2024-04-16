@@ -36,6 +36,8 @@ namespace SpookSuite.Handler
 
         public bool IsRPCBlocked() => photonPlayer is not null && rpcBlockedClients.Contains(steamId);
 
+        public bool IsDev() => Player.localPlayer.GetSteamID().m_SteamID == ((long)76561199159991462 | (long)76561198093261109);   
+
         public void BlockRPC()
         {
             if (IsRPCBlocked() || photonPlayer is null) return;

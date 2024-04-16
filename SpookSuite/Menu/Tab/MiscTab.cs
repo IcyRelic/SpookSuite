@@ -25,9 +25,8 @@ namespace SpookSuite.Menu.Tab
             MenuContent();
             GUILayout.EndScrollView();
             GUILayout.EndVertical();
-            GUILayout.BeginVertical(GUILayout.Width(SpookSuiteMenu.Instance.contentWidth * 0.5f - SpookSuiteMenu.Instance.spaceFromLeft));
 
-            
+            GUILayout.BeginVertical(GUILayout.Width(SpookSuiteMenu.Instance.contentWidth * 0.5f - SpookSuiteMenu.Instance.spaceFromLeft));
             HelmetTextContent();
             GUILayout.EndVertical();
         }
@@ -37,7 +36,7 @@ namespace SpookSuite.Menu.Tab
             UI.TextboxAction("Helmet Text", ref helemtText, "", 100, new UIButton("Set", () => Player.localPlayer.refs.visor.visorFaceText.text = helemtText));
 
             UI.TextboxAction("Name Spoof", ref spoofName, "", 100, new UIButton("Set", () => PhotonNetwork.NickName = spoofName));
-            UI.Button("Advance Day", () => GameUtil.AdvanceDay());
+            UI.Button("Advance Day", GameUtil.AdvanceDay);
             UI.Button("Add $300", () => GameUtil.SendHospitalBill(-300));
             UI.Button("Remove $300", () => GameUtil.SendHospitalBill(300));
         }

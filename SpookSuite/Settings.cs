@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using SpookSuite.Cheats.Core;
 using System.Linq;
+using SpookSuite.Menu.Tab;
 
 namespace SpookSuite
 {
@@ -116,13 +117,11 @@ namespace SpookSuite
 
                 
 
-
                 colors["MenuText"] = JsonConvert.SerializeObject(c_menuText);
                 colors["ESPPlayers"] = JsonConvert.SerializeObject(c_espPlayers);
                 colors["ESPItems"] = JsonConvert.SerializeObject(c_espItems);
                 colors["ESPMonsters"] = JsonConvert.SerializeObject(c_espMonsters);
                 colors["ESPDivingBells"] = JsonConvert.SerializeObject(c_espDivingBells);
-
 
                 settings["MenuFontSize"] = i_menuFontSize.ToString();
                 settings["MenuWidth"] = i_menuWidth.ToString();
@@ -219,7 +218,6 @@ namespace SpookSuite
                         c_espMonsters = JsonConvert.DeserializeObject<RGBAColor>(espMonstersToken.ToString());
                     if (colors.TryGetValue("ESPDivingBells", out JToken espDivingBellsToken))
                         c_espDivingBells = JsonConvert.DeserializeObject<RGBAColor>(espDivingBellsToken.ToString());
-
                 }
 
                 if (json.TryGetValue("MenuSettings", out JToken settingsToken))
@@ -240,9 +238,6 @@ namespace SpookSuite
                         f_menuAlpha = float.Parse(menuAlphaToken.ToString());
 
                 }
-
-
-
             }
 
             public static void RegenerateConfig()
@@ -253,8 +248,6 @@ namespace SpookSuite
                 Cheat.instances.ForEach(c => c.keybind = KeyCode.None);
 
                 LoadConfig();
-
-
             }
 
         }

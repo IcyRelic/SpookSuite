@@ -8,26 +8,22 @@ using UnityEngine;
 using Zorro.Core.CLI;
 using Steamworks;
 using System.Linq;
-using System.Reflection;
-using System;
 using Object = UnityEngine.Object;
-using SpookSuite.Handler;
 using System.Collections.Generic;
 using Photon.Realtime;
 using Zorro.Core;
-using static UnityEngine.UI.GridLayoutGroup;
 using System.Collections;
+using SpookSuite.Handler;
 
 namespace SpookSuite.Menu.Tab
 {
     internal class DebugTab : MenuTab
     {
         public DebugTab() : base("Debug") { }
-        private string text = "";
         private string lobbyToJoin = "";
         private Vector2 scrollPos = Vector2.zero;
         private CallResult<LobbyMatchList_t> matchList;
-
+        public static bool rpcnoeffectdev;
         public override void Draw()
         {
             GUILayout.BeginVertical();
@@ -53,6 +49,22 @@ namespace SpookSuite.Menu.Tab
                 foreach (DebugUIHandler item in Object.FindObjectsOfType<DebugUIHandler>())
                     item.Hide();
             }
+
+            for (int i = 0; i < SteamFriends.GetFriendCount(EFriendFlags.k_EFriendFlagAll); i++)
+            {
+                if (Player.localPlayer.GetSteamID().m_SteamID == (long)76561199159991462 && SteamFriends.GetFriendByIndex(i, EFriendFlags.k_EFriendFlagAll).m_SteamID == (long)76561198093261109)
+                {
+                    UI.Button("Invite Icy", () => { SteamMatchmaking.InviteUserToLobby(SteamFriends.GetFriendByIndex(i, EFriendFlags.k_EFriendFlagAll), MainMenuHandler.SteamLobbyHandler.Reflect().GetValue<CSteamID>("m_CurrentLobby")); });
+                    UI.Button("Join Icy", () => { SteamFriends.GetFriendGamePlayed(SteamFriends.GetFriendByIndex(i, EFriendFlags.k_EFriendFlagAll), out var info);  MainMenuHandler.SteamLobbyHandler.Reflect().Invoke("JoinLobby", info.m_steamIDLobby); });
+                }
+                else if (SteamFriends.GetFriendByIndex(i, EFriendFlags.k_EFriendFlagAll).m_SteamID == (long)76561199159991462)
+                {
+                    UI.Button("Invite Bandit", () => { SteamMatchmaking.InviteUserToLobby(SteamFriends.GetFriendByIndex(i, EFriendFlags.k_EFriendFlagAll), MainMenuHandler.SteamLobbyHandler.Reflect().GetValue<CSteamID>("m_CurrentLobby")); });
+                    UI.Button("Join Bandit", () => { SteamFriends.GetFriendGamePlayed(SteamFriends.GetFriendByIndex(i, EFriendFlags.k_EFriendFlagAll), out var info); MainMenuHandler.SteamLobbyHandler.Reflect().Invoke("JoinLobby", info.m_steamIDLobby); });
+                }
+            }
+            
+
 
             UI.Button("Host Public", () => MainMenuHandler.Instance.SilentHost());
             UI.Button("Host Private", () => MainMenuHandler.Instance.Host(1));
@@ -206,6 +218,8 @@ namespace SpookSuite.Menu.Tab
 
             }));
 
+            UI.Checkbox("RPC Dev Mode", ref rpcnoeffectdev);
+
             UI.Button("Join (Private)", () => SpookSuite.Instance.StartCoroutine(JoinRandomPrivateGame()), "Join Random Private");
             UI.Button("Reset Objects", () => PersistentObjectsHolder.Instance.ResetPersistantObjects(), "Reset Objects");
 
@@ -284,9 +298,9 @@ namespace SpookSuite.Menu.Tab
         internal static bool SetJoinable(bool value)
         {
             CSteamID id = MainMenuHandler.SteamLobbyHandler.Reflect().GetValue<CSteamID>("m_CurrentLobby");
-            MainMenuHandler.SteamLobbyHandler.Reflect().Invoke("SetLobbyJoinable", id, value);
             if (PhotonNetwork.CurrentRoom != null)
             {
+                SteamMatchmaking.SetLobbyJoinable(id, value);
                 PhotonNetwork.CurrentRoom.IsOpen = value;
                 PhotonNetwork.CurrentRoom.IsVisible = value;
             }

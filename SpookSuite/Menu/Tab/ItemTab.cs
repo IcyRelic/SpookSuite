@@ -1,10 +1,6 @@
 ﻿using UnityEngine;
 using SpookSuite.Menu.Core;
-using Zorro.Core;
-using Random = UnityEngine.Random;
-using Photon.Pun;
 using System;
-using System.Text;
 using System.Linq;
 using System.Collections.Generic;
 using SpookSuite.Util;
@@ -19,10 +15,10 @@ namespace SpookSuite.Menu.Tab
         private string searchText = "";
         private bool equipOnSpawn = false;
         private bool droneDelivery = false;
+        private int itemSpawnAmount = 1;
         public override void Draw()
         {
-            GUILayout.BeginVertical();
-            
+            GUILayout.BeginVertical();          
             MenuContent();
             GUILayout.EndVertical();
 
@@ -37,7 +33,8 @@ namespace SpookSuite.Menu.Tab
             UI.Checkbox("Equip on Spawn", ref equipOnSpawn);
             GUILayout.FlexibleSpace();
             UI.Checkbox("Drone Delivery", ref droneDelivery);
-
+            GUILayout.FlexibleSpace();
+            UI.InputInt("Spawn Amount", ref itemSpawnAmount);
             GUILayout.EndHorizontal();
 
             scrollPos = GUILayout.BeginScrollView(scrollPos);
@@ -46,7 +43,7 @@ namespace SpookSuite.Menu.Tab
 
             int gridWidth = 4;
             int btnWidth = (int) (SpookSuiteMenu.Instance.contentWidth - (SpookSuiteMenu.Instance.spaceFromLeft * 2)) / gridWidth;
-            UI.ButtonGrid<Item>(items, item => item.GetName(), searchText, item => GameUtil.SpawnItem(item.id, equipOnSpawn, droneDelivery), gridWidth, btnWidth);
+            UI.ButtonGrid<Item>(items, item => item.GetName(), searchText, item => GameUtil.SpawnItem(item.id, equipOnSpawn, droneDelivery, itemSpawnAmount), gridWidth, btnWidth);
             
             GUILayout.EndScrollView();
         }

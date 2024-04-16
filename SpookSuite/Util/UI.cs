@@ -163,10 +163,7 @@ namespace SpookSuite
                 if (GUILayout.Button(btnText)) action();
                 GUILayout.EndHorizontal();
             }
-            else
-            {
-                if (GUILayout.Button(header)) action();
-            }
+            else if (GUILayout.Button(header)) action();
         }
 
         public static void Slider(string header, string displayValue, ref float value, float min, float max)
