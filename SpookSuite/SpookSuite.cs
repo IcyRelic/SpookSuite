@@ -39,7 +39,6 @@ namespace SpookSuite
             SetupRPC();
             LoadCheats();
             DoPatching();
-            LoadKeybinds();
             this.StartCoroutine(GameObjectManager.Instance.CollectObjects());
         }
 
@@ -66,11 +65,6 @@ namespace SpookSuite
 
             Settings.Config.SaveDefaultConfig();
             Settings.Config.LoadConfig();
-        }
-
-        private void LoadKeybinds()
-        {
-
         }
 
         private void SetupRPC()

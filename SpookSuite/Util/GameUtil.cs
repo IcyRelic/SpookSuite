@@ -20,7 +20,7 @@ namespace SpookSuite.Util
             enemies.ToList().ForEach(x => monterNames.Add(x.name));
             Debug.Log($"Loaded {monterNames.Count} monsters");
         }
-        public static void SpawnItem(byte itemId, bool equip = false, bool drone = false, int amount = 1) => SpawnItem(itemId, Player.localPlayer.data.groundPos, equip, drone);
+        public static void SpawnItem(byte itemId, bool equip = false, bool drone = false, int amount = 1) => SpawnItem(itemId, Player.localPlayer.data.groundPos, equip, drone, amount);
         public static void SpawnItem(byte itemId, Vector3 spawnPos, bool equip = false, bool drone = false, int amount = 1)
         {
             if(drone)
