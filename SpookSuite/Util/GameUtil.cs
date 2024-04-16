@@ -1,4 +1,5 @@
 ﻿using Photon.Pun;
+using SpookSuite.Manager;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +32,15 @@ namespace SpookSuite.Util
 
                 for(int i = 0; i < amount; i++) items[i] = (byte)itemId;
 
+                bool b = GameObjectManager.allowedDroneSpawns.TryGetValue((byte) itemId, out object[] x);
+                
+                if(b) x[1] = (int)x[1] + amount;
+                else x = new object[] { equip, amount };
+
+                GameObjectManager.allowedDroneSpawns.TryAdd(itemId, x);
+
+                Log.Info($"Allowing {itemId} to be spawned x{GameObjectManager.allowedDroneSpawns.GetValueOrDefault((byte)itemId)[1]}");
+
                 ShopHandler.Instance.GetComponent<PhotonView>().RPC("RPCA_SpawnDrone", RpcTarget.All, items);
             }
             else
@@ -42,7 +52,8 @@ namespace SpookSuite.Util
                 {
                     ItemInstanceData data = new ItemInstanceData(Guid.NewGuid());
                     byte[] array = data.Serialize(false);
-                    if (equip) Patches.waitingForItemSpawn.Add(itemId);
+                    
+                    GameObjectManager.allowedSpawns.Add(data.m_guid, equip);
                     Player.localPlayer.refs.view.RPC("RPC_RequestCreatePickup", RpcTarget.MasterClient, (object)itemId, (object)array, (object)spawnPos, (object)Random.rotation);
                 }
                                     

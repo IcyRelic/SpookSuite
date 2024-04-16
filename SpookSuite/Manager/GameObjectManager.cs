@@ -35,6 +35,9 @@ namespace SpookSuite.Manager
         public static List<Laser> lasers = new List<Laser>();
         public static DivingBell divingBell;
 
+        public static Dictionary<Guid, bool> allowedSpawns = new Dictionary<Guid, bool>();
+        public static Dictionary<byte, object[]> allowedDroneSpawns = new Dictionary<byte, object[]>();
+
         public IEnumerator CollectObjects()
         {
             while (true)

@@ -178,51 +178,6 @@ namespace SpookSuite
             GUILayout.EndHorizontal();
         }
 
-        public static void InputInt(string label, ref int var)
-        {
-            int newvar = var;
-            GUILayout.Space(20);
-            GUILayout.BeginHorizontal();
-            GUILayout.Label(label);
-            if (int.TryParse(GUILayout.TextField(var.ToString()), out newvar))
-                var = newvar;
-            GUILayout.EndHorizontal();
-        }
-
-        public static void InputFloat(string label, ref float var)
-        {
-            float newvar = var;
-            GUILayout.Space(20);
-            GUILayout.BeginHorizontal();
-            GUILayout.Label(label);
-            if (float.TryParse(GUILayout.TextField(var.ToString()), out newvar))
-                var = newvar;
-            GUILayout.EndHorizontal();
-        }
-
-        public static void InputNum(string label, ref object var)
-        {
-            float fnewval;
-            int inewval;
-            GUILayout.Space(20);
-            GUILayout.BeginHorizontal();
-            GUILayout.Label(label);
-            if (var is float)
-            {
-                float.TryParse(GUILayout.TextField(var.ToString()), out fnewval);
-                var = fnewval;
-            }
-            else if (var is int)
-            {
-                int.TryParse(GUILayout.TextField(var.ToString()), out inewval);
-                var = inewval;
-            }
-            else
-                Debug.Log($"Input num couldnt convert the type of {label}");
-
-            GUILayout.EndHorizontal();
-        }
-
         public static void NumSelect(string header, ref int value, int min, int max)
         {
             GUILayout.BeginHorizontal();

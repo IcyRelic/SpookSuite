@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using Photon.Pun;
 using SpookSuite.Cheats.Core;
+using SpookSuite.Handler;
 using SpookSuite.Manager;
 using SpookSuite.Menu.Core;
 using SpookSuite.Util;
@@ -60,7 +61,7 @@ namespace SpookSuite
                     cheats.Add((ToggleCheat)Activator.CreateInstance(type));
                 else Activator.CreateInstance(type);
 
-                Debug.Log($"Loaded Cheat: {type.Name}");
+                Log.Info($"Loaded Cheat: {type.Name}");
             }
 
             Settings.Config.SaveDefaultConfig();
@@ -71,30 +72,6 @@ namespace SpookSuite
         {
             
         }
-
-        private void SetupRPC()
-        {
-            view = this.AddComponent<PhotonView>();
-            view.OwnershipTransfer = OwnershipOption.Fixed;
-            view.Synchronization = ViewSynchronization.Off;
-            view.ViewID = int.MaxValue;
-
-            PhotonNetwork.PhotonServerSettings.RpcList.Add("RPC_SS_Test");
-        }
-
-        public static void RPC(string name, RpcTarget target, params object[] args) => Instance.view.RPC(name, target, args);
-
-        public static void TestRPC()
-        {
-            RPC("RPC_SS_Test", RpcTarget.All, "Hello", "World");
-        }
-
-        [PunRPC]
-        public void RPC_SS_Test(string text, string text2)
-        {
-            Log.Info($"RPC Received: {text} {text2}");
-        }
-
         public void FixedUpdate()
         {
             try
@@ -116,14 +93,14 @@ namespace SpookSuite
                     {
                        if(c.GetType().IsSubclassOf(typeof(ToggleCheat))) ((ToggleCheat)c).Toggle();
                        else if(c.GetType().IsSubclassOf(typeof(ExecutableCheat))) ((ExecutableCheat)c).Execute();
-                       else Debug.Log($"Unknown Cheat Type: {c.GetType().Name}");
+                       else Log.Error($"Unknown Cheat Type: {c.GetType().Name}");
                     });
 
                 if (PhotonNetwork.InRoom) cheats.ForEach(cheat => cheat.Update());
             }
             catch (Exception e)
             {
-                Debug.Log($"Error in Update: {e}");
+                Log.Error($"Error in Update: {e}");
             }
         }
 
@@ -155,23 +132,52 @@ namespace SpookSuite
             }
         }
 
-        public static void Invoke(Action action, int delay = 0) => instance.StartCoroutine(DoInvoke(action, delay));
+        public static void Invoke(Action action, float delay = 0) => instance.StartCoroutine(DoInvoke(action, delay));
 
-        private static IEnumerator DoInvoke(Action action, int delay = 0)
+        private static IEnumerator DoInvoke(Action action, float delay = 0)
         {
             yield return new WaitForSeconds(delay);
             action();
         }
 
-        public static void Repeat(Action action, int times, int timeBetween = 0) => instance.StartCoroutine(DoRepeat(action, times, timeBetween));
+        public static void Repeat(Action action, int times, float timeBetween = 0) => instance.StartCoroutine(DoRepeat(action, times, timeBetween));
 
-        private static IEnumerator DoRepeat(Action action, int times, int timeBetween = 0)
+        private static IEnumerator DoRepeat(Action action, int times, float timeBetween = 0)
         {
             for (int i = 0; i < times; i++)
             {
                 action();
                 yield return new WaitForSeconds(timeBetween);
             }
+        }
+
+        /**
+         * RPC Stuff
+         */
+
+        private void SetupRPC()
+        {
+            view = this.AddComponent<PhotonView>();
+            view.OwnershipTransfer = OwnershipOption.Fixed;
+            view.Synchronization = ViewSynchronization.Off;
+            view.ViewID = int.MaxValue;
+
+            PhotonNetwork.PhotonServerSettings.RpcList.Add("RPC_8136b4f5cabbcf1e77629af5436130dc");
+        }
+
+        public static void RPC(string name, RpcTarget target, params object[] args) => Instance.view.RPC(name, target, args);
+
+        public static void CallBroadcastSSUser(Player player)
+        {
+            RPC("RPC_8136b4f5cabbcf1e77629af5436130dc", RpcTarget.Others, player);
+        }
+
+        [PunRPC] //Broadcast SpookSuite User
+        public void RPC_8136b4f5cabbcf1e77629af5436130dc(Player player)
+        {
+            Log.Warning($"{player.PhotonPlayer().NickName} is using SpookSuite");
+            //Respond
+            CallBroadcastSSUser(Player.localPlayer);
         }
 
     }

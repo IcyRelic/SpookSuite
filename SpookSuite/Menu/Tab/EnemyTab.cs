@@ -9,7 +9,10 @@ using SpookSuite.Manager;
 using SpookSuite.Menu.Core;
 using SpookSuite.Util;
 using System;
+using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
+using static HasSpaceTest;
 using static Photon.Pun.UtilityScripts.TabViewManager;
 
 namespace SpookSuite.Menu.Tab
@@ -77,14 +80,16 @@ namespace SpookSuite.Menu.Tab
         private void GeneralActions()
         {
             UI.Header("General Actions");
-            UI.Button("Destroy All Monsters", () => BotHandler.instance.DestroyAll());
 
         }
         private void EnemyActions()
         {
             UI.Header("Selected Monster Actions");
+            //PhotonView view = selectedEnemy.Reflect().GetValue<PhotonView>("view");
 
+            //UI.Label("Owner", view.Owner.NickName);
 
+            //UI.Button("Destroy", () => PhotonNetwork.Destroy(selectedEnemy.transform.root.gameObject));
         }
 
         private void SpawnActions()

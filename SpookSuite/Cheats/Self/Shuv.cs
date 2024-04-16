@@ -1,5 +1,7 @@
 ﻿using HarmonyLib;
+using Photon.Pun;
 using SpookSuite.Cheats.Core;
+using SpookSuite.Handler;
 using SpookSuite.Util;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -22,14 +24,13 @@ namespace SpookSuite.Cheats
 
             if (Input.GetKey(keybind) && p.refs != null && p.refs.items != null)
             {
-                Charge = Mathf.MoveTowards(Charge, 1f, Time.deltaTime);
+                Charge = Mathf.MoveTowards(Charge, 2f, Time.deltaTime);
                 if (Time.time > p.refs.items.Reflect().GetValue<float>("shakeTime") + 0.1f)
                 {
                     GamefeelHandler.instance.Reflect().GetValue<PerlinShake>("perlin").AddShake(Charge, 0.2f, 15f);
                     p.refs.items.Reflect().SetValue("shakeTime", Time.time);
                     return;
                 }
-                Debug.Log("Shuv Charge: " + Charge);
             }
             if (!Input.GetKey(keybind) && Charge > 0.25f)
             {
@@ -47,7 +48,8 @@ namespace SpookSuite.Cheats
 
                             player.Reflect().Invoke("CallTakeDamageAndAddForceAndFall", 0f, p.refs.cameraPos.forward * Charge * (ChargePower / (player.ai ? 4f : 1f)), Charge * MaxFallTime + 0.5f);
                             player.Reflect().Invoke("CallMakeSound", 0);
-                            Debug.Log("Player Shuved");
+
+                            SpookSuite.Invoke(() => player.Handle().RPC("RPCA_FALL", RpcTarget.All, 3), 1);
                         }
                     }
                 }

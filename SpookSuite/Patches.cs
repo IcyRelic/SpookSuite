@@ -1,6 +1,7 @@
 ﻿using ExitGames.Client.Photon;
 using HarmonyLib;
 using Photon.Pun;
+using Photon.Realtime;
 using SpookSuite.Components;
 using SpookSuite.Handler;
 using SpookSuite.Manager;
@@ -33,47 +34,32 @@ namespace SpookSuite
         [HarmonyPatch(typeof(ConnectionStateHandler), nameof(ConnectionStateHandler.Disconnect))]
         public static void Disconnect()
         {
-            Debug.Log("[SpookSuite] Disconnect Detected!");
+            Log.Info("Disconnect Detected!");
             SpookPlayerHandler.ClearRPCHistory();
         }
 
-        /**
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(Pickup), "RPC_ConfigurePickup")]
-        public static void InteractWithPickups(Pickup __instance, byte itemID, byte[] data)
+        [HarmonyPatch(typeof(LoadBalancingClient), nameof(LoadBalancingClient.OpJoinOrCreateRoom))]
+        public static void Connect()
         {
-            Debug.Log($"Configure for: {__instance.itemInstance.m_guid.Value}");
-            if(itemID == GameUtil.GetItemByName("bomb").id)
-            {
-                Attacks_Bombs bombsEnemy = Object.FindAnyObjectByType<Attacks_Bombs>();
+            Log.Error("Connection Detected! OpJoinOrCreateRoom");
 
-                if((GameObjectManager.divingBell is not null && GameObjectManager.divingBell.onSurface) || bombsEnemy is null)
-                {
-                    if (allowedBombs.Contains(__instance.itemInstance.m_guid.Value))
-                    {
-                        //SpookSuite Bomb
-                        allowedBombs.Remove(__instance.itemInstance.m_guid.Value);
-                        return;
-                    }
-                    //maybe add a check later to see if attack bombs has attacked
-                    Debug.Log("Bombing Detected, Removing...");
+        }
 
-                    __instance.m_photonView.RPC("RPC_Remove", RpcTarget.MasterClient);
-                }
-                
-            }
 
-            if(!waitingForItemSpawn.Contains(itemID)) return;
-
-            __instance.Interact(Player.localPlayer);
-            waitingForItemSpawn.Remove(itemID);
-        }**/
+        public static void Connected()
+        {
+            //Log.Error("Connection Detected!");
+            //SpookSuite.CallBroadcastSSUser();
+        }
 
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(PhotonNetwork), "ExecuteRpc")]
         public static bool ExecuteRPC(Hashtable rpcData, Photon.Realtime.Player sender)
         {
+            if (sender is null || sender.GamePlayer() is null) return true;
+
             string rpc = rpcData.ContainsKey(keyByteFive) ?
                 PhotonNetwork.PhotonServerSettings.RpcList[(int)(byte)rpcData[keyByteFive]] :
                 (string)rpcData[keyByteThree];
@@ -93,6 +79,7 @@ namespace SpookSuite
             return true;
         }
 
+   
 
 
 

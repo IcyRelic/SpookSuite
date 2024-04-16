@@ -235,7 +235,7 @@ namespace SpookSuite.Menu.Tab
             }, "Check");
 
             UI.Button("List RPCs", () => PhotonNetwork.PhotonServerSettings.RpcList.ForEach(d => Debug.Log(d)));
-            UI.Button("Test RPC", () => SpookSuite.TestRPC());
+
 
             GUILayout.EndScrollView();
         }

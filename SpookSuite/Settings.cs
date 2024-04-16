@@ -35,6 +35,7 @@ namespace SpookSuite
         /* *    
          * Color Settings
          * */
+        public static RGBAColor c_primary = new RGBAColor(165, 55, 253, 1f);
         public static RGBAColor c_menuText = new RGBAColor(255, 255, 255, 1f);
         public static RGBAColor c_espPlayers = new RGBAColor(0, 255, 0, 1f);
         public static RGBAColor c_espItems = new RGBAColor(255, 255, 255, 1f);

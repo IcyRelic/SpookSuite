@@ -13,7 +13,8 @@ namespace SpookSuite.Components
         public readonly Hashtable hash;
         public readonly DateTime timestamp;
         public bool suspected = false;
-        public object suspectedData = null;
+        public object data = null;
+        public RPCData parent = null;
 
         public RPCData(Photon.Realtime.Player sender, string rpc, Hashtable hash)
         {
@@ -30,8 +31,7 @@ namespace SpookSuite.Components
         public void SetSuspected(object data)
         {
             suspected = true;
-            this.suspectedData = data;
-            Log.Error($"Suspected {sender.NickName} of {rpc} with data: {data} | {suspected}");
+            this.data = data;
         }
     }
 }
