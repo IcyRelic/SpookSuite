@@ -67,6 +67,7 @@ namespace SpookSuite.Menu.Tab
 
             UI.Label("SteamID", steamid.m_SteamID.ToString());
             UI.Label("RPC Count (Last 60s)", selectedPlayer.Handle().RPCsOnFile().ToString());
+            UI.Label("SpookSuite User", selectedPlayer.Handle().IsSpookUser().ToString());
 
             if (!selectedPlayer.IsLocal)
                 UI.Button("Block RPCs", () => selectedPlayer.Handle().ToggleRPCBlock(), selectedPlayer.Handle().IsRPCBlocked() ? "UnBlock" : "Block");
@@ -120,6 +121,7 @@ namespace SpookSuite.Menu.Tab
 
                 if (selectedPlayer is null) selectedPlayer = player;
 
+                if(selectedPlayer.Handle().IsSpookUser()) GUI.contentColor = Settings.c_primary.GetColor();
                 if (selectedPlayer.GetInstanceID() == player.GetInstanceID()) GUI.contentColor = Settings.c_espPlayers.GetColor();
 
                 if (GUILayout.Button(player.refs.view.Owner.NickName, GUI.skin.label)) selectedPlayer = player;
