@@ -58,7 +58,7 @@ namespace SpookSuite.Menu.Tab
             GUILayout.BeginVertical();
 
             UI.Textbox("Search", ref search, big: false);
-
+           
             scrollPos = GUILayout.BeginScrollView(scrollPos);
 
             List<Cheat> cheats = Cheat.instances;
@@ -81,7 +81,11 @@ namespace SpookSuite.Menu.Tab
                 //if (cheat.HasKeybind && hack != Hack.OpenMenu && hack != Hack.UnlockDoorAction && GUILayout.Button("-")) hack.RemoveKeyBind();
 
                 string btnText = cheat.WaitingForKeybind ? "Waiting" : kb;               
-                if (GUILayout.Button(btnText, GUILayout.Width(85))) KBUtil.BeginChangeKeybind(cheat);
+                if (GUILayout.Button(btnText, GUILayout.Width(85)))
+                {
+                    GUI.FocusControl(null);
+                    KBUtil.BeginChangeKeybind(cheat);
+                }
 
                 GUILayout.EndHorizontal();
             }
