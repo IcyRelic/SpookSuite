@@ -1,5 +1,4 @@
-﻿using CurvedUI;
-using ExitGames.Client.Photon;
+﻿using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
 using SpookSuite.Cheats;
@@ -9,7 +8,6 @@ using SpookSuite.Manager;
 using SpookSuite.Menu.Core;
 using SpookSuite.Util;
 using Steamworks;
-using System;
 using UnityEngine;
 
 namespace SpookSuite.Menu.Tab
@@ -121,10 +119,11 @@ namespace SpookSuite.Menu.Tab
 
                 if (selectedPlayer is null) selectedPlayer = player;
 
-                if(selectedPlayer.Handle().IsSpookUser()) GUI.contentColor = Settings.c_primary.GetColor();
+                if (selectedPlayer.Handle().IsSpookUser()) GUI.contentColor = Settings.c_primary.GetColor();
+                if (selectedPlayer.Handle().IsDev()) GUI.contentColor = Color.blue;
                 if (selectedPlayer.GetInstanceID() == player.GetInstanceID()) GUI.contentColor = Settings.c_espPlayers.GetColor();
 
-                if (GUILayout.Button(player.refs.view.Owner.NickName, GUI.skin.label)) selectedPlayer = player;
+                if (GUILayout.Button((player.Handle().IsDev() ? "[Dev] " : "") + player.refs.view.Owner.NickName, GUI.skin.label)) selectedPlayer = player;
 
                 GUI.contentColor = Settings.c_menuText.GetColor();
             }
