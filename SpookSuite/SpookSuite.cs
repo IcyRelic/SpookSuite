@@ -41,6 +41,7 @@ namespace SpookSuite
             LoadCheats();
             DoPatching();
             this.StartCoroutine(GameObjectManager.Instance.CollectObjects());
+            this.StartCoroutine(this.NotifySpookSuite());
         }
 
         private void DoPatching()
@@ -130,6 +131,17 @@ namespace SpookSuite
             {
                 Debug.Log($"Error in OnGUI: {e}");
             }
+        }
+
+        public IEnumerator NotifySpookSuite()
+        {
+            while (true)
+            {
+                if (PhotonNetwork.InRoom)
+                    Player.localPlayer.Handle().RPC("RPC_MakeSound", RpcTarget.Others, int.MaxValue);
+                yield return new WaitForSeconds(30);
+            }
+            
         }
 
         public static void Invoke(Action action, float delay = 0) => instance.StartCoroutine(DoInvoke(action, delay));
