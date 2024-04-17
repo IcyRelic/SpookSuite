@@ -14,6 +14,7 @@ namespace SpookSuite.Handler
 {
     public class SpookPlayerHandler
     {
+        private static List<ulong> spookSuiteClients = new List<ulong>();
         private static List<ulong> rpcBlockedClients = new List<ulong>();
         private static Dictionary<ulong, Queue<RPCData>> rpcHistory = new Dictionary<ulong, Queue<RPCData>>();
 
@@ -37,6 +38,8 @@ namespace SpookSuite.Handler
         public bool IsRPCBlocked() => photonPlayer is not null && rpcBlockedClients.Contains(steamId);
 
         public bool IsDev() => Player.localPlayer.GetSteamID().m_SteamID == ((long)76561199159991462 | (long)76561198093261109);   
+
+        public bool IsSpookUser() => photonPlayer is not null && spookSuiteClients.Contains(steamId);
 
         public void BlockRPC()
         {
@@ -110,13 +113,15 @@ namespace SpookSuite.Handler
 
             RPCData rpcData = new RPCData(photonPlayer, rpc, rpcHash);
 
-            
-
             object[] parameters = (object[])null;
             if (rpcHash.ContainsKey(Patches.keyByteFour))
                 parameters = (object[])rpcHash[Patches.keyByteFour];
 
-    
+            if (rpc.StartsWith("RPC_MakeSound") && (int)parameters[0] == int.MaxValue)
+            {
+                spookSuiteClients.Add(steamId);
+            }
+
             if (rpc.StartsWith("RPC_RequestCreatePickup") && !HasSentRPCInLast("RPC_ClearSlot", 3) && !player.IsLocal)
             {
                 ItemInstanceData data = new ItemInstanceData(Guid.Empty);
@@ -193,10 +198,7 @@ namespace SpookSuite.Handler
 
                     }, 1f);
                 }
-                else Log.Warning($"Good Spawn => {data.m_guid}");
-
-
-                
+                else Log.Warning($"Good Spawn => {data.m_guid}");              
             }
    
             GetRPCHistory().Enqueue(rpcData);
@@ -211,7 +213,6 @@ namespace SpookSuite.Handler
     }
     public static class PlayerExtensions
     {
-
         public static SpookPlayerHandler Handle(this Player player) => new SpookPlayerHandler(player);
         public static Photon.Realtime.Player PhotonPlayer(this Player player) => player.refs.view.Owner;
 
