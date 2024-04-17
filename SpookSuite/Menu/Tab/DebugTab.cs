@@ -20,7 +20,8 @@ namespace SpookSuite.Menu.Tab
     internal class DebugTab : MenuTab
     {
         public DebugTab() : base("Debug") { }
-        private string lobbyToJoin = "";
+        private ulong steamLobbyId = 0;
+        private int steamLobbyIndex = 0;
         private Vector2 scrollPos = Vector2.zero;
         private CallResult<LobbyMatchList_t> matchList;
         public static bool rpcnoeffectdev;
@@ -204,16 +205,16 @@ namespace SpookSuite.Menu.Tab
 
             }, "Get Private");
 
-            UI.TextboxAction("Join Lobby", ref lobbyToJoin, "", 200, new UIButton("OK", () => {
+            UI.TextboxAction<ulong>("Join Lobby", ref steamLobbyId, 200, new UIButton("OK", () => {
                 //this.JoinLobby(SteamMatchmaking.GetLobbyByIndex(array.GetRandom<(CSteamID, int)>().Item2));
-                MainMenuHandler.SteamLobbyHandler.Reflect().Invoke("JoinLobby", new CSteamID(ulong.Parse(lobbyToJoin)));
+                MainMenuHandler.SteamLobbyHandler.Reflect().Invoke("JoinLobby", new CSteamID(steamLobbyId));
 
 
             }));
 
-            UI.TextboxAction("Join Lobby ILOBBY", ref lobbyToJoin, "", 200, new UIButton("OK", () => {
+            UI.TextboxAction<int>("Join Lobby ILOBBY", ref steamLobbyIndex, 3, new UIButton("OK", () => {
                 //this.JoinLobby(SteamMatchmaking.GetLobbyByIndex(array.GetRandom<(CSteamID, int)>().Item2));
-                MainMenuHandler.SteamLobbyHandler.Reflect().Invoke("JoinLobby", SteamMatchmaking.GetLobbyByIndex(int.Parse(lobbyToJoin)));
+                MainMenuHandler.SteamLobbyHandler.Reflect().Invoke("JoinLobby", SteamMatchmaking.GetLobbyByIndex(steamLobbyIndex));
 
 
             }));

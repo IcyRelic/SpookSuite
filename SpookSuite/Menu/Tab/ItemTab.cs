@@ -13,7 +13,7 @@ namespace SpookSuite.Menu.Tab
 
         private Vector2 scrollPos = Vector2.zero;
         private string searchText = "";
-        private string amount = "";
+        private int amount = 1;
 
         private bool equipOnSpawn = false;
         private bool droneDelivery = false;
@@ -35,7 +35,7 @@ namespace SpookSuite.Menu.Tab
             GUILayout.FlexibleSpace();
             UI.Checkbox("Drone Delivery", ref droneDelivery);
             GUILayout.FlexibleSpace();
-            UI.Textbox("Amount:", ref amount, @"[^0-9]");
+            UI.Textbox<int>("Amount:", ref amount);
             GUILayout.EndHorizontal();
 
             scrollPos = GUILayout.BeginScrollView(scrollPos);
@@ -44,7 +44,7 @@ namespace SpookSuite.Menu.Tab
 
             int gridWidth = 4;
             int btnWidth = (int) (SpookSuiteMenu.Instance.contentWidth - (SpookSuiteMenu.Instance.spaceFromLeft * 2)) / gridWidth;
-            UI.ButtonGrid<Item>(items, item => item.GetName(), searchText, item => GameUtil.SpawnItem(item.id, equipOnSpawn, droneDelivery, int.Parse(amount)), gridWidth, btnWidth);
+            UI.ButtonGrid<Item>(items, item => item.GetName(), searchText, item => GameUtil.SpawnItem(item.id, equipOnSpawn, droneDelivery, amount), gridWidth, btnWidth);
             
             GUILayout.EndScrollView();
         }

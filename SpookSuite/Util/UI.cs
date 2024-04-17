@@ -200,23 +200,42 @@ namespace SpookSuite
             GUILayout.EndHorizontal();
         }
 
-        public static void Textbox(string label, ref string value, string regex = "", bool big = true)
+        public static void Textbox<T>(string label, ref T value, bool big = true, int length = -1) where T : struct, IConvertible, IComparable<T>
         {
             GUILayout.BeginHorizontal();
             GUILayout.Label(label);
             GUILayout.FlexibleSpace();
-            value = GUILayout.TextField(value, GUILayout.Width(big ? Settings.i_textboxWidth * 3 : Settings.i_textboxWidth));
-            value = Regex.Replace(value, regex, "");
+            if (GUILayout.TextField(value.ToString(), length, GUILayout.Width(big ? Settings.i_textboxWidth * 3 : Settings.i_textboxWidth)).Parse<T>(out T result))
+                value = result;
             GUILayout.EndHorizontal();
         }
 
-        public static void TextboxAction(string label, ref string value, string regex, int length, params UIButton[] buttons)
+        public static void TextboxAction<T>(string label, ref T value, int length = -1, params UIButton[] buttons) where T : struct, IConvertible, IComparable<T>
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(label);
+            GUILayout.FlexibleSpace();
+            if (GUILayout.TextField(value.ToString(), length, GUILayout.Width(Settings.i_textboxWidth)).Parse<T>(out T result))
+                value = result;
+            buttons.ToList().ForEach(btn => btn.Draw());
+            GUILayout.EndHorizontal();
+        }
+
+        public static void Textbox(string label, ref string value, bool big = true, int length = -1)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(label);
+            GUILayout.FlexibleSpace();
+            value = GUILayout.TextField(value, length, GUILayout.Width(big ? Settings.i_textboxWidth * 3 : Settings.i_textboxWidth));
+            GUILayout.EndHorizontal();
+        }
+
+        public static void TextboxAction(string label, ref string value, int length = 1, params UIButton[] buttons)
         {
             GUILayout.BeginHorizontal();
             GUILayout.Label(label);
             GUILayout.FlexibleSpace();
             value = GUILayout.TextField(value, length, GUILayout.Width(Settings.i_textboxWidth));
-            value = Regex.Replace(value, regex, "");
             buttons.ToList().ForEach(btn => btn.Draw());
             GUILayout.EndHorizontal();
         }

@@ -24,6 +24,7 @@ namespace SpookSuite.Util
         public static void SpawnItem(byte itemId, bool equip = false, bool drone = false, int amount = 1) => SpawnItem(itemId, Player.localPlayer.data.groundPos, equip, drone, amount);
         public static void SpawnItem(byte itemId, Vector3 spawnPos, bool equip = false, bool drone = false, int amount = 1)
         {
+            amount = Math.Clamp(amount, 1, 1000);
             if(drone)
             {
                 if (!ShopHandler.Instance) return;
