@@ -91,8 +91,6 @@ namespace SpookSuite.Menu.Core
             Stylize();
             GUI.color = new Color(1f, 1f, 1f, Settings.f_menuAlpha);
 
-            
-
             windowRect = GUILayout.Window(0, windowRect, new GUI.WindowFunction(DrawContent), "SpookSuite");
             GUI.color = Color.white;
         }
@@ -101,19 +99,22 @@ namespace SpookSuite.Menu.Core
         {
             GUI.color = new Color(1f, 1f, 1f, 0.1f);
             GUIStyle watermark = new GUIStyle(GUI.skin.label) { fontSize = 20, fontStyle = FontStyle.Bold };
-            string text = "Placeholder Text";
+            string text = "Icy & TGB";
 
             GUI.Label(new Rect(windowRect.width - watermark.CalcSize(new GUIContent(text)).x - 10, windowRect.height - watermark.CalcSize(new GUIContent(text)).y - 10, watermark.CalcSize(new GUIContent(text)).x, watermark.CalcSize(new GUIContent(text)).y), text, watermark);
 
             GUI.color = new Color(1f, 1f, 1f, Settings.f_menuAlpha);
 
             GUILayout.BeginVertical();
+
             GUILayout.BeginArea(new Rect(0, 25, windowRect.width, 25), style: "Toolbar");
 
             GUILayout.BeginHorizontal();
             selectedTab = GUILayout.Toolbar(selectedTab, tabs.Select(x => x.name).ToArray(), style: "TabBtn");
             GUILayout.EndHorizontal();
+
             GUILayout.EndArea();
+
             GUILayout.Space(spaceFromTop);
 
             GUILayout.BeginArea(new Rect(spaceFromLeft, spaceFromTop, windowRect.width - spaceFromLeft, contentHeight - 15));

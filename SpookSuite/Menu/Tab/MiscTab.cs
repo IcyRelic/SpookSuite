@@ -1,5 +1,6 @@
 ﻿using Photon.Pun;
-using SpookSuite.Manager;
+using SpookSuite.Cheats.Core;
+using SpookSuite.Cheats;
 using SpookSuite.Menu.Core;
 using SpookSuite.Util;
 using System;
@@ -16,7 +17,8 @@ namespace SpookSuite.Menu.Tab
         private Vector2 scrollPos = Vector2.zero;
         private Vector2 scrollPos2 = Vector2.zero;
         private string searchText = "";
-        private string spoofName = "";
+        private string spoofName = Cheats.NickName.Value;
+        private string moneyToSet = "";
 
         public override void Draw()
         {
@@ -30,24 +32,26 @@ namespace SpookSuite.Menu.Tab
             HelmetTextContent();
             GUILayout.EndVertical();
         }
-        string helemtText = "";
+
         private void MenuContent()
         {
-            UI.TextboxAction("Helmet Text", ref helemtText, 100, new UIButton("Set", () => Player.localPlayer.refs.visor.visorFaceText.text = helemtText));
+            GUILayout.BeginHorizontal();
+            UI.Checkbox("Name Spoof", ref Cheat.Instance<NickName>().Enabled);
+            GUILayout.FlexibleSpace();
+            UI.TextboxAction("Name", ref spoofName, 100, new UIButton("Set", () => Cheats.NickName.Value = spoofName));
+            GUILayout.EndHorizontal();
 
-            UI.TextboxAction("Name Spoof", ref spoofName, 100, new UIButton("Set", () => PhotonNetwork.NickName = spoofName));
             UI.Button("Advance Day", GameUtil.AdvanceDay);
-            UI.Button("Add $300", () => GameUtil.SendHospitalBill(-300));
-            UI.Button("Remove $300", () => GameUtil.SendHospitalBill(300));
+            UI.TextboxAction("Money", ref moneyToSet, 10,
+                new UIButton("Add", () => { int.TryParse(moneyToSet, out int o); GameUtil.SendHospitalBill(-o); }),
+                new UIButton("Remove", () => { int.TryParse(moneyToSet, out int o); GameUtil.SendHospitalBill(o); })
+            );        
         }
 
         private void HelmetTextContent()
         {
-            GUILayout.BeginHorizontal();
-
+            UI.Header("Message Sender");
             UI.Textbox("Search", ref searchText);
-
-            GUILayout.EndHorizontal();
 
             List<LocalizationKeys.Keys> keys = Enum.GetValues(typeof(LocalizationKeys.Keys)).Cast<LocalizationKeys.Keys>().ToList().Where(key => key.ToString().ToLower().Contains(searchText.ToLower())).ToList();
 
