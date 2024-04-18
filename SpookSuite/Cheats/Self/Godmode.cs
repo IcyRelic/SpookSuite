@@ -34,7 +34,7 @@ namespace SpookSuite.Cheats
         {
             Player player = PlayerHandler.instance.Reflect().Invoke<Player>("TryGetPlayerFromViewID", args: viewID);
 
-            if(player.IsLocal)
+            if(player.IsLocal && Instance<Godmode>().Enabled)
             {
                 __instance.Reflect().GetValue<PhotonView>("view_g").RPC("RPCA_ReleasePlayer", RpcTarget.Others);
                 return false;

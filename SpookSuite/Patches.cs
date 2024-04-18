@@ -43,9 +43,7 @@ namespace SpookSuite
         public static void Connect()
         {
             Log.Error("Connection Detected! OpJoinOrCreateRoom");
-
         }
-
 
         public static void Connected()
         {
