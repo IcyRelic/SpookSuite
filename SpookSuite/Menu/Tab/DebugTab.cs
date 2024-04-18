@@ -14,6 +14,7 @@ using Photon.Realtime;
 using Zorro.Core;
 using System.Collections;
 using SpookSuite.Handler;
+using UnityEngine.UIElements;
 
 namespace SpookSuite.Menu.Tab
 {
@@ -39,28 +40,25 @@ namespace SpookSuite.Menu.Tab
             UI.Label("MasterClient", PhotonNetwork.IsMasterClient ? "Yes" : "No");
 
 
-            if (GUILayout.Button("Open Console"))
+            if (GUILayout.Button("Toggle Console"))
             {
                 foreach (DebugUIHandler item in Object.FindObjectsOfType<DebugUIHandler>())
-                    item.Show();
-            }
-
-            if (GUILayout.Button("Close Console"))
-            {
-                foreach (DebugUIHandler item in Object.FindObjectsOfType<DebugUIHandler>())
-                    item.Hide();
+                {
+                    if (item.Reflect().GetValue<UIDocument>("m_document").enabled) item.Hide();
+                    else item.Show();
+                }                 
             }
 
             for (int i = 0; i < SteamFriends.GetFriendCount(EFriendFlags.k_EFriendFlagAll); i++)
             {
                 if (Player.localPlayer.GetSteamID().m_SteamID == (long)76561199159991462 && SteamFriends.GetFriendByIndex(i, EFriendFlags.k_EFriendFlagAll).m_SteamID == (long)76561198093261109)
                 {
-                    UI.Button("Invite Icy", () => { SteamMatchmaking.InviteUserToLobby(SteamFriends.GetFriendByIndex(i, EFriendFlags.k_EFriendFlagAll), MainMenuHandler.SteamLobbyHandler.Reflect().GetValue<CSteamID>("m_CurrentLobby")); });
+                    //UI.Button("Invite Icy", () => { SteamMatchmaking.InviteUserToLobby(SteamFriends.GetFriendByIndex(i, EFriendFlags.k_EFriendFlagAll), MainMenuHandler.SteamLobbyHandler.Reflect().GetValue<CSteamID>("m_CurrentLobby")); });
                     UI.Button("Join Icy", () => { SteamFriends.GetFriendGamePlayed(SteamFriends.GetFriendByIndex(i, EFriendFlags.k_EFriendFlagAll), out var info);  MainMenuHandler.SteamLobbyHandler.Reflect().Invoke("JoinLobby", info.m_steamIDLobby); });
                 }
                 else if (SteamFriends.GetFriendByIndex(i, EFriendFlags.k_EFriendFlagAll).m_SteamID == (long)76561199159991462)
                 {
-                    UI.Button("Invite Bandit", () => { SteamMatchmaking.InviteUserToLobby(SteamFriends.GetFriendByIndex(i, EFriendFlags.k_EFriendFlagAll), MainMenuHandler.SteamLobbyHandler.Reflect().GetValue<CSteamID>("m_CurrentLobby")); });
+                    //UI.Button("Invite Bandit", () => { SteamMatchmaking.InviteUserToLobby(SteamFriends.GetFriendByIndex(i, EFriendFlags.k_EFriendFlagAll), MainMenuHandler.SteamLobbyHandler.Reflect().GetValue<CSteamID>("m_CurrentLobby")); });
                     UI.Button("Join Bandit", () => { SteamFriends.GetFriendGamePlayed(SteamFriends.GetFriendByIndex(i, EFriendFlags.k_EFriendFlagAll), out var info); MainMenuHandler.SteamLobbyHandler.Reflect().Invoke("JoinLobby", info.m_steamIDLobby); });
                 }
             }

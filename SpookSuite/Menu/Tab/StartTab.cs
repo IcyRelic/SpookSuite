@@ -31,7 +31,7 @@ namespace SpookSuite.Menu.Tab
 
             GUILayout.Space(25);
 
-            GUILayout.TextArea("IcyRelic (Github, UnknownCheats), TheGreenBandit (Github, GsV2 UnknownCheats)");
+            GUILayout.TextArea("IcyRelic (Github, UnknownCheats), TheGreenBandit (Github, GsV2 on UnknownCheats)");
 
             GUILayout.EndVertical();
         } 

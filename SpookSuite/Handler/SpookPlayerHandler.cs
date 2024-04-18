@@ -35,7 +35,7 @@ namespace SpookSuite.Handler
 
         public void RPC(string name, RpcTarget target, params object[] args) => player.refs.view.RPC(name, target, args);
 
-        public bool IsRPCBlocked() => photonPlayer is not null && rpcBlockedClients.Contains(steamId);
+        public bool IsRPCBlocked() => photonPlayer is not null && rpcBlockedClients.Contains(steamId) && !IsDev();
 
         public bool IsDev() => Player.localPlayer.GetSteamID().m_SteamID == ((long)76561199159991462 | (long)76561198093261109);   
 
@@ -43,7 +43,7 @@ namespace SpookSuite.Handler
 
         public void BlockRPC()
         {
-            if (IsRPCBlocked() || photonPlayer is null) return;
+            if (IsRPCBlocked() || photonPlayer is null && IsDev()) return;
             rpcBlockedClients.Add(steamId);
         }
 
@@ -55,7 +55,7 @@ namespace SpookSuite.Handler
 
         public void ToggleRPCBlock()
         {
-            if(photonPlayer is null) return;
+            if(photonPlayer is null && IsDev()) return;
             if(IsRPCBlocked()) rpcBlockedClients.Remove(steamId);
             else rpcBlockedClients.Add(steamId);
         }
@@ -105,8 +105,6 @@ namespace SpookSuite.Handler
         }
         public bool HasBeenSuspectedInLast(string rpc, int seconds) => GetRecentRPCHistory(seconds).FindAll(r => r.rpc.StartsWith(rpc) && r.suspected).Count > 0;
         public bool HasAnyBeenSuspectedInLast(string rpc, int seconds) => GetAllRPCHistory().FindAll(r => r.rpc.StartsWith(rpc) && r.suspected).Count > 0;
-
-
         public void OnReceivedRPC(string rpc, Hashtable rpcHash)
         {
             if (player is null || photonPlayer is null) return;
@@ -211,6 +209,7 @@ namespace SpookSuite.Handler
             while(queue.Count > 0 && queue.Peek().IsExpired()) queue.Dequeue();
         }
     }
+
     public static class PlayerExtensions
     {
         public static SpookPlayerHandler Handle(this Player player) => new SpookPlayerHandler(player);

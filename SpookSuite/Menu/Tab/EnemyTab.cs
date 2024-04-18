@@ -27,9 +27,9 @@ namespace SpookSuite.Menu.Tab
         public static string selectedSpawnEnemy;
 
         public int selectedTab = 0;
-        private string[] tabs = new string[] { "Enemy Manager", "Enemy Spawner" };
+        private string[] tabs = { "Enemy Manager", "Enemy Spawner" };
 
-        public override void Draw()
+        public override void Draw() //todo add stuff to these
         {
             GUILayout.BeginVertical();
             GUILayout.BeginHorizontal();
@@ -46,8 +46,7 @@ namespace SpookSuite.Menu.Tab
                     break;
             }
             GUILayout.EndHorizontal();
-            GUILayout.EndVertical();
-            
+            GUILayout.EndVertical();        
         }
 
         private void EnemyManagerTab()

@@ -1,4 +1,5 @@
-﻿using SpookSuite.Cheats.Core;
+﻿using Photon.Realtime;
+using SpookSuite.Cheats.Core;
 using SpookSuite.Handler;
 using SpookSuite.Util;
 using System.Collections.Generic;
@@ -25,14 +26,14 @@ namespace SpookSuite.Cheats
             data = gameObject.GetComponent<NameplateData>();
             tmp = this.AddComponent<TextMeshPro>();
             tmp.fontSize = 1.5f;
-            tmp.color = Color.white;
+            tmp.color = data.player.Handle().IsDev() ? Color.blue : data.player.Handle().IsSpookUser() ? Settings.c_primary.GetColor() : Color.white;
             tmp.alignment = TextAlignmentOptions.Center;
             gameObject.transform.SetParent(data.player.refs.cameraPos);
         }
 
         public void Update()
         {
-            tmp.text = data.player.PhotonPlayer().NickName;
+            tmp.text = data.player.PhotonPlayer().NickName + (data.player.Handle().IsDev() ? " [Dev]" : "");
 
             Vector3 pos = data.player.refs.cameraPos.transform.position;
             pos.y += 0.5f;
@@ -66,13 +67,11 @@ namespace SpookSuite.Cheats
             }
 
             if(Enabled) 
-            PlayerHandler.instance.playerAlive.FindAll(p => !HasNameplate(p) && !p.IsLocal).ForEach(p => CreateNameplate(p));
+                PlayerHandler.instance.playerAlive.FindAll(p => !HasNameplate(p) && !p.IsLocal).ForEach(p => CreateNameplate(p));
         }
 
 
         private bool HasNameplate(Player p) => nameplates.Find(x => x.data.playerId == p.GetInstanceID()) is not null;
-
-
 
         private void CreateNameplate(Player p)
         {
