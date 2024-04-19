@@ -47,6 +47,14 @@ namespace SpookSuite
 
         }
 
+
+        public static void Connected()
+        {
+            //Log.Error("Connection Detected!");
+            //SpookSuite.CallBroadcastSSUser();
+        }
+
+
         [HarmonyPrefix]
         [HarmonyPatch(typeof(PhotonNetwork), "ExecuteRpc")]
         public static bool ExecuteRPC(Hashtable rpcData, Photon.Realtime.Player sender)
