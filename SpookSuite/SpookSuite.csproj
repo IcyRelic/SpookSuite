@@ -26,6 +26,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Cheats\Other\" />
     <Folder Include="Cheats\World\" />
     <Folder Include="Resources\BaseGame\" />
   </ItemGroup>
@@ -357,6 +358,9 @@
     </Reference>
     <Reference Include="Zorro.Core.Runtime">
       <HintPath>Resources\BaseGame\Zorro.Core.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Zorro.UI.Runtime">
+      <HintPath>Resources\BaseGame\Zorro.UI.Runtime.dll</HintPath>
     </Reference>
   </ItemGroup>
 
