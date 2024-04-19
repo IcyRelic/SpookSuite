@@ -17,21 +17,17 @@ namespace SpookSuite
 {
     internal class Settings
     {
-        /* *
-         * Keybinds
-         *  */
-        public static KeyCode MenuToggleKey = KeyCode.Insert;
 
         /* *    
          * Menu Settings
          * */
+        public static bool b_isMenuOpen = false;
         public static int i_menuFontSize = 14;
         public static int i_menuWidth = 810;
         public static int i_menuHeight = 410;
         public static int i_sliderWidth = 100;
         public static int i_textboxWidth = 85;
         public static float f_menuAlpha = 1f;
-        public static bool b_isMenuOpen = false;
 
         /* *    
          * Color Settings
@@ -98,7 +94,7 @@ namespace SpookSuite
                 Dictionary<string, string> cheatValues = new Dictionary<string, string>();
 
 
-                Cheat.instances.ForEach(c =>
+                Cheat.instances.FindAll(c => !c.Hidden).ForEach(c =>
                 {
                     if(c.HasKeybind) keybinds.Add(c.GetType().Name, c.keybind.ToString());
                     if(c is ToggleCheat) toggles.Add(c.GetType().Name, ((ToggleCheat)c).Enabled.ToString());
@@ -154,7 +150,7 @@ namespace SpookSuite
 
                 if (json.TryGetValue("KeyBinds", out JToken keybindsToken))
                 {
-                    Cheat.instances.ForEach(c => c.keybind = KeyCode.None);
+                    Cheat.instances.ForEach(c => c.keybind = c.defaultKeybind);
                     foreach (var item in keybindsToken.ToObject<Dictionary<string, string>>())
                     {
                         string s_cheat = item.Key;
