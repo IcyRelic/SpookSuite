@@ -61,7 +61,7 @@ namespace SpookSuite.Menu.Tab
            
             scrollPos = GUILayout.BeginScrollView(scrollPos);
 
-            List<Cheat> cheats = Cheat.instances;
+            List<Cheat> cheats = Cheat.instances.FindAll(c => !c.Hidden);
             foreach (Cheat cheat in cheats)
             {
                 //if (!hack.CanHaveKeyBind()) continue;
