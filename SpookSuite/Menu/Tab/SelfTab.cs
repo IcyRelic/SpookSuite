@@ -31,23 +31,26 @@ namespace SpookSuite.Menu.Tab
             UI.Button("Suicide", () => Player.localPlayer.refs.view.RPC("RPCA_PlayerDie", RpcTarget.All, Array.Empty<object>()), null);
             UI.Button("Revive", () => Player.localPlayer.refs.view.RPC("RPCA_PlayerRevive", RpcTarget.All, Array.Empty<object>()), null);
             GUILayout.EndHorizontal();
-            
-            
+
+            UI.Textbox("Spoofed Name", ref NameSpoof.Value, length: 100, onChanged: NameSpoof.OnValueChanged);
+            UI.Checkbox("Use Spoofed Name", Cheat.Instance<NameSpoof>());
+
+
         }
 
         private void Toggles()
         {
             UI.CheatToggleSlider(Cheat.Instance<SuperSpeed>(), "Super Speed", SuperSpeed.Value.ToString("#"), ref SuperSpeed.Value, 10f, 100f);
             UI.CheatToggleSlider(Cheat.Instance<SuperJump>(), "Super Jump", SuperJump.Value.ToString("#.#"), ref SuperJump.Value, 0.6f, 20f);
-            UI.Checkbox("Godmode", ref Cheat.Instance<Godmode>().Enabled);
+            UI.Checkbox("Godmode", Cheat.Instance<Godmode>());
 
             UI.CheatToggleSlider(Cheat.Instance<NoClip>(), "NoClip", NoClip.Value.ToString(), ref NoClip.Value, 1f, 20f);
-            UI.Checkbox("Infinte Jump", ref Cheat.Instance<InfiniteJump>().Enabled);
-            UI.Checkbox("No Ragdoll", ref Cheat.Instance<NoRagdoll>().Enabled);
-            UI.Checkbox("Unlimited Oxygen", ref Cheat.Instance<UnlimitedOxygen>().Enabled);
-            UI.Checkbox("Unlimited Stamina", ref Cheat.Instance<UnlimitedStamina>().Enabled);
-            UI.Checkbox("Unlimited Battery", ref Cheat.Instance<UnlimitedBattery>().Enabled);
-            UI.Checkbox("Unlimited Film", ref Cheat.Instance<UnlimitedFilm>().Enabled);
+            UI.Checkbox("Infinte Jump", Cheat.Instance<InfiniteJump>());
+            UI.Checkbox("No Ragdoll", Cheat.Instance<NoRagdoll>());
+            UI.Checkbox("Unlimited Oxygen", Cheat.Instance<UnlimitedOxygen>());
+            UI.Checkbox("Unlimited Stamina", Cheat.Instance<UnlimitedStamina>());
+            UI.Checkbox("Unlimited Battery", Cheat.Instance<UnlimitedBattery>());
+            UI.Checkbox("Unlimited Film", Cheat.Instance<UnlimitedFilm>());
         }
     }
 }

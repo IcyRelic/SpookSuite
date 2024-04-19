@@ -28,8 +28,17 @@ namespace SpookSuite.Cheats
             DisplayChams(GameObjectManager.pickups, _ => Settings.c_chams);
             DisplayChams(GameObjectManager.players, _ => Settings.c_chams);
             DisplayChams(GameObjectManager.enemyPlayer, _ => Settings.c_chams);
-            DisplayChams(GameObjectManager.divingBells, _ => Settings.c_chams);
+            DisplayChams(new List<Object> { GameObjectManager.divingBellButton, GameObjectManager.divingBell }, _ => Settings.c_chams);
             DisplayChams(GameObjectManager.lasers, _ => Settings.c_chams);
+        }
+
+        public static void ToggleAll()
+        {
+            displayPlayers = !displayPlayers;
+            displayEnemies = !displayEnemies;
+            displayItems = !displayItems;
+            displayDivingBell = !displayDivingBell;
+            displayLasers = !displayLasers;
         }
 
         private void DisplayChams<T>(IEnumerable<T> objects, Func<T, RGBAColor> colorSelector) where T : Object

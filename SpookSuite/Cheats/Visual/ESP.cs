@@ -75,7 +75,8 @@ namespace SpookSuite.Cheats
 
         private void DisplayDivingBells()
         {
-            DisplayObjects(GameObjectManager.divingBells, divingBell => divingBell.name, divingBell => Settings.c_espDivingBells);
+            DisplayObjects(new[] { GameObjectManager.divingBell }, divingBell => divingBell.name, divingBell => Settings.c_espDivingBells);
+            DisplayObjects(new[] { GameObjectManager.divingBellButton }, divingBell => divingBell.name, divingBell => Settings.c_espDivingBells);
         }
         private void DisplayLasers()
         {

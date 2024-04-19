@@ -2,6 +2,7 @@
 using HarmonyLib;
 using Photon.Pun;
 using Photon.Realtime;
+using SpookSuite.Cheats;
 using SpookSuite.Components;
 using SpookSuite.Handler;
 using SpookSuite.Util;
@@ -41,7 +42,8 @@ namespace SpookSuite
         [HarmonyPatch(typeof(LoadBalancingClient), nameof(LoadBalancingClient.OpJoinOrCreateRoom))]
         public static void Connect()
         {
-            Log.Error("Connection Detected! OpJoinOrCreateRoom");
+            Log.Error("Connection Detected!");
+            NameSpoof.TrySetNickname();
 
         }
 

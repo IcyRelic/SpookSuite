@@ -31,9 +31,9 @@ namespace SpookSuite.Manager
         public static List<PlayerRagdoll> playerRagdolls = new List<PlayerRagdoll>();
         public static List<ItemInstance> items = new List<ItemInstance>();
         public static List<Pickup> pickups = new List<Pickup>();
-        public static List<UseDivingBellButton> divingBells = new List<UseDivingBellButton>();
         public static List<Laser> lasers = new List<Laser>();
         public static DivingBell divingBell;
+        public static UseDivingBellButton divingBellButton;
 
         public static Dictionary<Guid, bool> allowedSpawns = new Dictionary<Guid, bool>();
         public static Dictionary<byte, object[]> allowedDroneSpawns = new Dictionary<byte, object[]>();
@@ -48,10 +48,10 @@ namespace SpookSuite.Manager
                 CollectObjects(playerRagdolls);
                 CollectObjects(items);
                 CollectObjects(pickups);
-                CollectObjects(divingBells);
                 CollectObjects(lasers);
 
                 divingBell = Object.FindObjectOfType<DivingBell>();
+                divingBellButton = Object.FindObjectOfType<UseDivingBellButton>();
 
                 yield return new WaitForSeconds(collectInterval);
             }

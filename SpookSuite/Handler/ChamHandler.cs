@@ -72,7 +72,7 @@ namespace SpookSuite.Handler
             if (@object is Player && !((Player)@object).ai) e = ChamESP.displayPlayers;
             if (@object is Bot || (@object is Player && ((Player)@object).ai)) e = ChamESP.displayEnemies;
             if (@object is Pickup) e = ChamESP.displayItems;
-            if (@object is UseDivingBellButton) e = ChamESP.displayDivingBell;
+            if (@object is UseDivingBellButton || @object is DivingBell) e = ChamESP.displayDivingBell;
             if (@object is Laser) e = ChamESP.displayLasers;
 
             if (e && distance >= ChamESP.Value && Cheat.Instance<ChamESP>().Enabled) ApplyCham();

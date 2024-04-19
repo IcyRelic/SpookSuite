@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine;
+using static UnityEngine.Rendering.DebugUI;
 
 namespace SpookSuite
 {
@@ -101,9 +102,18 @@ namespace SpookSuite
         public static void Checkbox(string header, ref bool value)
         {
             GUILayout.BeginHorizontal();
-            GUILayout.Label(header); //dont wanna add langauge shit yet
+            GUILayout.Label(header);
             GUILayout.FlexibleSpace();
             value = GUILayout.Toggle(value, "");
+            GUILayout.EndHorizontal();
+        }
+
+        public static void Checkbox(string header, ToggleCheat cheat)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(header);
+            GUILayout.FlexibleSpace();
+            cheat.Enabled = GUILayout.Toggle(cheat.Enabled, "");
             GUILayout.EndHorizontal();
         }
 
@@ -200,15 +210,30 @@ namespace SpookSuite
             GUILayout.EndHorizontal();
         }
 
-        public static void Textbox<T>(string label, ref T value, bool big = true, int length = -1) where T : struct, IConvertible, IComparable<T>
+        public static void Textbox<T>(string label, ref T value, bool big = true, int length = -1, params Action<T>[] onChanged) where T : struct, IConvertible, IComparable<T>
         {
             GUILayout.BeginHorizontal();
             GUILayout.Label(label);
             GUILayout.FlexibleSpace();
             if (GUILayout.TextField(value.ToString(), length, GUILayout.Width(big ? Settings.i_textboxWidth * 3 : Settings.i_textboxWidth)).Parse<T>(out T result))
+            {
+                if(!value.Equals(result)) onChanged.ToList().ForEach(action => action.Invoke(result));
                 value = result;
+            }
             GUILayout.EndHorizontal();
         }
+
+        public static void Textbox(string label, ref string value, bool big = true, int length = -1, params Action<string>[] onChanged)
+        {
+            GUILayout.BeginHorizontal();
+            GUILayout.Label(label);
+            GUILayout.FlexibleSpace();
+            string s = GUILayout.TextField(value, length, GUILayout.Width(big ? Settings.i_textboxWidth * 3 : Settings.i_textboxWidth));
+            if(s != value) onChanged.ToList().ForEach(action => action.Invoke(s));
+            value = s;
+            GUILayout.EndHorizontal();
+        }
+
 
         public static void TextboxAction<T>(string label, ref T value, int length = -1, params UIButton[] buttons) where T : struct, IConvertible, IComparable<T>
         {
@@ -218,15 +243,6 @@ namespace SpookSuite
             if (GUILayout.TextField(value.ToString(), length, GUILayout.Width(Settings.i_textboxWidth)).Parse<T>(out T result))
                 value = result;
             buttons.ToList().ForEach(btn => btn.Draw());
-            GUILayout.EndHorizontal();
-        }
-
-        public static void Textbox(string label, ref string value, bool big = true, int length = -1)
-        {
-            GUILayout.BeginHorizontal();
-            GUILayout.Label(label);
-            GUILayout.FlexibleSpace();
-            value = GUILayout.TextField(value, length, GUILayout.Width(big ? Settings.i_textboxWidth * 3 : Settings.i_textboxWidth));
             GUILayout.EndHorizontal();
         }
 

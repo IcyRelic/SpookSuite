@@ -17,7 +17,6 @@ namespace SpookSuite.Menu.Tab
         private Vector2 scrollPos = Vector2.zero;
         private Vector2 scrollPos2 = Vector2.zero;
         private string searchText = "";
-        private string spoofName = Cheats.NickName.Value;
         private string moneyToSet = "";
 
         public override void Draw()
@@ -35,12 +34,6 @@ namespace SpookSuite.Menu.Tab
 
         private void MenuContent()
         {
-            GUILayout.BeginHorizontal();
-            UI.Checkbox("Name Spoof", ref Cheat.Instance<NickName>().Enabled);
-            GUILayout.FlexibleSpace();
-            UI.TextboxAction("Name", ref spoofName, 100, new UIButton("Set", () => Cheats.NickName.Value = spoofName));
-            GUILayout.EndHorizontal();
-
             UI.Button("Advance Day", GameUtil.AdvanceDay);
             UI.TextboxAction("Money", ref moneyToSet, 10,
                 new UIButton("Add", () => { int.TryParse(moneyToSet, out int o); GameUtil.SendHospitalBill(-o); }),

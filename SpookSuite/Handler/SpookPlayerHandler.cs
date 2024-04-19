@@ -92,6 +92,7 @@ namespace SpookSuite.Handler
             return null;
         }
 
+        public bool HasSentMatchInLast(string rpc, int seconds, object data) => GetRecentRPCHistory(seconds).FindAll(r => r.rpc.StartsWith(rpc) && r.data == data).Count > 0;
         public bool HasSentRPCInLast(string rpc, int seconds) => GetRecentRPCHistory(seconds).FindAll(r => r.rpc.StartsWith(rpc)).Count > 0;
         public bool HasAnySentInLast(string rpc, int seconds) //GetAllRecentRPCHistory(seconds).FindAll(r => r.rpc.StartsWith(rpc)).Count > 0;
         {
@@ -179,22 +180,35 @@ namespace SpookSuite.Handler
                 else if (droneSuspected || GetAnyMatch("RPC_ClearSlot", 5, itemID) is null)
                 {
                     //Spawned Item, Delete it
-                    rpcData.SetSuspected(data.m_guid);
+                    rpcData.SetSuspected(itemID);
                     if(droneSuspected)
                         rpcData.parent = suspected;
 
-                    Log.Error($"Spawned Item Detected. => Suspected: {suspected?.rpc} Guid: {data.m_guid} | Spawned By: {suspected?.sender.NickName}");
+                    bool goodSpawn = false;
 
-                    SpookSuite.Invoke(() =>
+                    float elapsedTime = Time.time - Time.timeSinceLevelLoad;
+
+                    if ( (itemID == GameUtil.GetItemByName("camera").id && !HasSentMatchInLast("RPC_ConfigurePickup", 15, itemID)) ||
+                        (!GameObjectManager.divingBell.onSurface && elapsedTime > 30) )
+                        goodSpawn = true;
+
+                    if(!goodSpawn)
                     {
-                        
-                        Pickup pickup = GameUtil.GetPickupByGuid(data.m_guid);
+                        Log.Error($"Spawned Item Detected. => Suspected: {suspected?.rpc} Guid: {data.m_guid} | Spawned By: {suspected?.sender.NickName}");
 
-                        Log.Error($"Sending RPC_Remove for spawned item {data.m_guid}");
-                        pickup.m_photonView.RPC("RPC_Remove", RpcTarget.MasterClient);
+                        SpookSuite.Invoke(() =>
+                        {
+
+                            Pickup pickup = GameUtil.GetPickupByGuid(data.m_guid);
+
+                            Log.Error($"Sending RPC_Remove for spawned item {data.m_guid}");
+                            pickup.m_photonView.RPC("RPC_Remove", RpcTarget.MasterClient);
 
 
-                    }, 1f);
+                        }, 1f);
+                    } else Log.Warning($"Host Spawn Detected As Good Spawn => {data.m_guid}");
+
+                    
                 }
                 else Log.Warning($"Good Spawn => {data.m_guid}");              
             }

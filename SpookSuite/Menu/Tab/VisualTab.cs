@@ -25,8 +25,8 @@ namespace SpookSuite.Menu.Tab
 
             UI.CheatToggleSlider(Cheat.Instance<FOV>(), "FOV", Cheats.FOV.Value.ToString(), ref Cheats.FOV.Value, 1, 170);
             UI.CheatToggleSlider(Cheat.Instance<ThirdPerson>(), "Third Person", Cheats.ThirdPerson.Value.ToString(), ref Cheats.ThirdPerson.Value, 0, 20);
-            UI.Checkbox("Display Dead", ref Cheat.Instance<DisplayDead>().Enabled);
-            UI.Checkbox("Nameplates", ref Cheat.Instance<Nameplates>().Enabled);
+            UI.Checkbox("Display Dead", Cheat.Instance<DisplayDead>());
+            UI.Checkbox("Nameplates", Cheat.Instance<Nameplates>());
 
             GUILayout.EndScrollView();
         }
@@ -35,7 +35,7 @@ namespace SpookSuite.Menu.Tab
         {
             scrollPos = GUILayout.BeginScrollView(scrollPos);
             
-            UI.Checkbox("Enable ESP", ref Cheat.Instance<ESP>().Enabled);
+            UI.Checkbox("Enable ESP", Cheat.Instance<ESP>());
             UI.Button("Toggle All ESP", () => ESP.ToggleAll());
             UI.Checkbox("Display Players", ref ESP.displayPlayers);
             UI.Checkbox("Display Monsters", ref ESP.displayEnemies);
@@ -44,7 +44,8 @@ namespace SpookSuite.Menu.Tab
             UI.Checkbox("Display Diving Bell", ref ESP.displayDivingBell);
 
             UI.SubHeader("Chams");
-            UI.CheatToggleSlider(Cheat.Instance<ChamESP>(), "Enable Chams", ChamESP.Value.ToString(), ref ChamESP.Value, 0, 170);
+            UI.CheatToggleSlider(Cheat.Instance<ChamESP>(), "Enable Chams", $"Min Distance: {ChamESP.Value.ToString("#")}", ref ChamESP.Value, 0, 170);
+            UI.Button("Toggle All Chams", () => ChamESP.ToggleAll());
             UI.Checkbox("Display Players", ref ChamESP.displayPlayers);
             UI.Checkbox("Display Monsters", ref ChamESP.displayEnemies);
             UI.Checkbox("Display Items", ref ChamESP.displayItems);
