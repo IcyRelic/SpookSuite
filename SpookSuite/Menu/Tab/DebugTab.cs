@@ -21,7 +21,7 @@ namespace SpookSuite.Menu.Tab
 {
     internal class DebugTab : MenuTab
     {
-        public DebugTab() : base("Debug") { }
+        public DebugTab() : base("Debug", true) { }
         private ulong steamLobbyId = 0;
         private int steamLobbyIndex = 0;
         private Vector2 scrollPos = Vector2.zero;

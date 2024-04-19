@@ -38,7 +38,10 @@ namespace SpookSuite.Menu.Tab
             UI.TextboxAction("Money", ref moneyToSet, 10,
                 new UIButton("Add", () => { int.TryParse(moneyToSet, out int o); GameUtil.SendHospitalBill(-o); }),
                 new UIButton("Remove", () => { int.TryParse(moneyToSet, out int o); GameUtil.SendHospitalBill(o); })
-            );        
+            );
+
+            UI.Button("Open/Close Diving Bell", Cheat.Instance<ToggleDivingBell>().Execute);
+            UI.Button("Activate Diving Bell", Cheat.Instance<UseDivingBell>().Execute);
         }
 
         private void HelmetTextContent()

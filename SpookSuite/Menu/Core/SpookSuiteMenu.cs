@@ -1,4 +1,6 @@
-﻿using SpookSuite.Manager;
+﻿using SpookSuite.Cheats;
+using SpookSuite.Cheats.Core;
+using SpookSuite.Manager;
 using SpookSuite.Menu.Tab;
 using SpookSuite.Util;
 using System.Collections.Generic;
@@ -32,8 +34,8 @@ namespace SpookSuite.Menu.Core
         public SpookSuiteMenu()
         {
             instance = this;
-            tabs.Add(new StartTab());
             tabs.Add(new DebugTab());
+            tabs.Add(new StartTab());
             tabs.Add(new SettingsTab());
             tabs.Add(new SelfTab());
             tabs.Add(new VisualTab());
@@ -41,6 +43,9 @@ namespace SpookSuite.Menu.Core
             tabs.Add(new MiscTab());
             tabs.Add(new EnemyTab());
             tabs.Add(new ItemTab());
+
+            Resize();
+            selectedTab = tabs.IndexOf(tabs.Where(x => x.name == "Start").First());
         }
 
         public void Resize()
@@ -58,7 +63,7 @@ namespace SpookSuite.Menu.Core
             Settings.i_menuHeight = 410;
             Settings.i_sliderWidth = 100;
             Settings.i_textboxWidth = 85;
-            //Settings.Config.SaveConfig();
+            Settings.Config.SaveConfig();
         }
 
         public void Stylize()
@@ -110,7 +115,7 @@ namespace SpookSuite.Menu.Core
             GUILayout.BeginArea(new Rect(0, 25, windowRect.width, 25), style: "Toolbar");
 
             GUILayout.BeginHorizontal();
-            selectedTab = GUILayout.Toolbar(selectedTab, tabs.Select(x => x.name).ToArray(), style: "TabBtn");
+            selectedTab = GUILayout.Toolbar(selectedTab, tabs.FindAll(x => DebugMode.Value ? true : !x.isDebug).Select(x => x.name).ToArray(), style: "TabBtn");
             GUILayout.EndHorizontal();
 
             GUILayout.EndArea();

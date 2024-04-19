@@ -110,7 +110,7 @@ namespace SpookSuite
                 JObject json = new JObject();
                 JObject settings = new JObject();
                 JObject colors = new JObject();
-
+                JObject cheatSettings = new JObject();
                 
 
                 colors["MenuText"] = JsonConvert.SerializeObject(c_menuText);
@@ -126,9 +126,21 @@ namespace SpookSuite
                 settings["TextboxWidth"] = i_textboxWidth.ToString();
                 settings["MenuAlpha"] = f_menuAlpha.ToString();
 
+                cheatSettings["ESPPlayers"] = ESP.displayPlayers.ToString();
+                cheatSettings["ESPEnemies"] = ESP.displayEnemies.ToString();
+                cheatSettings["ESPItems"] = ESP.displayItems.ToString();
+                cheatSettings["ESPDivingBell"] = ESP.displayDivingBell.ToString();
+                cheatSettings["ESPLasers"] = ESP.displayLasers.ToString();
+                cheatSettings["ChamsPlayers"] = ChamESP.displayPlayers.ToString();
+                cheatSettings["ChamsEnemies"] = ChamESP.displayEnemies.ToString();
+                cheatSettings["ChamsItems"] = ChamESP.displayItems.ToString();
+                cheatSettings["ChamsDivingBell"] = ChamESP.displayDivingBell.ToString();
+                cheatSettings["ChamsLasers"] = ChamESP.displayLasers.ToString();
+
                 json["KeyBinds"] = JObject.FromObject(keybinds);
                 json["Toggles"] = JObject.FromObject(toggles);
                 json["Values"] = JObject.FromObject(cheatValues);
+                json["CheatSettings"] = cheatSettings;
                 json["Colors"] = colors;
                 json["MenuSettings"] = settings;
 
@@ -200,6 +212,33 @@ namespace SpookSuite
                     }
                 }
 
+                Debug.Log("Loading Cheat Settings...");
+                if(json.TryGetValue("CheatSettings", out JToken cSettingsToken))
+                {
+                    JObject cheatSettings = cSettingsToken.ToObject<JObject>();
+                    if(cheatSettings.TryGetValue("ESPPlayers", out JToken espPlayersToken))
+                        ESP.displayPlayers = bool.Parse(espPlayersToken.ToString());
+                    if (cheatSettings.TryGetValue("ESPEnemies", out JToken espEnemiesToken))
+                        ESP.displayEnemies = bool.Parse(espEnemiesToken.ToString());
+                    if (cheatSettings.TryGetValue("ESPItems", out JToken espItemsToken))
+                        ESP.displayItems = bool.Parse(espItemsToken.ToString());
+                    if (cheatSettings.TryGetValue("ESPDivingBell", out JToken espDivingBellToken))
+                        ESP.displayDivingBell = bool.Parse(espDivingBellToken.ToString());
+                    if (cheatSettings.TryGetValue("ESPLasers", out JToken espLasersToken))
+                        ESP.displayLasers = bool.Parse(espLasersToken.ToString());
+                    if (cheatSettings.TryGetValue("ChamsPlayers", out JToken chamsPlayersToken))
+                        ChamESP.displayPlayers = bool.Parse(chamsPlayersToken.ToString());
+                    if (cheatSettings.TryGetValue("ChamsEnemies", out JToken chamsEnemiesToken))
+                        ChamESP.displayEnemies = bool.Parse(chamsEnemiesToken.ToString());
+                    if (cheatSettings.TryGetValue("ChamsItems", out JToken chamsItemsToken))
+                        ChamESP.displayItems = bool.Parse(chamsItemsToken.ToString());
+                    if (cheatSettings.TryGetValue("ChamsDivingBell", out JToken chamsDivingBellToken))
+                        ChamESP.displayDivingBell = bool.Parse(chamsDivingBellToken.ToString());
+                    if (cheatSettings.TryGetValue("ChamsLasers", out JToken chamsLasersToken))
+                        ChamESP.displayLasers = bool.Parse(chamsLasersToken.ToString());
+                }
+
+                Debug.Log("Loading Colors...");
                 if (json.TryGetValue("Colors", out JToken colorsToken))
                 {
                     JObject colors = colorsToken.ToObject<JObject>();
@@ -216,6 +255,7 @@ namespace SpookSuite
                         c_espDivingBells = JsonConvert.DeserializeObject<RGBAColor>(espDivingBellsToken.ToString());
                 }
 
+                Debug.Log("Loading Menu Settings...");
                 if (json.TryGetValue("MenuSettings", out JToken settingsToken))
                 {
                     JObject settings = settingsToken.ToObject<JObject>();
