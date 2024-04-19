@@ -6,6 +6,7 @@ namespace SpookSuite.Cheats.Core
     {
         public ExecutableCheat() { }
         public ExecutableCheat(KeyCode defaultKeybind) : base(defaultKeybind) { }
+        public ExecutableCheat(KeyCode defaultKeybind, bool hidden) : base(defaultKeybind, hidden) { }
         public abstract void Execute();
     }
 }

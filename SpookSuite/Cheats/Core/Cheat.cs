@@ -11,9 +11,11 @@ namespace SpookSuite.Cheats.Core
         public static List<Cheat> instances = new List<Cheat>();
         public static T? Instance<T>() where T : Cheat => instances.Find(x => x is T) as T;
 
+        public KeyCode defaultKeybind = KeyCode.None;
         public KeyCode keybind = KeyCode.None;
         public bool HasKeybind => keybind != KeyCode.None;
         public bool WaitingForKeybind = false;
+        public bool Hidden = false;
 
         public Cheat()
         {
@@ -22,7 +24,16 @@ namespace SpookSuite.Cheats.Core
 
         public Cheat(KeyCode defaultKeybind)
         {
-            keybind = defaultKeybind;
+            this.defaultKeybind = defaultKeybind;
+            this.keybind = defaultKeybind;
+            instances.Add(this);
+        }
+
+        public Cheat(KeyCode defaultKeybind, bool hidden)
+        {
+            this.defaultKeybind = defaultKeybind;
+            this.keybind = defaultKeybind;
+            this.Hidden = hidden;
             instances.Add(this);
         }
 
