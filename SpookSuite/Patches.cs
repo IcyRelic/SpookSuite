@@ -4,12 +4,11 @@ using Photon.Pun;
 using Photon.Realtime;
 using SpookSuite.Components;
 using SpookSuite.Handler;
-using SpookSuite.Manager;
 using SpookSuite.Util;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
-using Object = UnityEngine.Object;
+using Zorro.UI;
 
 namespace SpookSuite
 {
@@ -46,14 +45,6 @@ namespace SpookSuite
 
         }
 
-
-        public static void Connected()
-        {
-            //Log.Error("Connection Detected!");
-            //SpookSuite.CallBroadcastSSUser();
-        }
-
-
         [HarmonyPrefix]
         [HarmonyPatch(typeof(PhotonNetwork), "ExecuteRpc")]
         public static bool ExecuteRPC(Hashtable rpcData, Photon.Realtime.Player sender)
@@ -79,10 +70,8 @@ namespace SpookSuite
             return true;
         }
 
-   
-
-
-
-
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(UIPageHandler), "TransistionToPage", typeof(UIPage), typeof(PageTransistion))]
+        public static void TransistionToPage(UIPage page, PageTransistion pageTransistion) => SpookPageUI.TryAttachToPageHandler();
     }
 }

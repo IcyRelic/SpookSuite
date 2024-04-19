@@ -1,6 +1,7 @@
 ﻿using HarmonyLib;
 using Photon.Pun;
 using SpookSuite.Cheats.Core;
+using SpookSuite.Components;
 using SpookSuite.Handler;
 using SpookSuite.Manager;
 using SpookSuite.Menu.Core;
@@ -40,6 +41,7 @@ namespace SpookSuite
             SetupRPC();
             LoadCheats();
             DoPatching();
+            SpookPageUI.TryAttachToPageHandler();
             this.StartCoroutine(GameObjectManager.Instance.CollectObjects());
             this.StartCoroutine(this.NotifySpookSuite());
         }
@@ -86,9 +88,6 @@ namespace SpookSuite
         {
             try
             {
-                if (Player.localPlayer is not null)
-                    Player.localPlayer.GetComponent<PlayerController>().wallClimbGravityAdjustSpeed = float.MaxValue ; //spooksuite identifier
-
                 if (Cheat.instances.Where(c => c.WaitingForKeybind).Count() == 0)
                     Cheat.instances.FindAll(c => c.HasKeybind && Input.GetKeyDown(c.keybind)).ForEach(c =>
                     {
