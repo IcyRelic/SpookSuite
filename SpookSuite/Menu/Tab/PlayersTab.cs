@@ -86,16 +86,11 @@ namespace SpookSuite.Menu.Tab
 
             foreach (Player player in GameObjectManager.players)
             {
-                //if (player.disconnectedMidGame || !player.IsSpawned) continue;
                 if (player.ai) continue;
-
                 if (selectedPlayer is null) selectedPlayer = player;
-
-                if (selectedPlayer.Handle().IsSpookUser()) GUI.contentColor = Settings.c_primary.GetColor();
-                if (selectedPlayer.Handle().IsDev()) GUI.contentColor = Color.blue;
+                if (player.Handle().IsSpookUser()) GUI.contentColor = Settings.c_primary.GetColor();
                 if (selectedPlayer.GetInstanceID() == player.GetInstanceID()) GUI.contentColor = Settings.c_espPlayers.GetColor();
-
-                if (GUILayout.Button((player.Handle().IsDev() ? "[Dev] " : "") + player.refs.view.Owner.NickName, GUI.skin.label)) selectedPlayer = player;
+                if (GUILayout.Button(player.refs.view.Owner.NickName, GUI.skin.label)) selectedPlayer = player;
 
                 GUI.contentColor = Settings.c_menuText.GetColor();
             }

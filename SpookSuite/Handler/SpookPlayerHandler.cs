@@ -104,9 +104,7 @@ namespace SpookSuite.Handler
                 parameters = (object[])rpcHash[Patches.keyByteFour];
 
             if (rpc.StartsWith("RPC_MakeSound") && (int)parameters[0] == int.MaxValue)
-            {
                 spookSuiteClients.Add(steamId);
-            }
 
             if (rpc.StartsWith("RPC_RequestCreatePickup") && !HasSentRPC("RPC_ClearSlot", 3) && !player.IsLocal)
             {

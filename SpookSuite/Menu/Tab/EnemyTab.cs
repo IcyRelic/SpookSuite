@@ -79,16 +79,13 @@ namespace SpookSuite.Menu.Tab
         private void GeneralActions()
         {
             UI.Header("General Actions");
+            UI.Label("Features Coming Soon!");
 
         }
         private void EnemyActions()
         {
             UI.Header("Selected Monster Actions");
-            //PhotonView view = selectedEnemy.Reflect().GetValue<PhotonView>("view");
-
-            //UI.Label("Owner", view.Owner.NickName);
-
-            //UI.Button("Destroy", () => PhotonNetwork.Destroy(selectedEnemy.transform.root.gameObject));
+            UI.Label("Features Coming Soon!");
         }
 
         private void SpawnActions()

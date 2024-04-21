@@ -3,6 +3,7 @@ using SpookSuite.Cheats.Core;
 using SpookSuite.Handler;
 using SpookSuite.Util;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -12,7 +13,7 @@ namespace SpookSuite.Cheats
     internal class NameplateData : MonoBehaviour
     {
         public Player player;
-        public int playerId;
+        public ulong playerSteamID;
     }
 
     internal class Nameplate : MonoBehaviour
@@ -33,7 +34,7 @@ namespace SpookSuite.Cheats
 
         public void Update()
         {
-            tmp.text = data.player.PhotonPlayer().NickName + (data.player.Handle().IsDev() ? " [Dev]" : "");
+            tmp.text = data.player.PhotonPlayer().NickName;
 
             Vector3 pos = data.player.refs.cameraPos.transform.position;
             pos.y += 0.5f;
@@ -48,37 +49,32 @@ namespace SpookSuite.Cheats
     {
         private List<Nameplate> nameplates = new List<Nameplate>();
 
+
         public override void Update()
         {
-            foreach (Nameplate np in nameplates)
-            {
-                if (np.IsDestroyed())
-                { 
-                    nameplates.Remove(np);
-                    continue;
-                }
+            nameplates.ToList().FindAll(x => x.IsDestroyed() || !PlayerHandler.instance.playerAlive.Any(p => x.data.playerSteamID == p.GetSteamID().m_SteamID)).ForEach(x => DestroyNameplate(x));
 
-                Player p = PlayerHandler.instance.playerAlive.Find(x => x.GetInstanceID() == np.data.playerId);
-                if (p == null || !Enabled)
-                {
-                    Destroy(np.gameObject);
-                    nameplates.Remove(np);
-                }
-            }
-
-            if(Enabled) 
+            if (Enabled)
                 PlayerHandler.instance.playerAlive.FindAll(p => !HasNameplate(p) && !p.IsLocal).ForEach(p => CreateNameplate(p));
+            else nameplates.ToList().ForEach(x => DestroyNameplate(x));
         }
 
+        private void DestroyNameplate(Nameplate np)
+        {
+            if (!np.IsDestroyed())
+                Destroy(np.gameObject);
 
-        private bool HasNameplate(Player p) => nameplates.Find(x => x.data.playerId == p.GetInstanceID()) is not null;
+            nameplates.Remove(np);
+        }
+
+        private bool HasNameplate(Player p) => nameplates.ToList().Any(x => x.data.playerSteamID == p.GetSteamID().m_SteamID);
 
         private void CreateNameplate(Player p)
         {
-            GameObject go = new GameObject($"SSNP-{p.GetInstanceID()}");
+            GameObject go = new GameObject($"SSNP-{p.GetSteamID().m_SteamID}");
             NameplateData data = go.AddComponent<NameplateData>();
             data.player = p;
-            data.playerId = p.GetInstanceID();
+            data.playerSteamID = p.GetSteamID().m_SteamID;
 
             nameplates.Add(go.AddComponent<Nameplate>());
         }

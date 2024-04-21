@@ -138,7 +138,7 @@ namespace SpookSuite
             while (true)
             {
                 if (PhotonNetwork.InRoom)
-                    Player.localPlayer.Handle().RPC("RPC_MakeSound", RpcTarget.Others, int.MaxValue);
+                    Player.localPlayer.Handle().RPC("RPC_MakeSound", RpcTarget.All, int.MaxValue);
                 yield return new WaitForSeconds(30);
             }
             
@@ -174,23 +174,9 @@ namespace SpookSuite
             view.Synchronization = ViewSynchronization.Off;
             view.ViewID = int.MaxValue;
 
-            PhotonNetwork.PhotonServerSettings.RpcList.Add("RPC_8136b4f5cabbcf1e77629af5436130dc");
+            //PhotonNetwork.PhotonServerSettings.RpcList.Add("");
         }
 
         public static void RPC(string name, RpcTarget target, params object[] args) => Instance.view.RPC(name, target, args);
-
-        public static void CallBroadcastSSUser(Player player)
-        {
-            RPC("RPC_8136b4f5cabbcf1e77629af5436130dc", RpcTarget.Others, player);
-        }
-
-        [PunRPC] //Broadcast SpookSuite User
-        public void RPC_8136b4f5cabbcf1e77629af5436130dc(Player player)
-        {
-            Log.Warning($"{player.PhotonPlayer().NickName} is using SpookSuite");
-            //Respond
-            CallBroadcastSSUser(Player.localPlayer);
-        }
-
     }
 }
