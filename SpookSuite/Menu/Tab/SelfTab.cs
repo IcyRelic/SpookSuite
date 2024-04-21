@@ -34,17 +34,15 @@ namespace SpookSuite.Menu.Tab
 
             UI.Textbox("Spoofed Name", ref NameSpoof.Value, length: 100, onChanged: NameSpoof.OnValueChanged);
             UI.Checkbox("Use Spoofed Name", Cheat.Instance<NameSpoof>());
-
-
         }
 
         private void Toggles()
         {
             UI.CheatToggleSlider(Cheat.Instance<SuperSpeed>(), "Super Speed", SuperSpeed.Value.ToString("#"), ref SuperSpeed.Value, 10f, 100f);
             UI.CheatToggleSlider(Cheat.Instance<SuperJump>(), "Super Jump", SuperJump.Value.ToString("#.#"), ref SuperJump.Value, 0.6f, 20f);
-            UI.Checkbox("Godmode", Cheat.Instance<Godmode>());
-
             UI.CheatToggleSlider(Cheat.Instance<NoClip>(), "NoClip", NoClip.Value.ToString(), ref NoClip.Value, 1f, 20f);
+
+            UI.Checkbox("Godmode", Cheat.Instance<Godmode>());
             UI.Checkbox("Infinte Jump", Cheat.Instance<InfiniteJump>());
             UI.Checkbox("No Ragdoll", Cheat.Instance<NoRagdoll>());
             UI.Checkbox("Unlimited Oxygen", Cheat.Instance<UnlimitedOxygen>());

@@ -21,14 +21,10 @@ namespace SpookSuite.Menu.Tab
 
         private void VisualContent()
         {
-            scrollPos = GUILayout.BeginScrollView(scrollPos);
-
             UI.CheatToggleSlider(Cheat.Instance<FOV>(), "FOV", Cheats.FOV.Value.ToString(), ref Cheats.FOV.Value, 1, 170);
             UI.CheatToggleSlider(Cheat.Instance<ThirdPerson>(), "Third Person", Cheats.ThirdPerson.Value.ToString(), ref Cheats.ThirdPerson.Value, 0, 20);
             UI.Checkbox("Display Dead", Cheat.Instance<DisplayDead>());
             UI.Checkbox("Nameplates", Cheat.Instance<Nameplates>());
-
-            GUILayout.EndScrollView();
         }
 
         private void ESPContent()
