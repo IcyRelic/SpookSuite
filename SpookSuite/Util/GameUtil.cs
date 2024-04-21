@@ -38,10 +38,7 @@ namespace SpookSuite.Util
                 if(b) x[1] = (int)x[1] + amount;
                 else x = new object[] { equip, amount };
 
-                GameObjectManager.allowedDroneSpawns.TryAdd(itemId, x);
-
-                Log.Info($"Allowing {itemId} to be spawned x{GameObjectManager.allowedDroneSpawns.GetValueOrDefault((byte)itemId)[1]}");
-
+                GameObjectManager.allowedDroneSpawns.TryAdd(itemId, x);    
                 ShopHandler.Instance.GetComponent<PhotonView>().RPC("RPCA_SpawnDrone", RpcTarget.All, items);
             }
             else

@@ -41,17 +41,21 @@ namespace SpookSuite.Cheats
         }
         private void DisplayObjects<T>(IEnumerable<T> objects, Func<T, string> labelSelector, Func<T, RGBAColor> colorSelector) where T : Component
         {
-            foreach (T obj in objects)
+            try
             {
-                if (obj != null && obj.gameObject.activeSelf)
+                foreach (T obj in objects)
                 {
-                    float distance = GetDistanceToPlayer(obj.transform.position);
+                    if (obj != null && obj.gameObject.activeSelf)
+                    {
+                        float distance = GetDistanceToPlayer(obj.transform.position);
 
-                    if (!WorldToScreen(obj.transform.position, out Vector3 screen)) continue;
+                        if (!WorldToScreen(obj.transform.position, out Vector3 screen)) continue;
 
-                    VisualUtil.DrawDistanceString(screen, labelSelector(obj), colorSelector(obj), distance);
+                        VisualUtil.DrawDistanceString(screen, labelSelector(obj), colorSelector(obj), distance);
+                    }
                 }
             }
+            catch (Exception e) { }
         }
 
         private void DisplayPlayers()

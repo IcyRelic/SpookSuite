@@ -59,10 +59,7 @@ namespace SpookSuite.Cheats
                     float distance = GetDistanceToPlayer(transform.position);
                     o.GetChamHandler().ProcessCham(distance);
                 }
-                catch (Exception e)
-                {
-                    
-                }
+                catch (Exception e) { }
             });
         }
     }

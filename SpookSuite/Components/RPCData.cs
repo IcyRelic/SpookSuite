@@ -33,5 +33,7 @@ namespace SpookSuite.Components
             suspected = true;
             this.data = data;
         }
+
+        public void SetSuspected() => suspected = true;
     }
 }

@@ -66,46 +66,33 @@ namespace SpookSuite.Handler
                 rpcHistory.Add(steamId, new Queue<RPCData>());
             return rpcHistory[steamId];
         }
+        private List<RPCData> GetRPCHistory(string rpc) => GetRPCHistory().ToList().FindAll(r => r.rpc.StartsWith(rpc));
 
-        private List<RPCData> GetAllRPCHistory()
-        {
-            List<RPCData> hist = new List<RPCData>();
-
-            rpcHistory.Values.ToList().ForEach(q => hist.AddRange(q.ToList()));
-
-            return hist;
-        }
-        public int RPCsOnFile() => GetRPCHistory().Count;
-
-        private List<RPCData> GetRecentRPCHistory(int seconds = 5) => GetRPCHistory().ToList().FindAll(r => r.IsRecent(seconds));
-        private List<RPCData> GetAllRecentRPCHistory(int seconds = 5) => GetAllRPCHistory().FindAll(r => r.IsRecent(seconds));
-        private List<RPCData> GetSuspectedRPCHistory(string rpc, int seconds = 5) => GetRPCHistory().ToList().FindAll(r => r.rpc.StartsWith(rpc) && r.suspected);
-
-        private List<RPCData> GetAllSuspectedRPCHistory(string rpc, int seconds = 5) => GetAllRPCHistory().FindAll(r => r.rpc.StartsWith(rpc) && r.suspected);
-        private RPCData GetAnySuspectedMatch(string rpc, int seconds = 5, object data = null) => GetAllRPCHistory().FirstOrDefault(r => r.rpc.StartsWith(rpc) && r.suspected && r.data == data);
-        private RPCData GetAnyMatch(string rpc, int seconds = 5, object data = null) //=> GetAllRPCHistory().FirstOrDefault(r => r.rpc.StartsWith(rpc) && r.data == data);
-        {
-            foreach (var item in GetAllRecentRPCHistory(seconds))
-            {
-                if (item.rpc.StartsWith(rpc)) return item;
-            }
-            return null;
-        }
-
-        public bool HasSentMatchInLast(string rpc, int seconds, object data) => GetRecentRPCHistory(seconds).FindAll(r => r.rpc.StartsWith(rpc) && r.data == data).Count > 0;
-        public bool HasSentRPCInLast(string rpc, int seconds) => GetRecentRPCHistory(seconds).FindAll(r => r.rpc.StartsWith(rpc)).Count > 0;
-        public bool HasAnySentInLast(string rpc, int seconds) //GetAllRecentRPCHistory(seconds).FindAll(r => r.rpc.StartsWith(rpc)).Count > 0;
-        {
-            List<RPCData> data = GetAllRecentRPCHistory(seconds);
-            foreach (var item in data)
-            {
-                if (item.rpc.StartsWith(rpc)) return true;
-            }
-
-            return false;
-        }
-        public bool HasBeenSuspectedInLast(string rpc, int seconds) => GetRecentRPCHistory(seconds).FindAll(r => r.rpc.StartsWith(rpc) && r.suspected).Count > 0;
-        public bool HasAnyBeenSuspectedInLast(string rpc, int seconds) => GetAllRPCHistory().FindAll(r => r.rpc.StartsWith(rpc) && r.suspected).Count > 0;
+        private List<RPCData> GetRPCHistory(string rpc, int seconds) => GetRPCHistory().ToList().FindAll(r => r.rpc.StartsWith(rpc) && r.IsRecent(seconds));
+        private List<RPCData> GetRPCHistory(string rpc, int seconds, bool suspected) => GetRPCHistory().ToList().FindAll(r => r.rpc.StartsWith(rpc) && r.IsRecent(seconds) && r.suspected == suspected);
+        private RPCData GetRPCMatch(string rpc, int seconds, object data) => GetRPCHistory().FirstOrDefault(r => r.rpc.StartsWith(rpc) && r.IsRecent(seconds) && r.data.Equals(data));
+        private RPCData GetRPCMatch(string rpc, int seconds, object data, bool suspected) => GetRPCHistory().FirstOrDefault(r => r.rpc.StartsWith(rpc) && r.IsRecent(seconds) && r.data.Equals(data) && r.suspected == suspected);
+        private RPCData GetRPCMatch(string rpc, int seconds, Func<object, bool> predicate) => GetRPCHistory().FirstOrDefault(r => r.rpc.StartsWith(rpc) && r.IsRecent(seconds) && predicate(r.data));
+        private RPCData GetRPCMatch(string rpc, int seconds, Func<object, bool> predicate, bool suspected) => GetRPCHistory().FirstOrDefault(r => r.rpc.StartsWith(rpc) && r.IsRecent(seconds) && predicate(r.data) && r.suspected == suspected);
+        private bool HasSentRPC(string rpc, int seconds) => GetRPCHistory().ToList().FindAll(r => r.rpc.StartsWith(rpc) && r.IsRecent(seconds)).Count > 0;
+        private bool HasSentRPC(string rpc, int seconds, bool suspected) => GetRPCHistory().ToList().FindAll(r => r.rpc.StartsWith(rpc) && r.IsRecent(seconds) && r.suspected == suspected).Count > 0;
+        private bool HasSentRPC(string rpc, int seconds, object data) => GetRPCHistory().ToList().FindAll(r => r.rpc.StartsWith(rpc) && r.IsRecent(seconds) && r.data.Equals(data)).Count > 0;
+        private bool HasSentRPC(string rpc, int seconds, Func<object, bool> predicate) => GetRPCHistory().ToList().FindAll(r => r.rpc.StartsWith(rpc) && r.IsRecent(seconds) && predicate(r.data)).Count > 0;
+        private bool HasSentRPC(string rpc, int seconds, Func<object, bool> predicate, bool suspected) => GetRPCHistory().ToList().FindAll(r => r.rpc.StartsWith(rpc) && r.IsRecent(seconds) && predicate(r.data) && r.suspected == suspected).Count > 0;
+        private List<RPCData> GetAllRPCHistory() => rpcHistory.Values.SelectMany(x => x).ToList();
+        private List<RPCData> GetAllRPCHistory(int seconds) => GetAllRPCHistory().FindAll(r => r.IsRecent(seconds));
+        private List<RPCData> GetAllRPCHistory(string rpc, int seconds) => GetAllRPCHistory().FindAll(r => r.rpc.StartsWith(rpc) && r.IsRecent(seconds));
+        private List<RPCData> GetAllRPCHistory(string rpc, int seconds, bool suspected) => GetAllRPCHistory().FindAll(r => r.rpc.StartsWith(rpc) && r.IsRecent(seconds) && r.suspected == suspected);
+        private RPCData GetAnyRPCMatch(string rpc, int seconds, object data) => GetAllRPCHistory().FirstOrDefault(r => r.rpc.StartsWith(rpc) && r.IsRecent(seconds) && r.data.Equals(data));
+        private RPCData GetAnyRPCMatch(string rpc, int seconds, object data, bool suspected) => GetAllRPCHistory().FirstOrDefault(r => r.rpc.StartsWith(rpc) && r.IsRecent(seconds) && r.data.Equals(data) && r.suspected == suspected);
+        private RPCData GetAnyRPCMatch(string rpc, int seconds, Func<object, bool> predicate) => GetAllRPCHistory().FirstOrDefault(r => r.rpc.StartsWith(rpc) && r.IsRecent(seconds) && predicate(r.data));
+        private RPCData GetAnyRPCMatch(string rpc, int seconds, Func<object, bool> predicate, bool suspected) => GetAllRPCHistory().FirstOrDefault(r => r.rpc.StartsWith(rpc) && r.IsRecent(seconds) && predicate(r.data) && r.suspected == suspected);
+        private bool HasAnySentRPC(string rpc, int seconds) => GetAllRPCHistory().FindAll(r => r.rpc.StartsWith(rpc) && r.IsRecent(seconds)).Count > 0;
+        private bool HasAnySentRPC(string rpc, int seconds, bool suspected) => GetAllRPCHistory().FindAll(r => r.rpc.StartsWith(rpc) && r.IsRecent(seconds) && r.suspected == suspected).Count > 0;
+        private bool HasAnySentRPC(string rpc, int seconds, object data) => GetAllRPCHistory().FindAll(r => r.rpc.StartsWith(rpc) && r.IsRecent(seconds) && r.data.Equals(data)).Count > 0;
+        private bool HasAnySentRPC(string rpc, int seconds, Func<object, bool> predicate) => GetAllRPCHistory().FindAll(r => r.rpc.StartsWith(rpc) && r.IsRecent(seconds) && predicate(r.data)).Count > 0;
+        private bool HasAnySentRPC(string rpc, int seconds, Func<object, bool> predicate, bool suspected) => GetAllRPCHistory().FindAll(r => r.rpc.StartsWith(rpc) && r.IsRecent(seconds) && predicate(r.data) && r.suspected == suspected).Count > 0;
+        
         public void OnReceivedRPC(string rpc, Hashtable rpcHash)
         {
             if (player is null || photonPlayer is null) return;
@@ -121,7 +108,7 @@ namespace SpookSuite.Handler
                 spookSuiteClients.Add(steamId);
             }
 
-            if (rpc.StartsWith("RPC_RequestCreatePickup") && !HasSentRPCInLast("RPC_ClearSlot", 3) && !player.IsLocal)
+            if (rpc.StartsWith("RPC_RequestCreatePickup") && !HasSentRPC("RPC_ClearSlot", 3) && !player.IsLocal)
             {
                 ItemInstanceData data = new ItemInstanceData(Guid.Empty);
                 data.Deserialize((byte[])parameters[1]);
@@ -130,10 +117,16 @@ namespace SpookSuite.Handler
                 Log.Error($"{photonPlayer.NickName} is probably spawning items. => Item ID: {parameters[0]} | Guid: {data.m_guid}");
             }
 
-            if(rpc.Equals("RPCA_SpawnDrone") && !HasSentRPCInLast("RPCA_AddItemToCart", 60) && !player.IsLocal)
+            if(rpc.Equals("RPCA_SpawnDrone"))
             {
-                rpcData.SetSuspected(parameters[0]);
-                Log.Error($"{photonPlayer.NickName} is probably spawning items WITH DRONES.");
+                rpcData.data = parameters[0];
+                if(!HasSentRPC("RPCA_AddItemToCart", 60))
+                {
+                    rpcData.SetSuspected();
+
+                    if(!player.IsLocal)
+                        Log.Error($"{photonPlayer.NickName} is probably spawning items WITH DRONES.");
+                }
             }
 
             if (rpc.Equals("RPC_ClearSlot"))
@@ -142,6 +135,7 @@ namespace SpookSuite.Handler
                 inventory.TryGetItemInSlot((int)parameters[0], out ItemDescriptor item);
 
                 rpcData.data = item.item.id;
+                Log.Info($"{photonPlayer.NickName} cleared slot {parameters[0]} with item {item.item.id}");
             }
 
             if (rpc.Equals("RPC_ConfigurePickup"))
@@ -150,10 +144,10 @@ namespace SpookSuite.Handler
                 data.Deserialize((byte[])parameters[1]);
                 byte itemID = (byte)parameters[0];
 
-                bool spawnSuspected = !HasAnySentInLast("RPC_ClearSlot", 5);
-                bool droneSuspected = HasAnyBeenSuspectedInLast("RPCA_SpawnDrone", 10);
-
-                RPCData? suspected = GetAnySuspectedMatch("RPCA_SpawnDrone", 10, data.m_guid);
+                bool spawnSuspected = !HasAnySentRPC("RPC_ClearSlot", 5);
+                bool droneSuspected = HasAnySentRPC("RPCA_SpawnDrone", 10, true);
+                RPCData? suspected = GetRPCMatch("RPCA_SpawnDrone", 10, x => (x as byte[]).Contains(itemID));
+                
 
                 if (GameObjectManager.allowedSpawns.ContainsKey(data.m_guid))
                 {
@@ -177,7 +171,7 @@ namespace SpookSuite.Handler
                     if ((int)x[1] < 1) GameObjectManager.allowedDroneSpawns.Remove((byte)itemID);
                 }
 
-                else if (droneSuspected || GetAnyMatch("RPC_ClearSlot", 5, itemID) is null)
+                else if(GetAnyRPCMatch("RPC_ClearSlot", 5, itemID) is null || (droneSuspected && suspected is not null && !suspected.sender.IsLocal))
                 {
                     //Spawned Item, Delete it
                     rpcData.SetSuspected(itemID);
@@ -188,13 +182,13 @@ namespace SpookSuite.Handler
 
                     float elapsedTime = Time.time - Time.timeSinceLevelLoad;
 
-                    if ( (itemID == GameUtil.GetItemByName("camera").id && !HasSentMatchInLast("RPC_ConfigurePickup", 15, itemID)) ||
+                    if ( (itemID == GameUtil.GetItemByName("camera").id && !HasAnySentRPC("RPC_ConfigurePickup", 15, itemID)) ||
                         (!GameObjectManager.divingBell.onSurface && elapsedTime > 30) )
                         goodSpawn = true;
 
                     if(!goodSpawn)
                     {
-                        Log.Error($"Spawned Item Detected. => Suspected: {suspected?.rpc} Guid: {data.m_guid} | Spawned By: {suspected?.sender.NickName}");
+                        Log.Error($"Spawned Item Detected. => ItemID: {itemID} Suspected: {suspected?.rpc} Guid: {data.m_guid} | Spawned By: {suspected?.sender.NickName}");
 
                         SpookSuite.Invoke(() =>
                         {
