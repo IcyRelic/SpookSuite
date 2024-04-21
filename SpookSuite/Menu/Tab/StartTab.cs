@@ -5,35 +5,50 @@ namespace SpookSuite.Menu.Tab
 {
     internal class StartTab : MenuTab
     {
+        Vector2 scrollPos;
+
         public StartTab() : base("Start") { }
-        private Vector2 scrollPos = Vector2.zero;
+
 
         public override void Draw()
         {
+            GUILayout.BeginHorizontal();
+
             GUILayout.BeginVertical();
-
-            scrollPos = GUILayout.BeginScrollView(scrollPos);
             MenuContent();
-            GUILayout.EndScrollView();
-
             GUILayout.EndVertical();
+
+            GUILayout.EndHorizontal();
         }
 
         private void MenuContent()
         {
-            float width = SpookSuiteMenu.Instance.contentWidth - SpookSuiteMenu.Instance.spaceFromLeft * 2;
-            float height = SpookSuiteMenu.Instance.contentHeight - 60;
+            scrollPos = GUILayout.BeginScrollView(scrollPos);
+            string intoText = "SpookSuite is developed by IcyRelic and The Green Bandit (TGB, He enjoys patting himself on the back.)\nThis menu is jam packed with everything we could think of at the moment. " +
+                "There are still a couple of planned features and QOL updates in the pipeline. Let us know if there are any idea or suggestions you have either on UnknownCheats or GitHub. Enjoy!";
 
-            Rect rect = new Rect(0, 0, width, height);
-            GUI.Box(rect, "Credits");
+            UI.Header(Settings.c_primary.AsString("Welcome to SpookSuite!"), 30);
+            GUILayout.Space(20);
+            UI.Label(intoText);
 
-            GUILayout.BeginVertical(GUILayout.Width(width), GUILayout.Height(height));
 
-            GUILayout.Space(25);
+            GUILayout.Space(20);
 
-            GUILayout.TextArea("IcyRelic (Github, UnknownCheats), TheGreenBandit (Github, GsV2 on UnknownCheats)");
+            foreach (string line in Settings.Changelog.changes)
+            {
+                GUIStyle style = new GUIStyle(GUI.skin.label);
 
-            GUILayout.EndVertical();
-        } 
-    } 
+                if (line.StartsWith("v")) style.fontStyle = FontStyle.Bold;
+                GUILayout.Label(line.StartsWith("v") ? "Changelog " + line : line, style);
+
+
+            }
+
+
+
+
+            GUILayout.EndScrollView();
+        }
+
+    }
 }

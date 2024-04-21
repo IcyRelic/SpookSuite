@@ -53,7 +53,7 @@ namespace SpookSuite.Util
                 {
                     ItemInstanceData data = new ItemInstanceData(Guid.NewGuid());
                     byte[] array = data.Serialize(false);
-                    
+                    Debug.Log($"Spawning item {itemId} at {spawnPos} => equip: {equip}"); 
                     GameObjectManager.allowedSpawns.Add(data.m_guid, equip);
                     Player.localPlayer.refs.view.RPC("RPC_RequestCreatePickup", RpcTarget.MasterClient, (object)itemId, (object)array, (object)spawnPos, (object)Random.rotation);
                 }

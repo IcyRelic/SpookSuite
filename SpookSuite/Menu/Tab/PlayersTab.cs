@@ -61,17 +61,11 @@ namespace SpookSuite.Menu.Tab
                 UI.Button("Block RPCs", () => selectedPlayer.Handle().ToggleRPCBlock(), selectedPlayer.Handle().IsRPCBlocked() ? "UnBlock" : "Block");
 
             UI.Button("Teleport", () => { PhotonNetwork.DestroyPlayerObjects(Player.localPlayer.PhotonPlayer()); PhotonNetwork.Instantiate("Player", selectedPlayer.data.groundPos, new Quaternion(0f, 0f, 0f, 0f)); }, "Teleport");
-            //UI.Button("Bring", () =>
-            //{
-            //    if (!GameUtil.IsOverridingPhotonLocalPlayer())
-            //    { GameUtil.ToggleOverridePhotonLocalPlayer(); }
-            //    PhotonNetwork.Instantiate("Player", selectedPlayer.data.groundPos, new Quaternion(0f, 0f, 0f, 0f));
-            //    GameUtil.ToggleOverridePhotonLocalPlayer();
-            //}, "Bring");
-            UI.Button("Spawn Bomb", () => GameUtil.SpawnItem(GameUtil.GetItemByName("bomb").id, selectedPlayer.refs.cameraPos), "Bomb");
+
+            UI.Button("Spawn Bomb", () => GameUtil.SpawnItem(GameUtil.GetItemByName("bomb").id, selectedPlayer.refs.cameraPos.position), "Bomb");
             UI.Button("Kill", () => selectedPlayer.Reflect().Invoke("CallDie"), "Kill");
             UI.Button("Revive", () => selectedPlayer.CallRevive(), "Revive");
-            UI.Button("Kick", () => PhotonNetwork.NetworkingClient.CurrentRoom.Reflect().Invoke("RemovePlayer", selectedPlayer.refs.view.Owner), "Kick");
+
             UI.Button("Ragdoll", () => selectedPlayer.Reflect().Invoke("CallTakeDamageAndAddForceAndFall", 0f, Vector3.zero, 2f), "Ragdoll");
             UI.Button("Launch", () => selectedPlayer.Reflect().Invoke("CallTakeDamageAndAddForceAndFall", 0f, selectedPlayer.refs.cameraPos.up * 100, 0f), "Launch");
             UI.Button("Tase", () => selectedPlayer.Reflect().Invoke("CallTakeDamageAndTase", 1f, 5f));

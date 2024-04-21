@@ -55,6 +55,7 @@ namespace SpookSuite
 
         private void LoadCheats()
         {
+            Settings.Changelog.ReadChanges();
             GameUtil.LoadMonterNames();
             cheats = new List<ToggleCheat>();
             menu = new SpookSuiteMenu();

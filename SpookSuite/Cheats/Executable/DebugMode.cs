@@ -1,8 +1,12 @@
 ﻿using SpookSuite.Cheats.Core;
+using SpookSuite.Menu.Core;
+using SpookSuite.Menu.Tab;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using UnityEngine;
+using Zorro.UI;
 
 namespace SpookSuite.Cheats
 {
@@ -14,6 +18,7 @@ namespace SpookSuite.Cheats
         private int executeCount = 0;
         private int requiredConsecutive = 4;
 
+        private int prevSelectedTab = 0;
 
         public DebugMode() : base(KeyCode.F1, true) { }
 
@@ -34,6 +39,24 @@ namespace SpookSuite.Cheats
             Value = !Value;
             executeCount = 0;
             Console.Beep();
+
+            if (Value)
+            {
+                prevSelectedTab = SpookSuiteMenu.Instance.selectedTab;
+                AddDebugTabs();
+                SpookSuiteMenu.Instance.selectedTab = 0;
+            }
+            else
+            {
+
+                SpookSuiteMenu.Instance.tabs.RemoveAll(tab => tab.isDebug);
+                SpookSuiteMenu.Instance.selectedTab = prevSelectedTab;
+            }
+        }
+
+        public static void AddDebugTabs()
+        {
+            SpookSuiteMenu.Instance.tabs.Insert(0, new DebugTab());
         }
 
         private bool IsConsecutive() => DateTime.Now - lastExecute < timeBetween;

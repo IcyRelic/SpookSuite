@@ -14,8 +14,8 @@ namespace SpookSuite.Menu.Core
         public Rect windowRect = new Rect(50f, 50f, 700f, 450f);
 
         private Vector2 scrollPos = Vector2.zero;
-        private List<MenuTab> tabs = new List<MenuTab>();
-        private int selectedTab = 0;
+        public List<MenuTab> tabs = new List<MenuTab>();
+        public int selectedTab = 0;
         public float contentWidth;
         public float contentHeight;
         public int spaceFromTop = 60;
@@ -34,7 +34,7 @@ namespace SpookSuite.Menu.Core
         public SpookSuiteMenu()
         {
             instance = this;
-            tabs.Add(new DebugTab());
+            if(DebugMode.Value) DebugMode.AddDebugTabs();
             tabs.Add(new StartTab());
             tabs.Add(new SettingsTab());
             tabs.Add(new SelfTab());
@@ -115,7 +115,7 @@ namespace SpookSuite.Menu.Core
             GUILayout.BeginArea(new Rect(0, 25, windowRect.width, 25), style: "Toolbar");
 
             GUILayout.BeginHorizontal();
-            selectedTab = GUILayout.Toolbar(selectedTab, tabs.FindAll(x => DebugMode.Value ? true : !x.isDebug).Select(x => x.name).ToArray(), style: "TabBtn");
+            selectedTab = GUILayout.Toolbar(selectedTab, tabs.Select(x => x.name).ToArray(), style: "TabBtn");
             GUILayout.EndHorizontal();
 
             GUILayout.EndArea();
