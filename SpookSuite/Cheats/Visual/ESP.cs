@@ -62,7 +62,7 @@ namespace SpookSuite.Cheats
         {
             foreach (Player p in GameObjectManager.players)
             {
-                if (p.ai && !p.IsLocal) continue;
+                if (p.ai || p.IsLocal) continue;
 
                 float distance = GetDistanceToPlayer(p.data.groundPos);
 
