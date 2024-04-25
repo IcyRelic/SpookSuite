@@ -1,21 +1,12 @@
-﻿using ExitGames.Client.Photon;
-using Photon.Pun;
-using SpookSuite.Cheats;
-using SpookSuite.Cheats.Core;
+﻿using Photon.Pun;
 using SpookSuite.Menu.Core;
 using SpookSuite.Util;
 using UnityEngine;
-using Zorro.Core.CLI;
 using Steamworks;
-using System.Linq;
-using Object = UnityEngine.Object;
 using System.Collections.Generic;
-using Photon.Realtime;
 using Zorro.Core;
-using System.Collections;
-using SpookSuite.Handler;
-using UnityEngine.UIElements;
 using SpookSuite.Manager;
+using SpookSuite.Handler;
 
 namespace SpookSuite.Menu.Tab
 {
@@ -46,8 +37,6 @@ namespace SpookSuite.Menu.Tab
                 UI.Label("MasterClient Nickname", PhotonNetwork.MasterClient.NickName);
             }
 
-
-
             UI.Header("Lobby Tools");
             UI.Button("Host Public", () => MainMenuHandler.Instance.SilentHost());
             UI.Button("Host Private", () => MainMenuHandler.Instance.Host(1));
@@ -58,15 +47,12 @@ namespace SpookSuite.Menu.Tab
 
             UI.Header("Scene Tools");
             UI.Button("Load Factory", () => LoadScene("FactoryScene"));
-            UI.Button("Load Factory", () => LoadScene("SurfaceScene"));
-
+            UI.Button("Load Surface", () => LoadScene("SurfaceScene"));
 
             UI.Header("Debugging Cheats");
-
-            UI.Button("Use Diving Bell", () => GameObjectManager.divingBellButton.Interact(Player.localPlayer));
-            UI.Button("Use Diving Bell", () => GameObjectManager.divingBell.GoUnderground());
-            UI.Button("Use Diving Bell", () => GameObjectManager.divingBell.GoToSurface());
-
+            UI.Button("Use Diving Bell dontcare", () => GameObjectManager.divingBellButton.Interact(Player.localPlayer));
+            UI.Button("Use Diving Bell Underground", () => GameObjectManager.divingBell.GoUnderground());
+            UI.Button("Use Diving Bell Surface", () => GameObjectManager.divingBell.GoToSurface());
 
             UI.Button("Get Lobby Data", () => {
 
@@ -82,9 +68,7 @@ namespace SpookSuite.Menu.Tab
                     Debug.Log($"Key: {key} Value: {value}");
                 }
 
-                SteamAvatarHandler.TryGetSteamIDForPlayer(PhotonNetwork.MasterClient, out CSteamID steamid);
-
-                Debug.Log($"steam://joinlobby/2881650/{id}/{steamid}");
+                Debug.Log($"steam://joinlobby/2881650/{id}/{PhotonNetwork.MasterClient.GetSteamID()}");
             });
 
 

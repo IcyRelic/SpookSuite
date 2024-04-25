@@ -1,6 +1,4 @@
 ﻿using ExitGames.Client.Photon;
-using Photon.Pun;
-using SpookSuite.Util;
 using System;
 
 namespace SpookSuite.Components

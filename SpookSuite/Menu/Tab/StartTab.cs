@@ -6,9 +6,7 @@ namespace SpookSuite.Menu.Tab
     internal class StartTab : MenuTab
     {
         Vector2 scrollPos;
-
         public StartTab() : base("Start") { }
-
 
         public override void Draw()
         {
@@ -40,12 +38,7 @@ namespace SpookSuite.Menu.Tab
 
                 if (line.StartsWith("v")) style.fontStyle = FontStyle.Bold;
                 GUILayout.Label(line.StartsWith("v") ? "Changelog " + line : line, style);
-
-
             }
-
-
-
 
             GUILayout.EndScrollView();
         }

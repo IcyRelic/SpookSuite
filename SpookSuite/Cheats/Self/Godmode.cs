@@ -29,6 +29,15 @@ namespace SpookSuite.Cheats
         }
 
         [HarmonyPrefix]
+        [HarmonyPatch(typeof(Player), "CallDie")]
+        public static bool CallDie(Player __instance)
+        {
+            if (Instance<Godmode>().Enabled)
+                return false;
+            return true;
+        }
+
+        [HarmonyPrefix]
         [HarmonyPatch(typeof(Bot_Slurper), "RPCA_AttachBlob")]
         public static bool PreventSlurp(Bot_Slurper __instance, int viewID, int bodyPartID)
         {

@@ -31,11 +31,11 @@ namespace SpookSuite.Util
 
                 byte[] items = new byte[amount];
 
-                for(int i = 0; i < amount; i++) items[i] = (byte)itemId;
+                for (int i = 0; i < amount; i++) items[i] = (byte)itemId;
 
                 bool b = GameObjectManager.allowedDroneSpawns.TryGetValue((byte) itemId, out object[] x);
                 
-                if(b) x[1] = (int)x[1] + amount;
+                if (b) x[1] = (int)x[1] + amount;
                 else x = new object[] { equip, amount };
 
                 GameObjectManager.allowedDroneSpawns.TryAdd(itemId, x);    
@@ -53,8 +53,7 @@ namespace SpookSuite.Util
                     Debug.Log($"Spawning item {itemId} at {spawnPos} => equip: {equip}"); 
                     GameObjectManager.allowedSpawns.Add(data.m_guid, equip);
                     Player.localPlayer.refs.view.RPC("RPC_RequestCreatePickup", RpcTarget.MasterClient, (object)itemId, (object)array, (object)spawnPos, (object)Random.rotation);
-                }
-                                    
+                }                                    
             }
         }
 
@@ -86,7 +85,6 @@ namespace SpookSuite.Util
 
             if (!SurfaceNetworkHandler.Instance.Reflect().GetValue<bool>("m_Started", true))
                 SurfaceNetworkHandler.Instance.RequestStartGame();
-
 
             SurfaceNetworkHandler.Instance.Reflect().GetValue<PhotonView>("m_View").RPC("RPCA_Sleep", RpcTarget.All);
         }

@@ -2,11 +2,7 @@
 using SpookSuite.Menu.Core;
 using SpookSuite.Menu.Tab;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
-using Zorro.UI;
 
 namespace SpookSuite.Cheats
 {

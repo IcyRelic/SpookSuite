@@ -1,10 +1,4 @@
-﻿using Photon.Pun;
-using SpookSuite.Cheats.Core;
-using SpookSuite.Util;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using UnityEngine;
+﻿using SpookSuite.Cheats.Core;
 
 namespace SpookSuite.Cheats
 {

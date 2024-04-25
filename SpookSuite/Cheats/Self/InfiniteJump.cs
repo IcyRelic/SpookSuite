@@ -2,12 +2,11 @@
 using Photon.Pun;
 using SpookSuite.Cheats.Core;
 using System;
-using UnityEngine;
 
 namespace SpookSuite.Cheats
 {
     [HarmonyPatch]
-    internal class InfiniteJump : ToggleCheat //doesnt work
+    internal class InfiniteJump : ToggleCheat
     {
         [HarmonyPrefix]
         [HarmonyPatch(typeof(PlayerController), "TryJump")]

@@ -1,6 +1,4 @@
 ﻿using SpookSuite.Cheats;
-using SpookSuite.Cheats.Core;
-using SpookSuite.Manager;
 using SpookSuite.Menu.Tab;
 using SpookSuite.Util;
 using System.Collections.Generic;

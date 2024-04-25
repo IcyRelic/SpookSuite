@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace SpookSuite.Components
 {
     internal class MouseInput : MonoBehaviour
     {
-
         private float Yaw = 0f;
         private float Pitch = 0f;
 
@@ -23,6 +19,5 @@ namespace SpookSuite.Components
 
             transform.eulerAngles = new Vector3(Pitch, Yaw, 0f);
         }
-
     }
 }

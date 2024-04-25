@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace SpookSuite.Components
 {
@@ -39,7 +36,6 @@ namespace SpookSuite.Components
             this.up = up;
         }
 
-
         private void Update()
         {
             if (Cursor.visible) return;
@@ -59,9 +55,7 @@ namespace SpookSuite.Components
             }
 
             sprintMultiplier = Input.GetKey(KeyCode.LeftShift) ? Mathf.Min(sprintMultiplier + (5f * Time.deltaTime), 5f) : 1f;
-            movement = input;// * Time.deltaTime * movementSpeed * sprintMultiplier;
-            //transform.position += movement;
+            movement = input;
         }
-
     }
 }

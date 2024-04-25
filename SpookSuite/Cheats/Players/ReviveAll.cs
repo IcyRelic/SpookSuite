@@ -5,7 +5,6 @@ namespace SpookSuite.Cheats
 {
     internal class ReviveAll : ExecutableCheat
     {
-
         public override void Execute()
         {
             foreach (Player p in GameObjectManager.players)

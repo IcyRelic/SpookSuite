@@ -1,11 +1,7 @@
-﻿using Photon.Pun;
-using SpookSuite.Cheats.Core;
+﻿using SpookSuite.Cheats.Core;
 using SpookSuite.Menu.Core;
 using SpookSuite.Util;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using UnityEngine;
 
 namespace SpookSuite.Menu.Tab

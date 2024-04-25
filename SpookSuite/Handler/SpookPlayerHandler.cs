@@ -1,5 +1,4 @@
-﻿using DefaultNamespace.Artifacts;
-using ExitGames.Client.Photon;
+﻿using ExitGames.Client.Photon;
 using Photon.Pun;
 using SpookSuite.Components;
 using SpookSuite.Manager;

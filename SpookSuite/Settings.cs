@@ -6,12 +6,8 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using SpookSuite.Cheats.Core;
-using System.Linq;
-using SpookSuite.Menu.Tab;
 
 namespace SpookSuite
 {

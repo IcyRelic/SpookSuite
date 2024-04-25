@@ -1,9 +1,6 @@
 ﻿using SpookSuite.Cheats.Core;
 using SpookSuite.Manager;
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 
 namespace SpookSuite.Cheats

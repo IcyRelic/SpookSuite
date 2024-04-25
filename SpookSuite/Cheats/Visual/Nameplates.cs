@@ -18,7 +18,6 @@ namespace SpookSuite.Cheats
 
     internal class Nameplate : MonoBehaviour
     {
-        
         public TextMeshPro tmp;
         public NameplateData data;
 

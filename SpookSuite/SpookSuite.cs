@@ -5,7 +5,6 @@ using SpookSuite.Components;
 using SpookSuite.Handler;
 using SpookSuite.Manager;
 using SpookSuite.Menu.Core;
-using SpookSuite.Menu.Tab;
 using SpookSuite.Util;
 using System;
 using System.Collections;
@@ -48,9 +47,16 @@ namespace SpookSuite
 
         private void DoPatching()
         {
-            harmony = new Harmony("SpookSuite");
-            Harmony.DEBUG = false;
-            harmony.PatchAll(Assembly.GetExecutingAssembly());
+            try
+            {
+                harmony = new Harmony("SpookSuite");
+                Harmony.DEBUG = false;
+                harmony.PatchAll(Assembly.GetExecutingAssembly());
+            }
+            catch (Exception e)
+            {
+                Debug.Log($"Error in DoPatching: {e}");
+            }
         }
 
         private void LoadCheats()

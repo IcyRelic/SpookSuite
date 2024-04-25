@@ -5,14 +5,11 @@ using SpookSuite.Util;
 using Steamworks;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Localization.PropertyVariants;
 using UnityEngine.UI;
-using Zorro.Core;
 
 namespace SpookSuite.Menu.Game
 {
@@ -50,8 +47,6 @@ namespace SpookSuite.Menu.Game
             viewLobbiesBtn = CreateBtnCopy("viewLobbiesBtn", "View Lobbies", 450).GetComponent<Button>();
             joinFriendBtn = CreateBtnCopy("JoinFriendBtn", "Join Friend", 375).GetComponent<Button>();
             joinRandomBtn = CreateBtnCopy("joinRandomBtn", "Join Random Private", 300).GetComponent<Button>();
-
-
         }
 
         private GameObject CreateBtnCopy(string name, string btnText, float y)
@@ -136,7 +131,5 @@ namespace SpookSuite.Menu.Game
             //in the diving bell because they are already in the factory.
             SurfaceNetworkHandler.Instance.photonView.RPC("RPC_LoadScene", RpcTarget.All, (object)"FactoryScene");
         }
-
-
     }
 }

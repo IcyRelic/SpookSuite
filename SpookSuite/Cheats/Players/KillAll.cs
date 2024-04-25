@@ -6,7 +6,6 @@ namespace SpookSuite.Cheats
 {
     internal class KillAll : ExecutableCheat
     {
-
         public override void Execute()
         {
             foreach (Player p in GameObjectManager.players)

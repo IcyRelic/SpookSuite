@@ -1,19 +1,7 @@
-﻿using CurvedUI;
-using ExitGames.Client.Photon;
-using Photon.Pun;
-using Photon.Realtime;
-using SpookSuite.Cheats;
-using SpookSuite.Cheats.Core;
-using SpookSuite.Handler;
-using SpookSuite.Manager;
+﻿using SpookSuite.Manager;
 using SpookSuite.Menu.Core;
 using SpookSuite.Util;
-using System;
-using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
-using static HasSpaceTest;
-using static Photon.Pun.UtilityScripts.TabViewManager;
 
 namespace SpookSuite.Menu.Tab
 {

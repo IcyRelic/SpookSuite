@@ -1,13 +1,10 @@
-﻿using ExitGames.Client.Photon;
-using Photon.Pun;
-using Photon.Realtime;
+﻿using Photon.Pun;
 using SpookSuite.Cheats;
 using SpookSuite.Cheats.Core;
 using SpookSuite.Handler;
 using SpookSuite.Manager;
 using SpookSuite.Menu.Core;
 using SpookSuite.Util;
-using Steamworks;
 using UnityEngine;
 
 namespace SpookSuite.Menu.Tab
@@ -52,9 +49,7 @@ namespace SpookSuite.Menu.Tab
             if (selectedPlayer is null) return;
             UI.Header("Selected Player Actions");
 
-            SteamAvatarHandler.TryGetSteamIDForPlayer(selectedPlayer.refs.view.Owner, out CSteamID steamid);
-
-            UI.Label("SteamID", steamid.m_SteamID.ToString());
+            UI.Label("SteamID", selectedPlayer.GetSteamID().ToString());
             UI.Label("SpookSuite User", selectedPlayer.Handle().IsSpookUser().ToString());
 
             if (!selectedPlayer.IsLocal)
@@ -69,6 +64,13 @@ namespace SpookSuite.Menu.Tab
             UI.Button("Ragdoll", () => selectedPlayer.Reflect().Invoke("CallTakeDamageAndAddForceAndFall", 0f, Vector3.zero, 2f), "Ragdoll");
             UI.Button("Launch", () => selectedPlayer.Reflect().Invoke("CallTakeDamageAndAddForceAndFall", 0f, selectedPlayer.refs.cameraPos.up * 100, 0f), "Launch");
             UI.Button("Tase", () => selectedPlayer.Reflect().Invoke("CallTakeDamageAndTase", 1f, 5f));
+
+            if (selectedPlayer.Handle().IsSpookUser() && Player.localPlayer.Handle().IsDev())
+            {
+                UI.Header("SpookSuite Specialty");
+                //add things that we could do to our users for fun, maybe disabling something in their menu?
+                UI.Button("", () => { });
+            }
         }
 
         private void PlayersList()
