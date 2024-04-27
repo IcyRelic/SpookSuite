@@ -3,12 +3,18 @@ using HarmonyLib;
 using Photon.Pun;
 using Photon.Realtime;
 using SpookSuite.Cheats;
+using SpookSuite.Cheats.Core;
 using SpookSuite.Components;
 using SpookSuite.Handler;
 using SpookSuite.Util;
 using System;
 using System.Collections.Generic;
+using Unity.Collections;
+using Unity.Mathematics;
 using UnityEngine;
+using Zorro.Core.Compression;
+using Zorro.Core.Serizalization;
+using Zorro.Core;
 using Zorro.UI;
 
 namespace SpookSuite
@@ -47,13 +53,118 @@ namespace SpookSuite
 
         }
 
-
+         
         public static void Connected()
         {
             //Log.Error("Connection Detected!");
             //SpookSuite.CallBroadcastSSUser();
         }
 
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(PlayerSyncer), "OnPhotonSerializeView")] //the only reason this patch is like this is incase we want to add any other features that require spoofing
+        public static bool OnPhotonSerializeView(PlayerSyncer __instance, ref PhotonStream stream, ref PhotonMessageInfo info)
+        {
+            if (!__instance.Reflect().GetValue<Player>("player").IsLocal)
+                return true;
+
+            if (stream.IsWriting)
+            {
+                Vector3 pos = new Vector3();
+
+                if (Cheat.Instance<NoClip>().Enabled && !Cheat.Instance<Invisibility>().Enabled)
+                    pos = Player.localPlayer.refs.cameraPos.position;
+                else if (Cheat.Instance<Invisibility>().Enabled)
+                    pos = new Vector3(1000, 1000, 1000);
+                else
+                    pos = Player.localPlayer.Reflect().Invoke<Vector3>("GetRelativePosition_Rig", false, BodypartType.Hip, Vector3.zero);
+
+                PlayerSyncerBoolFlag playerSyncerBoolFlag = PlayerSyncerBoolFlag.NONE;
+                if (Player.localPlayer.data.isSprinting)
+                    playerSyncerBoolFlag |= PlayerSyncerBoolFlag.SPRINT;
+                if (Player.localPlayer.data.isCrouching)
+                    playerSyncerBoolFlag |= PlayerSyncerBoolFlag.CROUCH;
+                if (Player.localPlayer.input.movementInput.x > 0.01f)
+                    playerSyncerBoolFlag |= PlayerSyncerBoolFlag.WALK_RIGHT;
+                if (Player.localPlayer.input.movementInput.x < -0.01f)
+                    playerSyncerBoolFlag |= PlayerSyncerBoolFlag.WALK_LEFT;
+                if (Player.localPlayer.input.movementInput.y > 0.01f)
+                    playerSyncerBoolFlag |= PlayerSyncerBoolFlag.WALK_FORWARD;
+                if (Player.localPlayer.input.movementInput.y < -0.01f)
+                    playerSyncerBoolFlag |= PlayerSyncerBoolFlag.WALK_BACKWARD;
+                if (Player.localPlayer.input.aimIsPressed)
+                    playerSyncerBoolFlag |= PlayerSyncerBoolFlag.AIMING;
+
+                BinarySerializer binarySerializer = new BinarySerializer(20, Allocator.Temp);
+                Vector2 playerLookValues = Player.localPlayer.data.playerLookValues; //spinbot?
+
+                binarySerializer.WriteHalf(Cheat.Instance<NoClip>().Enabled ? (half)0 : (half)Player.localPlayer.data.sinceGrounded);
+                binarySerializer.WriteHalf((half)pos.x);
+                binarySerializer.WriteHalf((half)pos.y);
+                binarySerializer.WriteHalf((half)pos.z);
+                binarySerializer.WriteHalf((half)playerLookValues.x);
+                binarySerializer.WriteHalf((half)playerLookValues.y);
+                binarySerializer.WriteByte(FloatCompression.CompressZeroOne(Player.localPlayer.data.microphoneValue)); //earrape?
+                binarySerializer.WriteByte((byte)playerSyncerBoolFlag);
+                binarySerializer.WriteByte((Player.localPlayer.data.selectedItemSlot == -1) ? byte.MaxValue : ((byte)Player.localPlayer.data.selectedItemSlot)); //on reading, client reads if its 255, should be able to crash if its 254 lol
+                byte[] obj = binarySerializer.buffer.ToByteArray();
+                stream.SendNext(obj);
+                binarySerializer.Dispose();
+                return false;
+            }
+
+            __instance.Reflect().SetValue("hasReceived", true);
+
+            if (Player.localPlayer is null || Player.localPlayer.data is null)
+                return false;
+
+            __instance.Reflect().SetValue("sinceLastPackage", 0f);
+            __instance.Reflect().SetValue("lastPos", __instance.Reflect().GetValue<Vector3>("targetPos"));
+            BinaryDeserializer binaryDeserializer = new BinaryDeserializer((byte[])stream.ReceiveNext(), Allocator.Temp);
+            Player.localPlayer.data.sinceGrounded = binaryDeserializer.ReadHalf();
+            half d = binaryDeserializer.ReadHalf();
+            half d2 = binaryDeserializer.ReadHalf();
+            half d3 = binaryDeserializer.ReadHalf();
+            __instance.Reflect().SetValue("targetPos", new Vector3(d, d2, d3));
+            if (__instance.Reflect().GetValue<bool>("first"))
+            {
+                __instance.Reflect().SetValue("first", false);
+                __instance.Reflect().SetValue("lastPos", __instance.Reflect().GetValue<Vector3>("targetPos"));
+            }
+
+            half d4 = binaryDeserializer.ReadHalf();
+            half d5 = binaryDeserializer.ReadHalf();
+            __instance.Reflect().SetValue("targetLook", new Vector2(d4, d5));
+            __instance.Reflect().SetValue("lookDistance", Vector2.Distance(Player.localPlayer.data.playerLookValues, __instance.Reflect().GetValue<Vector2>("targetLook")));
+
+            Player.localPlayer.data.microphoneValue = FloatCompression.DecompressZeroOne(binaryDeserializer.ReadByte());
+            PlayerSyncerBoolFlag lhs = (PlayerSyncerBoolFlag)binaryDeserializer.ReadByte();
+            byte b = binaryDeserializer.ReadByte();
+            if (b == 255)
+                Player.localPlayer.data.selectedItemSlot = -1;
+            else
+                Player.localPlayer.data.selectedItemSlot = (int)b;
+
+            Player.localPlayer.data.isSprinting = lhs.HasFlagUnsafe(PlayerSyncerBoolFlag.SPRINT);
+            Player.localPlayer.data.isCrouching = lhs.HasFlagUnsafe(PlayerSyncerBoolFlag.CROUCH);
+            Vector2 zero = Vector2.zero;
+            if (lhs.HasFlagUnsafe(PlayerSyncerBoolFlag.WALK_RIGHT))
+                zero.x += 1f;
+            if (lhs.HasFlagUnsafe(PlayerSyncerBoolFlag.WALK_LEFT))
+                zero.x -= 1f;
+            if (lhs.HasFlagUnsafe(PlayerSyncerBoolFlag.WALK_FORWARD))
+                zero.y += 1f;
+            if (lhs.HasFlagUnsafe(PlayerSyncerBoolFlag.WALK_BACKWARD))
+                zero.y -= 1f;
+            if (lhs.HasFlagUnsafe(PlayerSyncerBoolFlag.AIMING))
+                Player.localPlayer.input.aimIsPressed = true;
+            else
+                Player.localPlayer.input.aimIsPressed = false;
+
+            Player.localPlayer.input.movementInput = zero;
+            binaryDeserializer.Dispose();
+            return false;
+        }
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(PhotonNetwork), "ExecuteRpc")]

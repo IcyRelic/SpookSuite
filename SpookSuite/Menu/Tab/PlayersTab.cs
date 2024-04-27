@@ -88,7 +88,7 @@ namespace SpookSuite.Menu.Tab
 
             foreach (Player player in GameObjectManager.players)
             {
-                if (player.ai) continue;
+                if (!player.IsValid()) continue;
                 if (selectedPlayer is null) selectedPlayer = player;
                 if (player.Handle().IsSpookUser()) GUI.contentColor = Settings.c_primary.GetColor();
                 if (selectedPlayer.GetInstanceID() == player.GetInstanceID()) GUI.contentColor = Settings.c_espPlayers.GetColor();

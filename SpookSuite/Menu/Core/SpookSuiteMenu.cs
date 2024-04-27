@@ -86,14 +86,13 @@ namespace SpookSuite.Menu.Core
             Resize();
         }
 
-
         public void Draw()
         {
             if (!Settings.b_isMenuOpen) return;
 
             Stylize();
             GUI.color = new Color(1f, 1f, 1f, Settings.f_menuAlpha);
-
+            
             windowRect = GUILayout.Window(0, windowRect, new GUI.WindowFunction(DrawContent), "SpookSuite");
             GUI.color = Color.white;
         }

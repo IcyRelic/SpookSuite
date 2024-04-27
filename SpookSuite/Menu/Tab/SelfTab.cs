@@ -43,6 +43,7 @@ namespace SpookSuite.Menu.Tab
             UI.CheatToggleSlider(Cheat.Instance<NoClip>(), "NoClip", NoClip.Value.ToString(), ref NoClip.Value, 1f, 20f);
 
             UI.Checkbox("Godmode", Cheat.Instance<Godmode>());
+            UI.Checkbox("Invisibility", Cheat.Instance<Invisibility>());
             UI.Checkbox("Infinte Jump", Cheat.Instance<InfiniteJump>());
             UI.Checkbox("No Ragdoll", Cheat.Instance<NoRagdoll>());
             UI.Checkbox("Unlimited Oxygen", Cheat.Instance<UnlimitedOxygen>());

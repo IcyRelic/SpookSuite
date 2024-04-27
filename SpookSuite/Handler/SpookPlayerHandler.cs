@@ -219,8 +219,8 @@ namespace SpookSuite.Handler
     {
         public static SpookPlayerHandler Handle(this Player player) => new SpookPlayerHandler(player);
         public static Photon.Realtime.Player PhotonPlayer(this Player player) => player.refs.view.Owner;
-
         public static CSteamID GetSteamID(this Player player) => player.refs.view.Owner.GetSteamID();
+        public static bool IsValid(this Player player) => !player.ai; //todo figure out way to check if its one of the spammed when joining private
     }
 
     public static class PhotonPlayerExtensions
