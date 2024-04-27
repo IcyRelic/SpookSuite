@@ -2,6 +2,7 @@ using Photon.Pun;
 using SpookSuite.Cheats;
 using SpookSuite.Cheats.Core;
 using SpookSuite.Menu.Core;
+using SpookSuite.Util;
 using System;
 using UnityEngine;
 
@@ -12,7 +13,7 @@ namespace SpookSuite.Menu.Tab
         public SelfTab() : base("Self") { }
 
         private Vector2 scrollPos = Vector2.zero;
-
+        private string s_faceColor = "";
         public override void Draw()
         {   
             GUILayout.BeginVertical(GUILayout.Width(SpookSuiteMenu.Instance.contentWidth * 0.5f - SpookSuiteMenu.Instance.spaceFromLeft));
@@ -41,6 +42,7 @@ namespace SpookSuite.Menu.Tab
             UI.CheatToggleSlider(Cheat.Instance<SuperSpeed>(), "Super Speed", SuperSpeed.Value.ToString("#"), ref SuperSpeed.Value, 10f, 100f);
             UI.CheatToggleSlider(Cheat.Instance<SuperJump>(), "Super Jump", SuperJump.Value.ToString("#.#"), ref SuperJump.Value, 0.6f, 20f);
             UI.CheatToggleSlider(Cheat.Instance<NoClip>(), "NoClip", NoClip.Value.ToString(), ref NoClip.Value, 1f, 20f);
+            UI.CheatToggleSlider(Cheat.Instance<RainbowFace>(), "Rainbow Face", RainbowFace.Value.ToString(), ref RainbowFace.Value, 0.1f, 1f);
 
             UI.Checkbox("Godmode", Cheat.Instance<Godmode>());
             UI.Checkbox("Invisibility", Cheat.Instance<Invisibility>());
