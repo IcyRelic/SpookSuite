@@ -3,7 +3,7 @@ using System;
 
 namespace SpookSuite.Components
 {
-    internal class RPCData
+    public class RPCData
     {
         private static readonly TimeSpan MAX_LIFE_TIME = TimeSpan.FromSeconds(60);
         public readonly Photon.Realtime.Player sender;

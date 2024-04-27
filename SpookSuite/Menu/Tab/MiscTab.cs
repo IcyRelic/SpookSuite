@@ -42,6 +42,7 @@ namespace SpookSuite.Menu.Tab
 
             UI.Button("Open/Close Diving Bell", Cheat.Instance<ToggleDivingBell>().Execute);
             UI.Button("Activate Diving Bell", Cheat.Instance<UseDivingBell>().Execute);
+            UI.Checkbox("AntiSpawner (Auto Remove Spawned Items From Other Players)", Cheat.Instance<AntiSpawner>());
         }
 
         private void HelmetTextContent()
