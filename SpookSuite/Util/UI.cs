@@ -88,6 +88,12 @@ namespace SpookSuite
             GUILayout.Label(header, new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold });
         }
 
+        public static void SubHeader(string label, bool center, bool bold = false)
+        {
+            GUIStyle style = new GUIStyle(GUI.skin.label) { alignment = center ? TextAnchor.MiddleCenter : TextAnchor.MiddleLeft,  };
+            GUILayout.Label(label, new GUIStyle(GUI.skin.label) { alignment = center ? TextAnchor.MiddleCenter : TextAnchor.MiddleLeft, fontStyle = bold ? FontStyle.Bold : FontStyle.Normal});
+        }
+
         public static void Label(string header, string label, RGBAColor color = null)
         {
             GUILayout.BeginHorizontal();

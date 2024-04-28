@@ -53,10 +53,10 @@ namespace SpookSuite.Menu.Tab
             UI.Button("Use Diving Bell dontcare", () => GameObjectManager.divingBellButton.Interact(Player.localPlayer));
             UI.Button("Use Diving Bell Underground", () => GameObjectManager.divingBell.GoUnderground());
             UI.Button("Use Diving Bell Surface", () => GameObjectManager.divingBell.GoToSurface());
+            CSteamID id = MainMenuHandler.SteamLobbyHandler.Reflect().GetValue<CSteamID>("m_CurrentLobby");
 
             UI.Button("Get Lobby Data", () => {
 
-                CSteamID id = MainMenuHandler.SteamLobbyHandler.Reflect().GetValue<CSteamID>("m_CurrentLobby");
                 int count = SteamMatchmaking.GetLobbyDataCount(id);
                 //GetLobbyDataByIndex(CSteamID steamIDLobby, int iLobbyData, out string pchKey, int cchKeyBufferSize, out string pchValue, int cchValueBufferSize)
                 
@@ -67,10 +67,11 @@ namespace SpookSuite.Menu.Tab
                     SteamMatchmaking.GetLobbyDataByIndex(id, i, out string key, 265, out string value, 265);
                     Debug.Log($"Key: {key} Value: {value}");
                 }
-
+                
                 Debug.Log($"steam://joinlobby/2881650/{id}/{PhotonNetwork.MasterClient.GetSteamID()}");
             });
-
+            if(id.IsValid())
+                GUILayout.TextArea($"steam://joinlobby/2881650/{id}/{PhotonNetwork.MasterClient.GetSteamID()}");
 
             UI.Button("LobbyList", () => {
 

@@ -16,6 +16,7 @@ using Zorro.Core.Compression;
 using Zorro.Core.Serizalization;
 using Zorro.Core;
 using Zorro.UI;
+using Steamworks;
 
 namespace SpookSuite
 {
@@ -35,7 +36,6 @@ namespace SpookSuite
         internal static readonly object keyByteSeven = (object)(byte)7;
         internal static readonly object keyByteEight = (object)(byte)8;
 
-
         [HarmonyPostfix]
         [HarmonyPatch(typeof(ConnectionStateHandler), nameof(ConnectionStateHandler.Disconnect))]
         public static void Disconnect()
@@ -50,26 +50,22 @@ namespace SpookSuite
         {
             Log.Error("Connection Detected!");
             NameSpoof.TrySetNickname();
-
         }
 
-         
-        public static void Connected()
-        {
-            //Log.Error("Connection Detected!");
-            //SpookSuite.CallBroadcastSSUser();
-        }
-
-
+        private static float rot = 1;
         [HarmonyPrefix]
         [HarmonyPatch(typeof(PlayerSyncer), "OnPhotonSerializeView")] //the only reason this patch is like this is incase we want to add any other features that require spoofing
         public static bool OnPhotonSerializeView(PlayerSyncer __instance, ref PhotonStream stream, ref PhotonMessageInfo info)
         {
-            if (!__instance.Reflect().GetValue<Player>("player").IsLocal)
+            if (!__instance.Reflect().GetValue<Player>("player").IsLocal || !MainMenuHandler.SteamLobbyHandler.Reflect().GetValue<CSteamID>("m_CurrentLobby").IsValid())
                 return true;
 
             if (stream.IsWriting)
             {
+                rot += Spinbot.Value;
+                if(rot > 360)
+                    rot = rot - 360;
+
                 Vector3 pos = new Vector3();
 
                 if (Cheat.Instance<NoClip>().Enabled && !Cheat.Instance<Invisibility>().Enabled)
@@ -96,23 +92,24 @@ namespace SpookSuite
                     playerSyncerBoolFlag |= PlayerSyncerBoolFlag.AIMING;
 
                 BinarySerializer binarySerializer = new BinarySerializer(20, Allocator.Temp);
-                Vector2 playerLookValues = Player.localPlayer.data.playerLookValues; //spinbot?
+                Vector2 playerLookValues = Cheat.Instance<Spinbot>().Enabled ? new Vector2(rot, Player.localPlayer.data.playerLookValues.y) : Player.localPlayer.data.playerLookValues;
 
                 binarySerializer.WriteHalf(Cheat.Instance<NoClip>().Enabled ? (half)0 : (half)Player.localPlayer.data.sinceGrounded);
                 binarySerializer.WriteHalf((half)pos.x);
                 binarySerializer.WriteHalf((half)pos.y);
                 binarySerializer.WriteHalf((half)pos.z);
-                binarySerializer.WriteHalf((half)playerLookValues.x);
+                binarySerializer.WriteHalf((half)playerLookValues.x); //target look
                 binarySerializer.WriteHalf((half)playerLookValues.y);
                 binarySerializer.WriteByte(FloatCompression.CompressZeroOne(Player.localPlayer.data.microphoneValue)); //earrape?
                 binarySerializer.WriteByte((byte)playerSyncerBoolFlag);
-                binarySerializer.WriteByte((Player.localPlayer.data.selectedItemSlot == -1) ? byte.MaxValue : ((byte)Player.localPlayer.data.selectedItemSlot)); //on reading, client reads if its 255, should be able to crash if its 254 lol
+                binarySerializer.WriteByte((Player.localPlayer.data.selectedItemSlot == -1) ? byte.MaxValue : ((byte)Player.localPlayer.data.selectedItemSlot));
+                
                 byte[] obj = binarySerializer.buffer.ToByteArray();
                 stream.SendNext(obj);
                 binarySerializer.Dispose();
-                return false;
+                return false; //this just does return normally
             }
-
+            //return true; //dont do anything else for now
             __instance.Reflect().SetValue("hasReceived", true);
 
             if (Player.localPlayer is null || Player.localPlayer.data is null)
@@ -132,10 +129,11 @@ namespace SpookSuite
                 __instance.Reflect().SetValue("lastPos", __instance.Reflect().GetValue<Vector3>("targetPos"));
             }
 
-            half d4 = binaryDeserializer.ReadHalf();
+            half d4 = binaryDeserializer.ReadHalf(); //playerlookvalues
             half d5 = binaryDeserializer.ReadHalf();
             __instance.Reflect().SetValue("targetLook", new Vector2(d4, d5));
-            __instance.Reflect().SetValue("lookDistance", Vector2.Distance(Player.localPlayer.data.playerLookValues, __instance.Reflect().GetValue<Vector2>("targetLook")));
+
+            __instance.Reflect().SetValue("lookDistance", Vector2.Distance(new Vector2(rot, Player.localPlayer.data.playerLookValues.y), __instance.Reflect().GetValue<Vector2>("targetLook")));
 
             Player.localPlayer.data.microphoneValue = FloatCompression.DecompressZeroOne(binaryDeserializer.ReadByte());
             PlayerSyncerBoolFlag lhs = (PlayerSyncerBoolFlag)binaryDeserializer.ReadByte();
@@ -175,7 +173,6 @@ namespace SpookSuite
             string rpc = rpcData.ContainsKey(keyByteFive) ?
                 PhotonNetwork.PhotonServerSettings.RpcList[(int)(byte)rpcData[keyByteFive]] :
                 (string)rpcData[keyByteThree];
-
 
             if (!sender.IsLocal && sender.GamePlayer().Handle().IsRPCBlocked())
             {

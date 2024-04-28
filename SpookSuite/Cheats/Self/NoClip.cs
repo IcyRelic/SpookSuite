@@ -1,6 +1,7 @@
 ﻿using SpookSuite.Cheats.Core;
 using SpookSuite.Components;
 using SpookSuite.Util;
+using Steamworks;
 using System.Linq;
 using UnityEngine;
 
@@ -8,14 +9,13 @@ namespace SpookSuite.Cheats
 {
     internal class NoClip : ToggleCheat, IVariableCheat<float>
     {
-
         public static float Value = 10f;
 
         private KBInput movement = null;
 
         public override void Update()
         {
-            if (Player.localPlayer is null || !Enabled) return;
+            if (Player.localPlayer is null || !Enabled || !MainMenuHandler.SteamLobbyHandler.Reflect().GetValue<CSteamID>("m_CurrentLobby").IsValid()) return;
 
             if (movement is null) movement = Player.localPlayer.gameObject.AddComponent<KBInput>();
 
@@ -29,6 +29,7 @@ namespace SpookSuite.Cheats
 
         public override void OnDisable()
         {
+            if (!MainMenuHandler.SteamLobbyHandler.Reflect().GetValue<CSteamID>("m_CurrentLobby").IsValid()) return; //for now while its being spammed
             Destroy(movement);
             movement = null;
             Player.localPlayer.refs.ragdoll.GetComponentsInChildren<Collider>().ToList().ForEach(c => c.enabled = true);

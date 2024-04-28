@@ -33,6 +33,13 @@ namespace SpookSuite.Menu.Tab
             UI.Button("Revive", () => Player.localPlayer.refs.view.RPC("RPCA_PlayerRevive", RpcTarget.All, Array.Empty<object>()), null);
             GUILayout.EndHorizontal();
 
+            UI.SubHeader("Talk To", true, true);
+            GUILayout.BeginHorizontal();
+            UI.Button("Everyone", NetworkVoiceHandler.ListenAndSendToAll, null);
+            UI.Button("Alive", NetworkVoiceHandler.TalkToAlive, null);
+            UI.Button("Dead", NetworkVoiceHandler.TalkToDead, null);
+            GUILayout.EndHorizontal();
+
             UI.Textbox("Spoofed Name", ref NameSpoof.Value, length: 100, onChanged: NameSpoof.OnValueChanged);
             UI.Checkbox("Use Spoofed Name", Cheat.Instance<NameSpoof>());
         }
@@ -43,7 +50,8 @@ namespace SpookSuite.Menu.Tab
             UI.CheatToggleSlider(Cheat.Instance<SuperJump>(), "Super Jump", SuperJump.Value.ToString("#.#"), ref SuperJump.Value, 0.6f, 20f);
             UI.CheatToggleSlider(Cheat.Instance<NoClip>(), "NoClip", NoClip.Value.ToString(), ref NoClip.Value, 1f, 20f);
             UI.CheatToggleSlider(Cheat.Instance<RainbowFace>(), "Rainbow Face", RainbowFace.Value.ToString(), ref RainbowFace.Value, 0.1f, 1f);
-
+            UI.CheatToggleSlider(Cheat.Instance<Spinbot>(), "Spinbot", Spinbot.Value.ToString(), ref Spinbot.Value, 1f, 23f);
+            
             UI.Checkbox("Godmode", Cheat.Instance<Godmode>());
             UI.Checkbox("Invisibility", Cheat.Instance<Invisibility>());
             UI.Checkbox("Infinte Jump", Cheat.Instance<InfiniteJump>());

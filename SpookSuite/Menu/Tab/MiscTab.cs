@@ -39,10 +39,16 @@ namespace SpookSuite.Menu.Tab
                 new UIButton("Add", () => { int.TryParse(moneyToSet, out int o); GameUtil.SendHospitalBill(-o); }),
                 new UIButton("Remove", () => { int.TryParse(moneyToSet, out int o); GameUtil.SendHospitalBill(o); })
             );
-
+            UI.Button("Give Views / Money", () =>
+            {
+                UnityEngine.Object.FindObjectOfType<ExtractVideoMachine>().Reflect()
+                .GetValue<PhotonView>("m_photonView").RPC("RPC_ExtractDone", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber, false);
+            });
             UI.Button("Open/Close Diving Bell", Cheat.Instance<ToggleDivingBell>().Execute);
             UI.Button("Activate Diving Bell", Cheat.Instance<UseDivingBell>().Execute);
             UI.Checkbox("AntiSpawner (Auto Remove Spawned Items From Other Players)", Cheat.Instance<AntiSpawner>());
+            UI.Checkbox("Hear Push To Talk Players Always", Cheat.Instance<NoPushToTalk>());
+
         }
 
         private void HelmetTextContent()
