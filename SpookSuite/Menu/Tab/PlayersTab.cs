@@ -58,6 +58,7 @@ namespace SpookSuite.Menu.Tab
             UI.Button("Teleport", () => { PhotonNetwork.DestroyPlayerObjects(Player.localPlayer.PhotonPlayer()); PhotonNetwork.Instantiate("Player", selectedPlayer.data.groundPos, new Quaternion(0f, 0f, 0f, 0f)); }, "Teleport");
 
             UI.Button("Spawn Bomb", () => GameUtil.SpawnItem(GameUtil.GetItemByName("bomb").id, selectedPlayer.refs.cameraPos.position), "Bomb");
+            UI.Button("Goo Em", () => { GameUtil.SpawnItem(GameUtil.GetItemByName("Goo Ball").id, selectedPlayer.refs.cameraPos.position); Object.FindObjectOfType<ItemGooBall>().Reflect().GetValue<OnOffEntry>("usedEntry").on = true; });
             UI.Button("Kill", () => selectedPlayer.Reflect().Invoke("CallDie"), "Kill");
             UI.Button("Revive", () => selectedPlayer.CallRevive(), "Revive");
 
