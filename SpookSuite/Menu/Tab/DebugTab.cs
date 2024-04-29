@@ -17,6 +17,7 @@ namespace SpookSuite.Menu.Tab
         private int steamLobbyIndex = 0;
         private Vector2 scrollPos = Vector2.zero;
         private CallResult<LobbyMatchList_t> matchList;
+        public static bool logPlayerPrefs = false;
 
         public override void Draw()
         {
@@ -24,7 +25,6 @@ namespace SpookSuite.Menu.Tab
             MenuContent();
             GUILayout.EndVertical();          
         }
-
         private void MenuContent()
         {
             scrollPos = GUILayout.BeginScrollView(scrollPos);
@@ -50,6 +50,7 @@ namespace SpookSuite.Menu.Tab
             UI.Button("Load Surface", () => LoadScene("SurfaceScene"));
 
             UI.Header("Debugging Cheats");
+            UI.Checkbox("Log Player Prefs", ref logPlayerPrefs);
             UI.Button("Use Diving Bell dontcare", () => GameObjectManager.divingBellButton.Interact(Player.localPlayer));
             UI.Button("Use Diving Bell Underground", () => GameObjectManager.divingBell.GoUnderground());
             UI.Button("Use Diving Bell Surface", () => GameObjectManager.divingBell.GoToSurface());
@@ -63,7 +64,7 @@ namespace SpookSuite.Menu.Tab
                 Debug.Log($"Lobby ID: {id}");
 
                 for (int i = 0; i < count; i++)
-                {
+                {                  
                     SteamMatchmaking.GetLobbyDataByIndex(id, i, out string key, 265, out string value, 265);
                     Debug.Log($"Key: {key} Value: {value}");
                 }
@@ -86,10 +87,9 @@ namespace SpookSuite.Menu.Tab
                 matchList = CallResult<LobbyMatchList_t>.Create(new CallResult<LobbyMatchList_t>.APIDispatchDelegate(MatchListReceived));
 
                 matchList.Set(SteamMatchmaking.RequestLobbyList());
-
-
-
             }, "Get Public");
+
+            
 
             UI.TextboxAction<ulong>("Join Lobby", ref steamLobbyId, 200, new UIButton("OK", () => {
                 //this.JoinLobby(SteamMatchmaking.GetLobbyByIndex(array.GetRandom<(CSteamID, int)>().Item2));

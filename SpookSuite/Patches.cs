@@ -17,6 +17,9 @@ using Zorro.Core.Serizalization;
 using Zorro.Core;
 using Zorro.UI;
 using Steamworks;
+using Unity.VisualScripting;
+using static UnityEngine.Rendering.DebugUI;
+using SpookSuite.Menu.Tab;
 
 namespace SpookSuite
 {
@@ -57,7 +60,7 @@ namespace SpookSuite
         [HarmonyPatch(typeof(PlayerSyncer), "OnPhotonSerializeView")] //the only reason this patch is like this is incase we want to add any other features that require spoofing
         public static bool OnPhotonSerializeView(PlayerSyncer __instance, ref PhotonStream stream, ref PhotonMessageInfo info)
         {
-            if (!__instance.Reflect().GetValue<Player>("player").IsLocal || !MainMenuHandler.SteamLobbyHandler.Reflect().GetValue<CSteamID>("m_CurrentLobby").IsValid())
+            if (!__instance.Reflect().GetValue<Player>("player").IsLocal || !PhotonNetwork.InRoom)
                 return true;
 
             if (stream.IsWriting)
@@ -162,6 +165,52 @@ namespace SpookSuite
             Player.localPlayer.input.movementInput = zero;
             binaryDeserializer.Dispose();
             return false;
+        }
+
+        //player prefs stuff, track what is being saved across sessions
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(PlayerPrefs), "GetInt", [typeof(string), typeof(int)])]
+        public static void GetInt(string key, int defaultValue, ref int __result)
+        {
+            if (DebugTab.logPlayerPrefs)
+                Log.Info($"Get Int called on {key} result is: {__result}");
+        }
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(PlayerPrefs), "SetInt")]
+        public static void SetInt(string key, int value)
+        {
+            if (DebugTab.logPlayerPrefs)
+                Log.Info($"Set Int called on {key} with arg {value}");
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(PlayerPrefs), "GetFloat", [typeof(string), typeof(float)])]
+        public static void GetFloat(string key, float defaultValue, ref float __result)
+        {
+            if (DebugTab.logPlayerPrefs)
+                Log.Info($"Get Int called on {key} result is: {__result}");
+        }
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(PlayerPrefs), "SetFloat")]
+        public static void SetFloat(string key, float value)
+        {
+            if (DebugTab.logPlayerPrefs)
+                Log.Info($"Set Float called on {key} with arg {value}");
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(PlayerPrefs), "GetString", [typeof(string), typeof(string)])]
+        public static void GetString(string key, string defaultValue, ref string __result)
+        {
+            if (DebugTab.logPlayerPrefs)
+                Log.Info($"Get String called on {key} result is: {__result}");
+        }
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(PlayerPrefs), "SetString")]
+        public static void SetString(string key, string value)
+        {
+            if (DebugTab.logPlayerPrefs)
+                Log.Info($"Set Float called on {key} with arg {value}");
         }
 
         [HarmonyPrefix]

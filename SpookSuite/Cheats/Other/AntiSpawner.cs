@@ -13,7 +13,6 @@ namespace SpookSuite.Cheats
 {
     internal class AntiSpawner : ToggleCheat
     {
-
         internal void Process(SpookPlayerHandler handler, object[] parameters, ref RPCData rpcData)
         {
             ItemInstanceData data = new ItemInstanceData(Guid.Empty);
@@ -73,8 +72,6 @@ namespace SpookSuite.Cheats
                     
                 }
                 else Log.Warning($"Host Spawn Detected As Good Spawn => {data.m_guid}");
-
-
             }
             else Log.Warning($"Good Spawn => {data.m_guid}");
         }

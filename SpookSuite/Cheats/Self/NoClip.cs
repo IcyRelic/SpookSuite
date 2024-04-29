@@ -1,4 +1,5 @@
-﻿using SpookSuite.Cheats.Core;
+﻿using Photon.Pun;
+using SpookSuite.Cheats.Core;
 using SpookSuite.Components;
 using SpookSuite.Util;
 using Steamworks;
@@ -15,7 +16,7 @@ namespace SpookSuite.Cheats
 
         public override void Update()
         {
-            if (Player.localPlayer is null || !Enabled || !MainMenuHandler.SteamLobbyHandler.Reflect().GetValue<CSteamID>("m_CurrentLobby").IsValid()) return;
+            if (Player.localPlayer is null || !Enabled || !PhotonNetwork.InRoom) return;
 
             if (movement is null) movement = Player.localPlayer.gameObject.AddComponent<KBInput>();
 
@@ -29,7 +30,7 @@ namespace SpookSuite.Cheats
 
         public override void OnDisable()
         {
-            if (!MainMenuHandler.SteamLobbyHandler.Reflect().GetValue<CSteamID>("m_CurrentLobby").IsValid()) return; //for now while its being spammed
+            if (!PhotonNetwork.InRoom) return; //for now while its being spammed
             Destroy(movement);
             movement = null;
             Player.localPlayer.refs.ragdoll.GetComponentsInChildren<Collider>().ToList().ForEach(c => c.enabled = true);
