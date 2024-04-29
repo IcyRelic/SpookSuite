@@ -2,6 +2,7 @@
 using SpookSuite.Util;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using UnityEngine;
 
@@ -86,12 +87,6 @@ namespace SpookSuite
         {
             if (space) GUILayout.Space(20);
             GUILayout.Label(header, new GUIStyle(GUI.skin.label) { fontStyle = FontStyle.Bold });
-        }
-
-        public static void SubHeader(string label, bool center, bool bold = false)
-        {
-            GUIStyle style = new GUIStyle(GUI.skin.label) { alignment = center ? TextAnchor.MiddleCenter : TextAnchor.MiddleLeft,  };
-            GUILayout.Label(label, new GUIStyle(GUI.skin.label) { alignment = center ? TextAnchor.MiddleCenter : TextAnchor.MiddleLeft, fontStyle = bold ? FontStyle.Bold : FontStyle.Normal});
         }
 
         public static void Label(string header, string label, RGBAColor color = null)
@@ -270,6 +265,21 @@ namespace SpookSuite
             GUILayout.BeginHorizontal();
             buttons.ToList().ForEach(btn => btn.Draw());
             GUILayout.EndHorizontal();
+        }
+        public static void HorizontalSpace(string title, Action action)
+        {
+            if (title is not null)
+                Header(title);
+
+            GUILayout.BeginHorizontal();
+            action.Invoke();
+            GUILayout.EndHorizontal();
+        }
+        public static void VerticalSpace(Action action)
+        {
+            GUILayout.BeginVertical();
+            action.Invoke();
+            GUILayout.EndVertical();
         }
         public static void ButtonGrid<T>(List<T> objects, Func<T, string> textSelector, string search, Action<T> action, int numPerRow, int btnWidth = 175)
         {

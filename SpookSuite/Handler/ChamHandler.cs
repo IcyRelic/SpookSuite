@@ -1,10 +1,12 @@
 ﻿using SpookSuite.Cheats;
 using SpookSuite.Cheats.Core;
+using SpookSuite.Util;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using Object = UnityEngine.Object;
+
 namespace SpookSuite.Handler
 {
     public class ChamHandler
@@ -13,6 +15,8 @@ namespace SpookSuite.Handler
         private static Dictionary<int, Material[]> materials = new Dictionary<int, Material[]>();
         public static Material m_chamMaterial;
         private static int _color;
+        public static bool overrideMaterial;
+        public static Material overridedMaterial;
 
         private Object @object;
 
@@ -23,18 +27,17 @@ namespace SpookSuite.Handler
 
         public static void SetupChamMaterial()
         {
-            m_chamMaterial = new Material(Shader.Find("Hidden/Internal-Colored"))
+            m_chamMaterial = overrideMaterial ? overridedMaterial : new Material(Shader.Find("Hidden/Internal-Colored"))
             {
                 hideFlags = HideFlags.DontSaveInEditor | HideFlags.HideInHierarchy
             };
-
-            m_chamMaterial.SetInt("_SrcBlend", 5);
-            m_chamMaterial.SetInt("_DstBlend", 10);
-            m_chamMaterial.SetInt("_Cull", 0);
-            m_chamMaterial.SetInt("_ZTest", 8);
-            m_chamMaterial.SetInt("_ZWrite", 0);
-            m_chamMaterial.SetColor("_Color", Settings.c_chams.GetColor());
-            _color = Shader.PropertyToID("_Color");
+                m_chamMaterial.SetInt("_SrcBlend", 5);
+                m_chamMaterial.SetInt("_DstBlend", 10);
+                m_chamMaterial.SetInt("_Cull", 0);
+                m_chamMaterial.SetInt("_ZTest", 8);
+                m_chamMaterial.SetInt("_ZWrite", 0);
+                m_chamMaterial.SetColor("_Color", Settings.c_chamItems.GetColor());
+                _color = Shader.PropertyToID("_Color");
 
             SpookSuite.Instance.StartCoroutine(CleanUpMaterials());
         }
@@ -63,7 +66,7 @@ namespace SpookSuite.Handler
             });
         }
 
-        public void ProcessCham(float distance)
+        public void ProcessCham(float distance, RGBAColor color)
         {
             if (@object == null) return;
 
@@ -74,40 +77,35 @@ namespace SpookSuite.Handler
             if (@object is Pickup) e = ChamESP.displayItems;
             if (@object is UseDivingBellButton || @object is DivingBell) e = ChamESP.displayDivingBell;
             if (@object is Laser) e = ChamESP.displayLasers;
-
-            if (e && distance >= ChamESP.Value && Cheat.Instance<ChamESP>().Enabled) ApplyCham();
+            m_chamMaterial = overrideMaterial ? overridedMaterial : m_chamMaterial;
+            if (e && distance >= ChamESP.Value && Cheat.Instance<ChamESP>().Enabled) ApplyCham(color);
             else RemoveCham();
-
-
         }
 
-        public void ApplyCham()
+        public void ApplyCham(RGBAColor color)
         {
             if (@object == null) return;
 
             GetRenderers().ForEach(r =>
             {
                 if (r == null) return;
-
+                m_chamMaterial = overrideMaterial ? overridedMaterial : m_chamMaterial;
                 if (!materials.ContainsKey(r.GetInstanceID()))
                 {
                     if (r.materials == null) return;
-
                     materials.Add(r.GetInstanceID(), r.materials);
                     r.SetMaterials(Enumerable.Repeat(m_chamMaterial, r.materials.Length).ToList());
-                    UpdateChamColor(r);
                 }
-
+                if (!overridedMaterial)
+                    UpdateChamColor(r, color);
             });
         }
 
-        private void UpdateChamColor(Renderer r)
+        private void UpdateChamColor(Renderer r, RGBAColor color)
         {
             if (r == null || r.materials == null) return;
-            r.materials.ToList().ForEach(m => m.SetColor(_color, Settings.c_chams.GetColor()));
-
+            r.materials.ToList().ForEach(m => m.SetColor(_color, color.GetColor()));
         }
-
 
         public static ChamHandler GetHandler(Object obj)
         {

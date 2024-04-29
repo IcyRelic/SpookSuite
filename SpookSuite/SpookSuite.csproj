@@ -359,6 +359,9 @@
     <Reference Include="Zorro.Core.Runtime">
       <HintPath>Resources\BaseGame\Zorro.Core.Runtime.dll</HintPath>
     </Reference>
+    <Reference Include="Zorro.Settings.Runtime">
+      <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\Zorro.Settings.Runtime.dll</HintPath>
+    </Reference>
     <Reference Include="Zorro.UI.Runtime">
       <HintPath>Resources\BaseGame\Zorro.UI.Runtime.dll</HintPath>
     </Reference>

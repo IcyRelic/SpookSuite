@@ -7,6 +7,11 @@ using System.Collections.Generic;
 using Zorro.Core;
 using SpookSuite.Manager;
 using SpookSuite.Handler;
+using Zorro.Settings;
+using TMPro;
+using UnityEngine.Rendering.Universal;
+using System.Linq;
+using System;
 
 namespace SpookSuite.Menu.Tab
 {
@@ -51,6 +56,13 @@ namespace SpookSuite.Menu.Tab
 
             UI.Header("Debugging Cheats");
             UI.Checkbox("Log Player Prefs", ref logPlayerPrefs);
+
+            //UI.HorizontalSpace("Shader Settings", () => 
+            //{
+            UI.Checkbox("Override Chams", ref ChamHandler.overrideMaterial);
+                UI.ButtonGrid<Renderer>(UnityEngine.Object.FindObjectsOfType<Renderer>().ToList<Renderer>(), r => r.material.name, "", renderer => ChamHandler.overridedMaterial = renderer.material, 4);
+            //});
+
             UI.Button("Use Diving Bell dontcare", () => GameObjectManager.divingBellButton.Interact(Player.localPlayer));
             UI.Button("Use Diving Bell Underground", () => GameObjectManager.divingBell.GoUnderground());
             UI.Button("Use Diving Bell Surface", () => GameObjectManager.divingBell.GoToSurface());

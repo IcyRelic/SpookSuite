@@ -34,10 +34,11 @@ namespace SpookSuite
         public static RGBAColor c_espItems = new RGBAColor(255, 255, 255, 1f);
         public static RGBAColor c_espMonsters = new RGBAColor(255, 0, 0, 1f);
         public static RGBAColor c_espDivingBells = new RGBAColor(0, 0, 255, 1f);
-        public static RGBAColor c_chams = new RGBAColor(238, 111, 255, 0.1f);
-
-
-
+        //public static RGBAColor c_chams = new RGBAColor(238, 111, 255, 0.1f);
+        public static RGBAColor c_chamItems = new RGBAColor(238, 111, 255, 0.1f);
+        public static RGBAColor c_chamMonsters = new RGBAColor(238, 111, 255, 0.1f);
+        public static RGBAColor c_chamPlayers = new RGBAColor(238, 111, 255, 0.1f);
+        public static RGBAColor c_chamDivingBell = new RGBAColor(238, 111, 255, 0.1f);
 
         internal class Changelog
         {
@@ -108,12 +109,15 @@ namespace SpookSuite
                 JObject colors = new JObject();
                 JObject cheatSettings = new JObject();
                 
-
                 colors["MenuText"] = JsonConvert.SerializeObject(c_menuText);
                 colors["ESPPlayers"] = JsonConvert.SerializeObject(c_espPlayers);
                 colors["ESPItems"] = JsonConvert.SerializeObject(c_espItems);
                 colors["ESPMonsters"] = JsonConvert.SerializeObject(c_espMonsters);
                 colors["ESPDivingBells"] = JsonConvert.SerializeObject(c_espDivingBells);
+                colors["ChamPlayers"] = JsonConvert.SerializeObject(c_chamPlayers);
+                colors["ChamItems"] = JsonConvert.SerializeObject(c_chamItems);
+                colors["ChamMonsters"] = JsonConvert.SerializeObject(c_chamMonsters);
+                colors["ChamDivingBell"] = JsonConvert.SerializeObject(c_chamDivingBell);
 
                 settings["MenuFontSize"] = i_menuFontSize.ToString();
                 settings["MenuWidth"] = i_menuWidth.ToString();

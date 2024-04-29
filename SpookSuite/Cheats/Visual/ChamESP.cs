@@ -19,16 +19,20 @@ namespace SpookSuite.Cheats
         public static bool displayItems = false;
         public static bool displayDivingBell = false;
         public static bool displayLasers = false;
+        public static bool rainbowMode = false;
+        public static float opacity = .1f;
+        private RainbowController rgb = new RainbowController();
 
         public ChamESP() => ChamHandler.SetupChamMaterial();
 
         public override void Update()
-        {
-            DisplayChams(GameObjectManager.pickups, _ => Settings.c_chams);
-            DisplayChams(GameObjectManager.players, _ => Settings.c_chams);
-            DisplayChams(GameObjectManager.enemyPlayer, _ => Settings.c_chams);
-            DisplayChams(new List<Object> { GameObjectManager.divingBellButton, GameObjectManager.divingBell }, _ => Settings.c_chams);
-            DisplayChams(GameObjectManager.lasers, _ => Settings.c_chams);
+        {        
+            rgb.Update();
+            DisplayChams(GameObjectManager.pickups, _ => rainbowMode ? rgb.GetRGBA() : Settings.c_chamItems);
+            DisplayChams(GameObjectManager.players, _ => rainbowMode ? rgb.GetRGBA() : Settings.c_chamPlayers);
+            DisplayChams(GameObjectManager.enemyPlayer, _ => rainbowMode ? rgb.GetRGBA() : Settings.c_chamMonsters);
+            DisplayChams(new List<Object> { GameObjectManager.divingBellButton, GameObjectManager.divingBell }, _ => rainbowMode ? rgb.GetRGBA() : Settings.c_chamDivingBell);
+            DisplayChams(GameObjectManager.lasers, _ => rainbowMode ? rgb.GetRGBA() : Settings.c_chamDivingBell);
         }
 
         public static void ToggleAll()
@@ -56,7 +60,9 @@ namespace SpookSuite.Cheats
                     if (transform is null) return;
 
                     float distance = GetDistanceToPlayer(transform.position);
-                    o.GetChamHandler().ProcessCham(distance);
+                    RGBAColor c = colorSelector((T)o);
+                    c.a = opacity;
+                    o.GetChamHandler().ProcessCham(distance, c);
                 }
                 catch (Exception e) { }
             });

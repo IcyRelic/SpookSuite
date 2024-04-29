@@ -18,6 +18,9 @@ namespace SpookSuite.Menu.Tab
         private Vector2 scrollPos2 = Vector2.zero;
         private string searchText = "";
         private string moneyToSet = "";
+        private float faceSize = .035f;
+        private string faceText = "SS";
+        private float faceRotation = 0;
 
         public override void Draw()
         {
@@ -49,6 +52,47 @@ namespace SpookSuite.Menu.Tab
             UI.Checkbox("AntiSpawner (Auto Remove Spawned Items From Other Players)", Cheat.Instance<AntiSpawner>());
             UI.Checkbox("Hear Push To Talk Players Always", Cheat.Instance<NoPushToTalk>());
 
+            UI.Header("Face");
+
+            UI.HorizontalSpace(null, () =>
+            {
+                UI.ExecuteSlider("Rotation", faceRotation.ToString(), () =>
+                {
+                    if (!Player.localPlayer.refs.visor)
+                        return;
+
+                    PlayerVisor v = Player.localPlayer.refs.visor;
+                    v.SetAllFaceSettings(v.hue.Value, v.visorColorIndex, v.visorFaceText.text, faceRotation, v.FaceSize); //doesnt check limit
+                }, ref faceRotation, 0, 360);
+            });
+
+            
+
+            UI.HorizontalSpace(null, () =>
+            {
+                UI.Textbox("Text", ref faceText, false, 3);
+                UI.Button("Set", () => Player.localPlayer.refs.view.RPC("RPCA_SetVisorText", RpcTarget.All, faceText));
+            });
+
+            UI.HorizontalSpace(null, () =>
+            {
+                UI.ExecuteSlider("Size", faceSize.ToString(), () =>
+                {
+                    if (!Player.localPlayer.refs.visor)
+                        return;
+
+                    PlayerVisor v = Player.localPlayer.refs.visor;
+                    v.SetAllFaceSettings(v.hue.Value, v.visorColorIndex, v.visorFaceText.text, v.FaceRotation, faceSize); //doesnt check limit
+                }, ref faceSize, .001f, 1f);
+                UI.Button("Reset", () =>
+                {
+                    if (!Player.localPlayer.refs.visor)
+                        return;
+
+                    PlayerVisor v = Player.localPlayer.refs.visor;
+                    v.SetAllFaceSettings(v.hue.Value, v.visorColorIndex, v.visorFaceText.text, v.FaceRotation, 0.035f);
+                });
+            });
         }
 
         private void HelmetTextContent()

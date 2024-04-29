@@ -7,6 +7,13 @@ namespace SpookSuite.Util
     {
         public float r, g, b, a;
 
+        public RGBAColor(Color color)
+        {
+            this.r = color.r;
+            this.g = color.g;
+            this.b = color.b;
+            this.a = color.a;
+        }
 
         [JsonConstructor]
         public RGBAColor(float r, float g, float b, float a)

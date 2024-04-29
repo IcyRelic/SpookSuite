@@ -14,6 +14,16 @@ namespace SpookSuite.Menu.Tab
         private float f_leftWidth;
         private string search = "";
         private int themesselect = 0;
+        private string s_Primary = Settings.c_primary.GetHexCode();
+        private string s_Text = Settings.c_menuText.GetHexCode();
+        private string s_PlayerChams = Settings.c_chamPlayers.GetHexCode();
+        private string s_ItemChams = Settings.c_chamItems.GetHexCode();
+        private string s_MonsterChams = Settings.c_chamMonsters.GetHexCode();
+        private string s_DivingBellCham = Settings.c_chamDivingBell.GetHexCode();
+        private string s_PlayerEsp = Settings.c_espPlayers.GetHexCode();
+        private string s_ItemEsp = Settings.c_espItems.GetHexCode();
+        private string s_MonsterEsp = Settings.c_espMonsters.GetHexCode();
+        private string s_DivingBellEsp = Settings.c_espDivingBells.GetHexCode();
 
         public override void Draw()
         {
@@ -46,6 +56,49 @@ namespace SpookSuite.Menu.Tab
                 new UIOption("Green", () => ThemeUtil.ApplyTheme("Green")),
                 new UIOption("Blue", () => ThemeUtil.ApplyTheme("Blue"))
             );
+
+            UI.Header("Menu Colors");
+            UI.TextboxAction("Primary", ref s_Primary, 8,
+                new UIButton("Set", () => SetColor(ref Settings.c_primary, s_Primary))
+            );
+            UI.TextboxAction("Text", ref s_Text, 8,
+                new UIButton("Set", () => SetColor(ref Settings.c_menuText, s_Text))
+            );
+
+            UI.Header("Esp Colors");
+            UI.TextboxAction("Items", ref s_ItemEsp, 8,
+                new UIButton("Set", () => SetColor(ref Settings.c_espItems, s_ItemEsp))
+            );
+            UI.TextboxAction("Players", ref s_PlayerEsp, 8,
+                new UIButton("Set", () => SetColor(ref Settings.c_espPlayers, s_PlayerEsp))
+            );
+            UI.TextboxAction("Monsters", ref s_MonsterEsp, 8,
+                new UIButton("Set", () => SetColor(ref Settings.c_espMonsters, s_MonsterEsp))
+            );
+            UI.TextboxAction("Diving Bell", ref s_DivingBellEsp, 8,
+                new UIButton("Set", () => SetColor(ref Settings.c_espDivingBells, s_DivingBellEsp))
+            );
+
+            UI.Header("Cham Colors");
+            UI.TextboxAction("Items", ref s_ItemChams, 8,
+                new UIButton("Set", () => SetColor(ref Settings.c_chamItems, s_ItemChams))
+            );
+            UI.TextboxAction("Players", ref s_PlayerChams, 8,
+                new UIButton("Set", () => SetColor(ref Settings.c_chamPlayers, s_PlayerChams))
+            );
+            UI.TextboxAction("Monsters", ref s_MonsterChams, 8,
+                new UIButton("Set", () => SetColor(ref Settings.c_chamMonsters, s_MonsterChams))
+            );
+            UI.TextboxAction("Diving Bell", ref s_DivingBellCham, 8,
+                new UIButton("Set", () => SetColor(ref Settings.c_chamDivingBell, s_DivingBellCham))
+            );
+        }
+
+        private void SetColor(ref RGBAColor color, string hexCode)
+        {
+            while (hexCode.Length < 6) hexCode += "0";
+            color = new RGBAColor(hexCode);
+            Settings.Config.SaveConfig();
         }
 
         private void KeybindContent()
