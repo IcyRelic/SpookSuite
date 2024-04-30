@@ -49,7 +49,7 @@ namespace SpookSuite.Menu.Tab
             UI.CheatToggleSlider(Cheat.Instance<SuperSpeed>(), "Super Speed", SuperSpeed.Value.ToString("#"), ref SuperSpeed.Value, 10f, 100f);
             UI.CheatToggleSlider(Cheat.Instance<SuperJump>(), "Super Jump", SuperJump.Value.ToString("#.#"), ref SuperJump.Value, 0.6f, 20f);
             UI.CheatToggleSlider(Cheat.Instance<NoClip>(), "NoClip", NoClip.Value.ToString(), ref NoClip.Value, 1f, 20f);
-            UI.CheatToggleSlider(Cheat.Instance<RainbowFace>(), "Rainbow Face", RainbowFace.Value.ToString(), ref RainbowFace.Value, 0.1f, 1f);
+            UI.CheatToggleSlider(Cheat.Instance<RainbowFace>(), "Rainbow Face", RainbowFace.Value.ToString(), ref RainbowFace.Value, 0.1f, 30f);
             UI.CheatToggleSlider(Cheat.Instance<Spinbot>(), "Spinbot", Spinbot.Value.ToString(), ref Spinbot.Value, 1f, 23f);
 
             UI.Checkbox("Godmode", Cheat.Instance<Godmode>());

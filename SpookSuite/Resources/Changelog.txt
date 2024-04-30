@@ -1,2 +1,32 @@
+v1.1
+Self:
+- Spinbot
+- Smooth AF RainbowFace
+- Face Editor
+- Switch Voice Channel (Dead vc doesnt switch to dead )
+- Noclip is now synced in the air and you dont slam into the ground on disable anymore
+- Invisibility
+
+Visual: 
+- Rainbow Chams
+- Cham Opacity
+- Fixed Item Spawning (Would spawn away from you if you werent on ground)
+- Disable Visor
+
+Settings:
+- Added Color Changers (They use hex code)
+
+- Players:
+- Added Goo Em
+
+Misc:
+- Give Views	
+- No Push To Talk (for all players, if someone has push to talk on you can still hear them without them pressing the button)
+
+Others:
+- Maybe? fixed dev check
+- Added toggle for Anti Spawner
+- Added Menu Panic Button (Press END on you keyboard, menu will not turn back on after this is pressed, even when reinjected)
+
 v1.0
 - Release

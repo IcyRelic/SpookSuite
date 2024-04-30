@@ -13,6 +13,7 @@ namespace SpookSuite.Cheats
     internal class ChamESP : ToggleCheat, IVariableCheat<float>
     {
         public static float Value = 0f;
+        public static float Speed = 1f;
 
         public static bool displayPlayers = false;
         public static bool displayEnemies = false;
@@ -26,7 +27,8 @@ namespace SpookSuite.Cheats
         public ChamESP() => ChamHandler.SetupChamMaterial();
 
         public override void Update()
-        {        
+        {
+            rgb.speed = Speed;
             rgb.Update();
             DisplayChams(GameObjectManager.pickups, _ => rainbowMode ? rgb.GetRGBA() : Settings.c_chamItems);
             DisplayChams(GameObjectManager.players, _ => rainbowMode ? rgb.GetRGBA() : Settings.c_chamPlayers);
