@@ -16,8 +16,11 @@ Visual:
 Settings:
 - Added Color Changers (They use hex code)
 
-- Players:
+Players:
 - Added Goo Em
+
+Monster Spawner:
+- Added Spawn BigSlap Synced (other monsters cannot be synced!)
 
 Misc:
 - Give Views	
