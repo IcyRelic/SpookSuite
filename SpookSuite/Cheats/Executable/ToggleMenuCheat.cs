@@ -7,7 +7,6 @@ namespace SpookSuite.Cheats
 {
     internal class ToggleMenuCheat : ExecutableCheat
     {
-
         public ToggleMenuCheat() : base(KeyCode.Insert) { }
 
         public override void Execute() 
@@ -17,13 +16,9 @@ namespace SpookSuite.Cheats
             if (!PhotonNetwork.InRoom) return;
 
             if (Settings.b_isMenuOpen)
-            {
                 MenuUtil.ShowCursor();
-            }
             else
-            {
                 MenuUtil.HideCursor();
-            }
         }
 
     }

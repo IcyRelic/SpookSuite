@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using Zorro.Core;
 using SpookSuite.Manager;
 using SpookSuite.Handler;
+using System;
+using System.Threading.Tasks;
 
 namespace SpookSuite.Menu.Tab
 {
@@ -18,7 +20,6 @@ namespace SpookSuite.Menu.Tab
         private Vector2 scrollPos = Vector2.zero;
         private CallResult<LobbyMatchList_t> matchList;
         public static bool logPlayerPrefs = false;
-        public static bool disablePatch = false;
 
         public override void Draw()
         {
@@ -45,7 +46,6 @@ namespace SpookSuite.Menu.Tab
             UI.Button("Set Lobby Private", () => SetPublic(false));
             UI.Button("Set Lobby Joinable", () => SetJoinable(true));
             UI.Button("Set Lobby NonJoinable", () => SetJoinable(false));
-
             UI.Header("Scene Tools");
             UI.Button("Load Factory", () => LoadScene("FactoryScene"));
             UI.Button("Load Harbour", () => LoadScene("HarbourScene"));
@@ -66,7 +66,7 @@ namespace SpookSuite.Menu.Tab
                 Debug.Log($"Lobby ID: {id}");
 
                 for (int i = 0; i < count; i++)
-                {                  
+                {
                     SteamMatchmaking.GetLobbyDataByIndex(id, i, out string key, 265, out string value, 265);
                     Debug.Log($"Key: {key} Value: {value}");
                 }
@@ -96,20 +96,15 @@ namespace SpookSuite.Menu.Tab
             UI.TextboxAction<ulong>("Join Lobby", ref steamLobbyId, 200, new UIButton("OK", () => {
                 //this.JoinLobby(SteamMatchmaking.GetLobbyByIndex(array.GetRandom<(CSteamID, int)>().Item2));
                 MainMenuHandler.SteamLobbyHandler.Reflect().Invoke("JoinLobby", new CSteamID(steamLobbyId));
-
-
             }));
 
             UI.TextboxAction<int>("Join Lobby ILOBBY", ref steamLobbyIndex, 3, new UIButton("OK", () => {
                 //this.JoinLobby(SteamMatchmaking.GetLobbyByIndex(array.GetRandom<(CSteamID, int)>().Item2));
                 MainMenuHandler.SteamLobbyHandler.Reflect().Invoke("JoinLobby", SteamMatchmaking.GetLobbyByIndex(steamLobbyIndex));
-
-
             }));
 
             GUILayout.EndScrollView();
         }
-
 
         internal static bool SetPublic(bool value)
         {

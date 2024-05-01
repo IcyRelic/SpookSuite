@@ -79,6 +79,12 @@ namespace SpookSuite.Menu.Tab
         private void SpawnActions()
         {
             UI.Button("Spawn Monster", () => MonsterSpawner.SpawnMonster(selectedSpawnEnemy));
+            UI.Button("Spawn BigSlap Synced", () =>
+            {
+                if (!GameObjectManager.pickups.Contains(GameUtil.GetPickupByGuid(GameUtil.GetItemByName("Old Painting").PersistentID)))
+                    GameUtil.SpawnItem(GameUtil.GetItemByName("Old Painting").id, new Vector3(0, 0, 0));
+                Patches.SpawnBigSlap = true;
+            });
         }
 
         private void LivingEnemyList()

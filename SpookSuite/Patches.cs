@@ -16,9 +16,6 @@ using Zorro.Core.Compression;
 using Zorro.Core.Serizalization;
 using Zorro.Core;
 using Zorro.UI;
-using Steamworks;
-using Unity.VisualScripting;
-using static UnityEngine.Rendering.DebugUI;
 using SpookSuite.Menu.Tab;
 
 namespace SpookSuite
@@ -28,6 +25,7 @@ namespace SpookSuite
     {
         public static List<byte> waitingForItemSpawn = new List<byte>();
         public static List<Guid> allowedBombs = new List<Guid>();
+        public static bool SpawnBigSlap = false;
 
         internal static readonly object keyByteZero = (object)(byte)0;
         internal static readonly object keyByteOne = (object)(byte)1;
@@ -165,6 +163,21 @@ namespace SpookSuite
             Player.localPlayer.input.movementInput = zero;
             binaryDeserializer.Dispose();
             return false;
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(ArtifactBigSlapPainting), "Update")]
+        public static bool Update(ArtifactBigSlapPainting __instance)
+        {
+            if (SpawnBigSlap)
+            {
+                BinarySerializer binarySerializer = new BinarySerializer();
+                binarySerializer.WriteInt(Player.localPlayer.refs.view.ViewID);
+                __instance.itemInstance.CallRPC(ItemRPC.RPC0, binarySerializer);
+                SpawnBigSlap = false;
+                return false;
+            }
+            return true;
         }
 
         //player prefs stuff, track what is being saved across sessions

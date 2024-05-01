@@ -4,6 +4,7 @@ using SpookSuite.Cheats.Core;
 using SpookSuite.Menu.Core;
 using SpookSuite.Util;
 using System;
+using System.Linq;
 using UnityEngine;
 
 namespace SpookSuite.Menu.Tab
@@ -43,7 +44,7 @@ namespace SpookSuite.Menu.Tab
             UI.Textbox("Spoofed Name", ref NameSpoof.Value, length: 100, onChanged: NameSpoof.OnValueChanged);
             UI.Checkbox("Use Spoofed Name", Cheat.Instance<NameSpoof>());
         }
-        public string name;
+
         private void Toggles()
         {
             UI.CheatToggleSlider(Cheat.Instance<SuperSpeed>(), "Super Speed", SuperSpeed.Value.ToString("#"), ref SuperSpeed.Value, 10f, 100f);

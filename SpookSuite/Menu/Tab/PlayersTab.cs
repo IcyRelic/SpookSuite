@@ -1,4 +1,5 @@
 ﻿using Photon.Pun;
+using Photon.Realtime;
 using SpookSuite.Cheats;
 using SpookSuite.Cheats.Core;
 using SpookSuite.Handler;
@@ -36,10 +37,7 @@ namespace SpookSuite.Menu.Tab
         private void GeneralActions()
         {
             UI.Header("ALL Players");
-            UI.Button("Kick All", () =>
-            {
-                Cheat.Instance<KickAll>().Execute();
-            });
+            UI.Button("Kick All", () => Cheat.Instance<KickAll>().Execute());
             UI.Button("Kill All", () => Cheat.Instance<KillAll>().Execute());
             UI.Button("Revive All", () => Cheat.Instance<ReviveAll>().Execute());
         }
@@ -49,7 +47,7 @@ namespace SpookSuite.Menu.Tab
             if (selectedPlayer is null) return;
             UI.Header("Selected Player Actions");
 
-            UI.Label("SteamID", selectedPlayer.GetSteamID().ToString());
+            GUILayout.TextArea("SteamID: " + selectedPlayer.GetSteamID().ToString());
             UI.Label("SpookSuite User", selectedPlayer.Handle().IsSpookUser().ToString());
 
             if (!selectedPlayer.IsLocal)
@@ -72,6 +70,25 @@ namespace SpookSuite.Menu.Tab
                 //add things that we could do to our users for fun, maybe disabling something in their menu?
                 UI.Button("", () => { });
             }
+        }
+
+        private ItemDescriptor GetHeldItem()
+        {
+            if (Player.localPlayer.TryGetInventory(out var o))
+            {
+                if (o.TryGetItemInSlot(Player.localPlayer.refs.items.m_displayingSlot, out var item))
+                    return item;
+            }
+            return ItemDescriptor.Empty;
+        }
+
+        private bool TryGetItemIsType<T>(Item item)
+        {
+            if (item is null) return false;
+
+            if (item.id == GameUtil.GetItemByName("Old Painting").id) return true;
+
+            return false;
         }
 
         private void PlayersList()
