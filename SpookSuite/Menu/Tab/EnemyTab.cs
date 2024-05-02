@@ -1,4 +1,5 @@
-﻿using SpookSuite.Manager;
+﻿using Photon.Pun;
+using SpookSuite.Manager;
 using SpookSuite.Menu.Core;
 using SpookSuite.Util;
 using UnityEngine;
@@ -78,13 +79,20 @@ namespace SpookSuite.Menu.Tab
 
         private void SpawnActions()
         {
-            UI.Button("Spawn Monster", () => MonsterSpawner.SpawnMonster(selectedSpawnEnemy));
-            UI.Button("Spawn BigSlap Synced", () =>
+            if (!PhotonNetwork.MasterClient.IsLocal)
             {
-                if (!GameObjectManager.pickups.Contains(GameUtil.GetPickupByGuid(GameUtil.GetItemByName("Old Painting").PersistentID)))
-                    GameUtil.SpawnItem(GameUtil.GetItemByName("Old Painting").id, new Vector3(0, 0, 0));
-                Patches.SpawnBigSlap = true;
-            });
+                UI.Label("Monster Spawner Requires Host");
+                UI.Label("This is the only known monster you can spawn as Non Host");
+                UI.Button("Spawn BigSlap", () =>
+                {
+                    if (!GameObjectManager.pickups.Contains(GameUtil.GetPickupByGuid(GameUtil.GetItemByName("Old Painting").PersistentID)))
+                        GameUtil.SpawnItem(GameUtil.GetItemByName("Old Painting").id, new Vector3(1000, 1000, 1000));
+
+                    Object.FindObjectOfType<ArtifactBigSlapPainting>().itemInstance.CallRPC(ItemRPC.RPC0, new Zorro.Core.Serizalization.BinarySerializer());
+                });
+                return;
+            }
+            UI.Button("Spawn Monster", () => MonsterSpawner.SpawnMonster(selectedSpawnEnemy));
         }
 
         private void LivingEnemyList()

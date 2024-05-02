@@ -46,6 +46,7 @@ namespace SpookSuite.Menu.Tab
             UI.Header("Scene Tools");
             UI.Button("Load Factory", () => LoadScene("FactoryScene"));
             UI.Button("Load Harbour", () => LoadScene("HarbourScene"));
+            UI.Button("Load Mines", () => LoadScene("MinesScene"));
             UI.Button("Load Surface", () => LoadScene("SurfaceScene"));
 
             UI.Header("Debugging Cheats");

@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using SpookSuite.Manager;
 
 namespace SpookSuite.Menu.Tab
 {
@@ -18,6 +19,7 @@ namespace SpookSuite.Menu.Tab
         private Vector2 scrollPos2 = Vector2.zero;
         private string searchText = "";
         private string moneyToSet = "";
+        private string metaToSet = "";
         private float faceSize = .035f;
         private string faceText = "SS";
         private float faceRotation = 0;
@@ -42,6 +44,10 @@ namespace SpookSuite.Menu.Tab
                 new UIButton("Add", () => { int.TryParse(moneyToSet, out int o); GameUtil.SendHospitalBill(-o); }),
                 new UIButton("Remove", () => { int.TryParse(moneyToSet, out int o); GameUtil.SendHospitalBill(o); })
             );
+            UI.TextboxAction("MetaCoins", ref metaToSet, 10,
+                new UIButton("Add", () => { int.TryParse(metaToSet, out int o); SurfaceNetworkHandler.Instance.photonView.RPC("RPCA_OnNewWeek", RpcTarget.All, o / 50); }),
+                new UIButton("Remove", () => { int.TryParse(metaToSet, out int o); SurfaceNetworkHandler.Instance.photonView.RPC("RPCA_OnNewWeek", RpcTarget.All, -(o / 50)); })
+            );
             UI.Button("Give Views / Money", () =>
             {
                 UnityEngine.Object.FindObjectOfType<ExtractVideoMachine>().Reflect()
@@ -50,6 +56,7 @@ namespace SpookSuite.Menu.Tab
             UI.Button("Open/Close Diving Bell", Cheat.Instance<ToggleDivingBell>().Execute);
             UI.Button("Activate Diving Bell", Cheat.Instance<UseDivingBell>().Execute);
             UI.Checkbox("AntiSpawner (Auto Remove Spawned Items From Other Players)", Cheat.Instance<AntiSpawner>());
+            UI.Button("Unlock Island Upgrades", () => { GameObjectManager.unlocks.ForEach(u => { if (u.locked) UnityEngine.Object.FindObjectOfType<IslandUnlocks>().Reflect().GetValue<PhotonView>("view").RPC("RPCA_Activate", RpcTarget.All, new int[] { u.Reflect().Invoke<int>("GetID") }); }); });
             //UI.Checkbox("Hear Push To Talk Players Always", Cheat.Instance<NoPushToTalk>()); is broken since update?
 
             UI.Header("Face");

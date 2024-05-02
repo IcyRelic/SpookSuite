@@ -165,21 +165,6 @@ namespace SpookSuite
             return false;
         }
 
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(ArtifactBigSlapPainting), "Update")]
-        public static bool Update(ArtifactBigSlapPainting __instance)
-        {
-            if (SpawnBigSlap)
-            {
-                BinarySerializer binarySerializer = new BinarySerializer();
-                binarySerializer.WriteInt(Player.localPlayer.refs.view.ViewID);
-                __instance.itemInstance.CallRPC(ItemRPC.RPC0, binarySerializer);
-                SpawnBigSlap = false;
-                return false;
-            }
-            return true;
-        }
-
         //player prefs stuff, track what is being saved across sessions
         [HarmonyPrefix]
         [HarmonyPatch(typeof(PlayerPrefs), "GetInt", [typeof(string), typeof(int)])]

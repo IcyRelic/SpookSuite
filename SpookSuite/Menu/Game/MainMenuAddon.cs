@@ -11,6 +11,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Localization.PropertyVariants;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace SpookSuite.Menu.Game
@@ -128,8 +129,8 @@ namespace SpookSuite.Menu.Game
 
             Debug.Log("Handle Surface Joining");
             
-            if (!PhotonGameLobbyHandler.IsSurface) //if in underworld go under with em, stopping lag. Else saty with em
-                SurfaceNetworkHandler.Instance.photonView.RPC("RPC_LoadScene", RpcTarget.All, (object)"FactoryScene");
+            if (SceneManager.GetActiveScene().name != "SurfaceScene") //if in underworld go under with em, stopping lag. Else saty with em
+                SurfaceNetworkHandler.Instance.photonView.RPC("RPC_LoadScene", PhotonNetwork.LocalPlayer, "FactoryScene");
             else
             {
                 RetrievableSingleton<PersistentObjectsHolder>.Instance.ClearPersistentObjects();
