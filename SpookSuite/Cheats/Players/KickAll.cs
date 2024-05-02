@@ -9,7 +9,7 @@ namespace SpookSuite.Cheats
         public override void Execute()
         {
             PhotonNetwork.CurrentRoom.SetMasterClient(PhotonNetwork.LocalPlayer.IsMasterClient ?
-                PlayerHandler.instance.playerAlive.Find(x => x.GetSteamID() != Player.localPlayer.GetSteamID()).PhotonPlayer() : Player.localPlayer.PhotonPlayer());
+                PlayerHandler.instance.playersAlive.Find(x => x.GetSteamID() != Player.localPlayer.GetSteamID()).PhotonPlayer() : Player.localPlayer.PhotonPlayer());
         }
 
     }

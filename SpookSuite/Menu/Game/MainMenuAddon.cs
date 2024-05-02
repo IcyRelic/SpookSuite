@@ -1,6 +1,8 @@
 ﻿using ExitGames.Client.Photon;
 using Photon.Pun;
 using Photon.Realtime;
+using SpookSuite.Cheats;
+using SpookSuite.Cheats.Core;
 using SpookSuite.Util;
 using Steamworks;
 using System.Collections;
@@ -66,7 +68,6 @@ namespace SpookSuite.Menu.Game
 
             go.GetComponentInChildren<TextMeshProUGUI>().text = btnText;
 
-
             return go;
         }
 
@@ -101,9 +102,8 @@ namespace SpookSuite.Menu.Game
         internal IEnumerator JoinRandomPrivateGame()
         {
             Debug.Log("Joining Random Private Photon Room");
-
             //Hosting a game, Allows me to kick myself from the photon room, the game then bugs out and places me in a random what seems to be in progress, full, or private lobbies or all 3
-            MainMenuHandler.Instance.Host(1);
+            MainMenuHandler.Instance.Host(1); //host nonsaveable save to not screw with any other save
 
             //lets wait for the hosted lobby
             yield return new WaitForSeconds(4);
@@ -124,12 +124,17 @@ namespace SpookSuite.Menu.Game
 
             Debug.Log("Setting Nickname");
             //change the nicckname because this is sketch af
-            PhotonNetwork.NickName = "uhhhh, Hello?";
+            PhotonNetwork.NickName = Cheat.Instance<NameSpoof>().Enabled ? NameSpoof.Value : "uhhhh, Hello?";
 
-            Debug.Log("Load Factory");
-            //You gotta force load the factory to be able to move and not lag, this will spawn a bunch of clones everyone can see, but sometimes you need to do this and will be alone
-            //in the diving bell because they are already in the factory.
-            SurfaceNetworkHandler.Instance.photonView.RPC("RPC_LoadScene", RpcTarget.All, (object)"FactoryScene");
+            Debug.Log("Handle Surface Joining");
+            
+            if (!PhotonGameLobbyHandler.IsSurface) //if in underworld go under with em, stopping lag. Else saty with em
+                SurfaceNetworkHandler.Instance.photonView.RPC("RPC_LoadScene", RpcTarget.All, (object)"FactoryScene");
+            else
+            {
+                RetrievableSingleton<PersistentObjectsHolder>.Instance.ClearPersistentObjects();
+                SurfaceNetworkHandler.ResetSurface();
+            }
         }
     }
 }

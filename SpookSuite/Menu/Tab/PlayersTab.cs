@@ -53,7 +53,7 @@ namespace SpookSuite.Menu.Tab
             if (!selectedPlayer.IsLocal)
                 UI.Button("Block RPCs", () => selectedPlayer.Handle().ToggleRPCBlock(), selectedPlayer.Handle().IsRPCBlocked() ? "UnBlock" : "Block");
 
-            UI.Button("Teleport", () => { PhotonNetwork.DestroyPlayerObjects(Player.localPlayer.PhotonPlayer()); PhotonNetwork.Instantiate("Player", selectedPlayer.data.groundPos, new Quaternion(0f, 0f, 0f, 0f)); }, "Teleport");
+            UI.Button("Teleport", () => { PhotonNetwork.Instantiate("Player", selectedPlayer.data.groundPos, new Quaternion(0f, 0f, 0f, 0f)); }, "Teleport");
 
             UI.Button("Spawn Bomb", () => GameUtil.SpawnItem(GameUtil.GetItemByName("bomb").id, selectedPlayer.refs.cameraPos.position), "Bomb");
             UI.Button("Goo Em", () => { GameUtil.SpawnItem(GameUtil.GetItemByName("Goo Ball").id, selectedPlayer.refs.cameraPos.position); Object.FindObjectOfType<ItemGooBall>().Reflect().GetValue<OnOffEntry>("usedEntry").on = true; }, "Goo"); //todo fix not exploding, figure out how to interact
@@ -64,31 +64,12 @@ namespace SpookSuite.Menu.Tab
             UI.Button("Launch", () => selectedPlayer.Reflect().Invoke("CallTakeDamageAndAddForceAndFall", 0f, selectedPlayer.refs.cameraPos.up * 100, 0f), "Launch");
             UI.Button("Tase", () => selectedPlayer.Reflect().Invoke("CallTakeDamageAndTase", 1f, 5f));
 
-            if (selectedPlayer.Handle().IsSpookUser() && Player.localPlayer.Handle().IsDev())
+            if (selectedPlayer.Handle().IsSpookUser() && Player.localPlayer.Handle().IsDev()) //dev check still seems to be failing somewhere
             {
                 UI.Header("SpookSuite Specialty");
                 //add things that we could do to our users for fun, maybe disabling something in their menu?
                 UI.Button("", () => { });
             }
-        }
-
-        private ItemDescriptor GetHeldItem()
-        {
-            if (Player.localPlayer.TryGetInventory(out var o))
-            {
-                if (o.TryGetItemInSlot(Player.localPlayer.refs.items.m_displayingSlot, out var item))
-                    return item;
-            }
-            return ItemDescriptor.Empty;
-        }
-
-        private bool TryGetItemIsType<T>(Item item)
-        {
-            if (item is null) return false;
-
-            if (item.id == GameUtil.GetItemByName("Old Painting").id) return true;
-
-            return false;
         }
 
         private void PlayersList()

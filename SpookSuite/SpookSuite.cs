@@ -11,7 +11,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace SpookSuite
@@ -175,10 +174,10 @@ namespace SpookSuite
 
         private void SetupRPC()
         {
-            view = this.AddComponent<PhotonView>();
-            view.OwnershipTransfer = OwnershipOption.Fixed;
-            view.Synchronization = ViewSynchronization.Off;
-            view.ViewID = int.MaxValue;
+            //view = this.AddComponent<PhotonView>();
+            //view.OwnershipTransfer = OwnershipOption.Fixed;
+            //view.Synchronization = ViewSynchronization.Off;
+            //view.ViewID = int.MaxValue;
 
             //PhotonNetwork.PhotonServerSettings.RpcList.Add("");
         }

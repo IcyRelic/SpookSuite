@@ -1,5 +1,4 @@
 ﻿using SpookSuite.Menu.Game;
-using Unity.VisualScripting;
 using UnityEngine;
 using Zorro.UI;
 using Object = UnityEngine.Object;
@@ -18,7 +17,7 @@ namespace SpookSuite.Components
         private void Update()
         {
            if(pageHandler.currentPage is MainMenuMainPage main && main.GetComponent<MainMenuAddon>() is null)
-                main.AddComponent<MainMenuAddon>();
+            main.gameObject.AddComponent<MainMenuAddon>();
         }
 
         public static void TryAttachToPageHandler()

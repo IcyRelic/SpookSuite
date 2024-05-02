@@ -7,8 +7,6 @@ using System.Collections.Generic;
 using Zorro.Core;
 using SpookSuite.Manager;
 using SpookSuite.Handler;
-using System;
-using System.Threading.Tasks;
 
 namespace SpookSuite.Menu.Tab
 {
@@ -20,7 +18,6 @@ namespace SpookSuite.Menu.Tab
         private Vector2 scrollPos = Vector2.zero;
         private CallResult<LobbyMatchList_t> matchList;
         public static bool logPlayerPrefs = false;
-
         public override void Draw()
         {
             GUILayout.BeginVertical();

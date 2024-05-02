@@ -32,7 +32,7 @@ namespace SpookSuite.Handler
 
         public Bot GetClosestMonster() => GameObjectManager.monsters.OrderBy(x => Vector3.Distance(x.transform.position, player.transform.position)).FirstOrDefault();
 
-        public Player GetClosestPlayer() => PlayerHandler.instance.playerAlive.Where(x => x.GetInstanceID() != player.GetInstanceID()).OrderBy(x => Vector3.Distance(x.transform.position, player.transform.position)).FirstOrDefault();
+        public Player GetClosestPlayer() => PlayerHandler.instance.playersAlive.Where(x => x.GetInstanceID() != player.GetInstanceID()).OrderBy(x => Vector3.Distance(x.transform.position, player.transform.position)).FirstOrDefault();
 
         public void RPC(string name, RpcTarget target, params object[] args) => player.refs.view.RPC(name, target, args);
 

@@ -22,13 +22,12 @@ namespace SpookSuite.Cheats
                 DisplayPlayers();
             if (displayItems)
                 DisplayItems();
-            if(displayDivingBell)
+            if (displayDivingBell)
                 DisplayDivingBells();
             if (displayLasers)
                 DisplayLasers();
             if (displayEnemies)
                 DisplayMonsters();
-
         }
 
         public static void ToggleAll()
@@ -62,7 +61,7 @@ namespace SpookSuite.Cheats
         {
             foreach (Player p in GameObjectManager.players)
             {
-                if (p.ai || p.IsLocal) continue;
+                if (p.ai || p.IsLocal || p is null) continue;
 
                 float distance = GetDistanceToPlayer(p.data.groundPos);
 
