@@ -85,7 +85,7 @@ namespace SpookSuite.Menu.Tab
                 UI.Label("This is the only known monster you can spawn as Non Host");
                 UI.Button("Spawn BigSlap", () =>
                 {
-                    if (!GameObjectManager.pickups.Contains(GameUtil.GetPickupByGuid(GameUtil.GetItemByName("Old Painting").PersistentID)))
+                    if (!GameUtil.DoesItemExist("Old Painting"))
                         GameUtil.SpawnItem(GameUtil.GetItemByName("Old Painting").id, new Vector3(1000, 1000, 1000));
 
                     Object.FindObjectOfType<ArtifactBigSlapPainting>().itemInstance.CallRPC(ItemRPC.RPC0, new Zorro.Core.Serizalization.BinarySerializer());

@@ -174,12 +174,12 @@ namespace SpookSuite
 
         private void SetupRPC()
         {
-            //view = this.AddComponent<PhotonView>();
-            //view.OwnershipTransfer = OwnershipOption.Fixed;
-            //view.Synchronization = ViewSynchronization.Off;
-            //view.ViewID = int.MaxValue;
+            view = this.gameObject.AddComponent<PhotonView>();
+            view.OwnershipTransfer = OwnershipOption.Fixed;
+            view.Synchronization = ViewSynchronization.Off;
+            view.ViewID = int.MaxValue;
 
-            //PhotonNetwork.PhotonServerSettings.RpcList.Add("");
+            PhotonNetwork.PhotonServerSettings.RpcList.Add("");
         }
 
         public static void RPC(string name, RpcTarget target, params object[] args) => Instance.view.RPC(name, target, args);

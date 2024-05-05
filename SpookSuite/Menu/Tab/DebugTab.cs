@@ -48,7 +48,7 @@ namespace SpookSuite.Menu.Tab
             UI.Button("Load Harbour", () => LoadScene("HarbourScene"));
             UI.Button("Load Mines", () => LoadScene("MinesScene"));
             UI.Button("Load Surface", () => LoadScene("SurfaceScene"));
-
+            UI.Button("Log RPCS", () => { foreach (string s in PhotonNetwork.PhotonServerSettings.RpcList) Debug.Log(s); });
             UI.Header("Debugging Cheats");
             UI.Checkbox("Log Player Prefs", ref logPlayerPrefs);
             UI.Button("Use Diving Bell dontcare", () => GameObjectManager.divingBellButton.Interact(Player.localPlayer));

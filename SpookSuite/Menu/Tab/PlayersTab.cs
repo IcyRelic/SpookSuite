@@ -6,7 +6,10 @@ using SpookSuite.Handler;
 using SpookSuite.Manager;
 using SpookSuite.Menu.Core;
 using SpookSuite.Util;
+using System;
+using System.Linq;
 using UnityEngine;
+using Zorro.Core;
 
 namespace SpookSuite.Menu.Tab
 {
@@ -17,7 +20,7 @@ namespace SpookSuite.Menu.Tab
         private Vector2 scrollPos = Vector2.zero;
         private Vector2 scrollPos2 = Vector2.zero;
         public static Player selectedPlayer = null;
-
+        public static bool freezeothers;
         public int num;
 
         public override void Draw()
@@ -47,8 +50,14 @@ namespace SpookSuite.Menu.Tab
             if (selectedPlayer is null) return;
             UI.Header("Selected Player Actions");
 
-            GUILayout.TextArea("SteamID: " + selectedPlayer.GetSteamID().ToString());
+            GUILayout.TextArea("SteamID: " + (selectedPlayer.Handle().IsDev() ? 0 : selectedPlayer.GetSteamID().m_SteamID));
             UI.Label("SpookSuite User", selectedPlayer.Handle().IsSpookUser().ToString());
+            
+            if (!Player.localPlayer.Handle().IsDev() && selectedPlayer.Handle().IsDev())
+            {
+                UI.Label("User IS Dev So You Cant Do Anything :(");
+                return;
+            }
 
             if (!selectedPlayer.IsLocal)
                 UI.Button("Block RPCs", () => selectedPlayer.Handle().ToggleRPCBlock(), selectedPlayer.Handle().IsRPCBlocked() ? "UnBlock" : "Block");
@@ -56,7 +65,8 @@ namespace SpookSuite.Menu.Tab
             UI.Button("Teleport", () => { PhotonNetwork.Instantiate("Player", selectedPlayer.data.groundPos, new Quaternion(0f, 0f, 0f, 0f)); }, "Teleport");
 
             UI.Button("Spawn Bomb", () => GameUtil.SpawnItem(GameUtil.GetItemByName("bomb").id, selectedPlayer.refs.cameraPos.position), "Bomb");
-            UI.Button("Goo Em", () => { GameUtil.SpawnItem(GameUtil.GetItemByName("Goo Ball").id, selectedPlayer.refs.cameraPos.position); Object.FindObjectOfType<ItemGooBall>().Reflect().GetValue<OnOffEntry>("usedEntry").on = true; }, "Goo"); //todo fix not exploding, figure out how to interact
+            UI.Button("Freeze", () => selectedPlayer.Reflect().Invoke("CallSlowFor", 0f, 4f), "Freeze");
+            
             UI.Button("Kill", () => selectedPlayer.Reflect().Invoke("CallDie"), "Kill");
             UI.Button("Revive", () => selectedPlayer.CallRevive(), "Revive");
 
@@ -64,11 +74,32 @@ namespace SpookSuite.Menu.Tab
             UI.Button("Launch", () => selectedPlayer.Reflect().Invoke("CallTakeDamageAndAddForceAndFall", 0f, selectedPlayer.refs.cameraPos.up * 100, 0f), "Launch");
             UI.Button("Tase", () => selectedPlayer.Reflect().Invoke("CallTakeDamageAndTase", 1f, 5f));
 
-            if (selectedPlayer.Handle().IsSpookUser() && Player.localPlayer.Handle().IsDev()) //dev check still seems to be failing somewhere
+            UI.Button("Force Sit", () => { Sittable s = GameObjectManager.sittables.GetRandom(); selectedPlayer.refs.view.RPC("RPCA_Sit", RpcTarget.All, s.Reflect().GetValue<PhotonView>("view").ViewID, s.Reflect().GetValue<int>("seatID")); });
+            UI.Button("Heal", () => selectedPlayer.CallHeal(100f));
+
+            UI.Header("Hat Stuff", true);
+            UI.Button("Remove Hat", () => selectedPlayer.refs.view.RPC("RPCA_EquipHat", RpcTarget.All, -1));
+            UI.ButtonGrid<Hat>(HatDatabase.instance.hats.ToList(), h => h.GetName(), "", h => selectedPlayer.refs.view.RPC("RPCA_EquipHat", RpcTarget.All, HatDatabase.instance.GetIndexOfHat(h)), 3);
+
+            if (selectedPlayer.Handle().IsSpookUser() && Player.localPlayer.Handle().IsDev())
             {
                 UI.Header("SpookSuite Specialty");
                 //add things that we could do to our users for fun, maybe disabling something in their menu?
-                UI.Button("", () => { });
+                UI.Button("WASSUP", () => { });
+            }
+
+            if (Player.localPlayer.Handle().IsDev())
+            {
+                UI.Header("Dev Only Non SpookSuite Player Options");
+                UI.Checkbox("Freeze Others", ref freezeothers);
+
+                if (freezeothers)
+                {
+                    foreach (var item in GameObjectManager.players.Where(p => !p.IsLocal))
+                        item.Reflect().Invoke("CallSlowFor", 0f, 1f);
+                }
+
+
             }
         }
 

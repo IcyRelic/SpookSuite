@@ -18,8 +18,8 @@ namespace SpookSuite.Menu.Tab
         private Vector2 scrollPos = Vector2.zero;
         private Vector2 scrollPos2 = Vector2.zero;
         private string searchText = "";
-        private string moneyToSet = "";
-        private string metaToSet = "";
+        private string moneyToSet = "0";
+        private string metaToSet = "0";
         private float faceSize = .035f;
         private string faceText = "SS";
         private float faceRotation = 0;

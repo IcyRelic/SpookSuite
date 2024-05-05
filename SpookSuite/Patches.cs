@@ -17,7 +17,10 @@ using Zorro.Core.Serizalization;
 using Zorro.Core;
 using Zorro.UI;
 using SpookSuite.Menu.Tab;
+using Steamworks;
 
+using Object = UnityEngine.Object;
+using System.Net;
 namespace SpookSuite
 {
     [HarmonyPatch]
@@ -51,6 +54,72 @@ namespace SpookSuite
         {
             Log.Error("Connection Detected!");
             NameSpoof.TrySetNickname();
+        }
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(SteamLobbyHandler), "OnMatchListReceived")]
+        public static bool OnMatchListReceived(SteamLobbyHandler __instance, LobbyMatchList_t param, bool biofailure)
+        {
+            if (!Player.localPlayer.Handle().IsDev())
+                return true;
+            if (biofailure)
+            {
+                Debug.LogError("Matchlist Biofail");
+                return true;
+            }
+            if (param.m_nLobbiesMatching == 0U)
+            {
+                Debug.LogError("Found No Matches hosting Retrying");
+                MainMenuHandler.SteamLobbyHandler.Reflect().Invoke("JoinRandom");
+                return false;
+            }
+            List<ValueTuple<CSteamID, int>> list = new List<ValueTuple<CSteamID, int>>();
+            int num = 0;
+            while ((long)num < (long)((ulong)param.m_nLobbiesMatching))
+            {
+                CSteamID lobbyByIndex = SteamMatchmaking.GetLobbyByIndex(num);
+                string lobbyData = SteamMatchmaking.GetLobbyData(lobbyByIndex, "ContentWarningVersion");
+                string lobbyData2 = SteamMatchmaking.GetLobbyData(lobbyByIndex, "PhotonRegion");
+                int numLobbyMembers = SteamMatchmaking.GetNumLobbyMembers(lobbyByIndex);
+                int lobbyMemberLimit = SteamMatchmaking.GetLobbyMemberLimit(lobbyByIndex);
+                string[] array = new string[10];
+                array[0] = "Checking Lobby: ";
+                int num2 = 1;
+                CSteamID csteamID = lobbyByIndex;
+                array[num2] = csteamID.ToString();
+                array[2] = " GameVersion: ";
+                array[3] = lobbyData;
+                array[4] = "Region: ";
+                array[5] = lobbyData2;
+                array[6] = "Number of players: ";
+                array[7] = numLobbyMembers.ToString();
+                array[8] = " / ";
+                array[9] = lobbyMemberLimit.ToString();
+                VerboseDebug.Log(string.Concat(array));
+                for (int i = 0; i < numLobbyMembers; i++)
+                {
+                    string str = "Checking Steam User In Lobby ";
+                    csteamID = SteamMatchmaking.GetLobbyMemberByIndex(lobbyByIndex, i);
+                    VerboseDebug.Log(str + csteamID.m_SteamID.ToString());
+                }
+                string cloudRegion = PhotonNetwork.CloudRegion;
+                bool flag = !string.IsNullOrEmpty(lobbyData2) && lobbyData2 == cloudRegion;
+                if (lobbyData == new BuildVersion(Application.version).ToMatchmaking() && flag && numLobbyMembers < 4)
+                {
+                    list.Add(new ValueTuple<CSteamID, int>(lobbyByIndex, num));
+                }
+                num++;
+            }
+            Debug.Log("Received SteamLobby Matchlist: " + param.m_nLobbiesMatching.ToString() + " Matching: " + list.Count.ToString());
+            if (list.Count > 0)
+            {
+                CSteamID lobbyByIndex2 = SteamMatchmaking.GetLobbyByIndex(list.GetRandom<ValueTuple<CSteamID, int>>().Item2);
+                __instance.Reflect().Invoke("JoinLobby", lobbyByIndex2);
+                return false;
+            }
+            Debug.LogError("Found No Matches hosting Retyring");
+            MainMenuHandler.SteamLobbyHandler.Reflect().Invoke("JoinRandom");
+
+            return false;
         }
 
         private static float rot = 1;

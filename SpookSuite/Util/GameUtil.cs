@@ -1,4 +1,5 @@
-﻿using Photon.Pun;
+﻿using ExitGames.Client.Photon.StructWrapping;
+using Photon.Pun;
 using SpookSuite.Manager;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,11 @@ namespace SpookSuite.Util
             enemies.ToList().ForEach(x => monterNames.Add(x.name));
             Debug.Log($"Loaded {monterNames.Count} monsters");
         }
+
+        public static bool DoesItemExist(Item i) => PickupHandler.Instance.Reflect().GetValue<List<Pickup>>("m_pickup").Find(p => p.itemInstance.item.GetName() == i.GetName()) is not null;
+        public static bool DoesItemExist(string i) => PickupHandler.Instance.Reflect().GetValue<List<Pickup>>("m_pickup").Find(p => p.itemInstance.item.GetName() == i) is not null;
+        public static bool DoesItemExist(Pickup i) => PickupHandler.Instance.Reflect().GetValue<List<Pickup>>("m_pickup").Find(p => p == i) is not null; 
+
         public static void SpawnItem(byte itemId, bool equip = false, bool drone = false, int amount = 1) => SpawnItem(itemId, Player.localPlayer.refs.cameraPos.position, equip, drone, amount);
         public static void SpawnItem(byte itemId, Vector3 spawnPos, bool equip = false, bool drone = false, int amount = 1)
         {

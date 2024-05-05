@@ -33,6 +33,8 @@ namespace SpookSuite.Manager
         public static List<Pickup> pickups = new List<Pickup>();
         public static List<Laser> lasers = new List<Laser>();
         public static List<IslandUnlock> unlocks = new List<IslandUnlock>();
+        public static List<Sittable> sittables = new List<Sittable>();
+
         public static DivingBell divingBell;
         public static UseDivingBellButton divingBellButton;
 
@@ -51,6 +53,7 @@ namespace SpookSuite.Manager
                 CollectObjects(pickups);
                 CollectObjects(lasers);
                 CollectObjects(unlocks);
+                CollectObjects(sittables);
 
                 divingBell = Object.FindObjectOfType<DivingBell>();
                 divingBellButton = Object.FindObjectOfType<UseDivingBellButton>();

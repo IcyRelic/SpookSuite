@@ -9,7 +9,6 @@ namespace SpookSuite
 {
     public static class Extensions
     {
-    
         private static readonly Dictionary<Type, Delegate> TryParseMethods = new Dictionary<Type, Delegate>()
         {
             { typeof(int), new TryParseDelegate<int>(int.TryParse) },
@@ -33,6 +32,11 @@ namespace SpookSuite
         public static string GetName(this Item item)
         {
             return string.IsNullOrEmpty(item.displayName) ? item.name : item.displayName;
+        }
+
+        public static string GetName(this Hat hat)
+        {
+            return string.IsNullOrEmpty(hat.displayName) ? hat.name : hat.displayName;
         }
 
         public static bool Parse<T>(this string s, out T result) where T : struct, IConvertible ,IComparable<T>

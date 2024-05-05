@@ -14,7 +14,7 @@ namespace SpookSuite.Cheats
         [HarmonyPatch(typeof(Player), "TakeDamage")]
         public static bool TakeDamage(Player __instance)
         {
-            if (Instance<Godmode>().Enabled)
+            if (Instance<Godmode>().Enabled && __instance.IsLocal)
                 return false;
             return true;
         }
@@ -23,7 +23,7 @@ namespace SpookSuite.Cheats
         [HarmonyPatch(typeof(Player), "Die")]
         public static bool Die(Player __instance)
         {
-            if (Instance<Godmode>().Enabled)
+            if (Instance<Godmode>().Enabled && __instance.IsLocal)
                 return false;
             return true;
         }
@@ -32,7 +32,7 @@ namespace SpookSuite.Cheats
         [HarmonyPatch(typeof(Player), "CallDie")]
         public static bool CallDie(Player __instance)
         {
-            if (Instance<Godmode>().Enabled)
+            if (Instance<Godmode>().Enabled && __instance.IsLocal)
                 return false;
             return true;
         }
@@ -56,13 +56,11 @@ namespace SpookSuite.Cheats
         [HarmonyPatch(typeof(Player), "RPCA_PlayerDie")]
         public static void RPCA_PlayerDieRevive(Player __instance)
         {
-            if (Instance<Godmode>().Enabled && __instance.data.isLocal)
+            if (Instance<Godmode>().Enabled && __instance.IsLocal)
             {
                 Debug.LogWarning("Sending Revive");
                 __instance.CallRevive();
             }
         }
-
-
     }
 }

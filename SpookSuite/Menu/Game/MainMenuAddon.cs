@@ -129,9 +129,9 @@ namespace SpookSuite.Menu.Game
 
             Debug.Log("Handle Surface Joining");
             
-            if (SceneManager.GetActiveScene().name != "SurfaceScene") //if in underworld go under with em, stopping lag. Else saty with em
+            //if (SceneManager.GetActiveScene().name != "SurfaceScene") //if in underworld go under with em, stopping lag. Else saty with em
                 SurfaceNetworkHandler.Instance.photonView.RPC("RPC_LoadScene", PhotonNetwork.LocalPlayer, "FactoryScene");
-            else
+            //else
             {
                 RetrievableSingleton<PersistentObjectsHolder>.Instance.ClearPersistentObjects();
                 SurfaceNetworkHandler.ResetSurface();
