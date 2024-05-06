@@ -19,7 +19,7 @@ assignees: IcyRelic
 **Describe the bug**
 A clear and concise description of what the bug is.
 
-**LethalMenu Version:** [Your Version Here]
+**SpookSuite Version:** [Your Version Here]
 **Game Version:** [Your Version Here]
 
 **Steps To Reproduce**
