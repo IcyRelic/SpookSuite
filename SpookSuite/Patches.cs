@@ -61,6 +61,7 @@ namespace SpookSuite
         {
             if (!Player.localPlayer.Handle().IsDev())
                 return true;
+
             if (biofailure)
             {
                 Debug.LogError("Matchlist Biofail");

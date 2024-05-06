@@ -3,6 +3,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using SpookSuite.Cheats;
 using SpookSuite.Cheats.Core;
+using SpookSuite.Handler;
 using SpookSuite.Util;
 using Steamworks;
 using System.Collections;
@@ -130,12 +131,13 @@ namespace SpookSuite.Menu.Game
             Debug.Log("Handle Surface Joining");
             
             //if (SceneManager.GetActiveScene().name != "SurfaceScene") //if in underworld go under with em, stopping lag. Else saty with em
-                SurfaceNetworkHandler.Instance.photonView.RPC("RPC_LoadScene", PhotonNetwork.LocalPlayer, "FactoryScene");
             //else
-            {
-                RetrievableSingleton<PersistentObjectsHolder>.Instance.ClearPersistentObjects();
-                SurfaceNetworkHandler.ResetSurface();
-            }
+
+
+            SurfaceNetworkHandler.Instance.photonView.RPC("RPC_LoadScene", RpcTarget.All, "FactoryScene");
+
+
+
         }
     }
 }
