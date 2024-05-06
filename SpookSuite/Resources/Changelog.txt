@@ -1,38 +1,33 @@
 v1.1.1
-Updated Menu For Newest Update
-Misc: Give Meta Coins, Unlock All Upgrades
-Player: Hat Options, Relpaced Goo Em with Freeze Player, Heal Player, Force Sit, Bomball, SuperSpeed, Reverse
+- Support for newest update
+- Added Give Meta Coins
+- Added Unlock All Upgrades
+- Added Hat Options
+- Added Freeze Player
+- Added Heal Player
+- Added Force Sit
+- Added Bomball
+- Added SuperSpeed for others
+- Added Reverse
+- Removed Goo Em
 
 v1.1
-Self:
 - Spinbot
 - Smooth AF RainbowFace
 - Face Editor
 - Switch Voice Channel (Dead vc doesnt switch to dead )
 - Noclip is now synced in the air and you dont slam into the ground on disable anymore
 - Invisibility
-
-Visual: 
 - Rainbow Chams
 - Cham Opacity
 - Fixed Item Spawning (Would spawn away from you if you werent on ground)
 - Disable Visor
-
-Settings:
 - Added Color Changers (They use hex code)
-
-Players:
 - Added Goo Em
-
-Monster Spawner:
 - Added Spawn BigSlap Synced (other monsters cannot be synced!)
-
-Misc:
 - Give Views	
 - No Push To Talk (for all players, if someone has push to talk on you can still hear them without them pressing the button)
-
-Others:
-- Maybe? fixed dev check
+- Several Fixes
 - Added toggle for Anti Spawner
 - Added Menu Panic Button (Press END on you keyboard, menu will not turn back on after this is pressed, even when reinjected)
 
