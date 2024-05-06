@@ -25,7 +25,7 @@ If you have a feature or enhancement you'd like to see added to this project, fe
 #### How to Request a Feature
 
 1. **Check Existing Requests:** Before submitting a new feature request, please check the [existing requests](https://github.com/IcyRelic/SpookSuite/labels/enhancement) to see if the feature has already been suggested.
-2. **Create a New Request:** If the feature hasn't been requested, [create a new feature request](https://github.com/IcyRelic/SpookSuite/issues/new?assignees=IcyRelic&labels=enhancement&projects=&template=feature-request.md&title=%5BFeature%5D) on the GitHub repository. Use the "Feature Request" template provided to ensure you include relevant information.
+2. **Create a New Request:** If the feature hasn't been requested, [create a new feature request](https://github.com/IcyRelic/SpookSuite/issues/new?assignees=IcyRelic&labels=enhancement&projects=&template=feature_request.md&title=%5BFeature%5D) on the GitHub repository. Use the "Feature Request" template provided to ensure you include relevant information.
 
 ### Issue Guidelines
 - **One Issue per Report:** Please report only one bug or request per issue to ensure clarity and easier tracking.
