@@ -59,8 +59,7 @@ namespace SpookSuite
         [HarmonyPatch(typeof(SteamLobbyHandler), "OnMatchListReceived")]
         public static bool OnMatchListReceived(SteamLobbyHandler __instance, LobbyMatchList_t param, bool biofailure)
         {
-            if (!Player.localPlayer.Handle().IsDev())
-                return true;
+            return true;
 
             if (biofailure)
             {
@@ -69,8 +68,9 @@ namespace SpookSuite
             }
             if (param.m_nLobbiesMatching == 0U)
             {
-                Debug.LogError("Found No Matches hosting Retrying");
-                MainMenuHandler.SteamLobbyHandler.Reflect().Invoke("JoinRandom");
+                Debug.LogError("Found No Matches hosting Retrying 1");
+                MainMenuHandler.SteamLobbyHandler.Reflect().SetValue("m_Joining", false);
+                MainMenuHandler.SteamLobbyHandler.JoinRandom();
                 return false;
             }
             List<ValueTuple<CSteamID, int>> list = new List<ValueTuple<CSteamID, int>>();
@@ -117,8 +117,9 @@ namespace SpookSuite
                 __instance.Reflect().Invoke("JoinLobby", lobbyByIndex2);
                 return false;
             }
-            Debug.LogError("Found No Matches hosting Retyring");
-            MainMenuHandler.SteamLobbyHandler.Reflect().Invoke("JoinRandom");
+            Debug.LogError("Found No Matches hosting Retyring 2");
+            MainMenuHandler.SteamLobbyHandler.Reflect().SetValue("m_Joining", false);
+            MainMenuHandler.SteamLobbyHandler.JoinRandom();
 
             return false;
         }

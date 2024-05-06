@@ -6,6 +6,7 @@ using SpookSuite.Handler;
 using SpookSuite.Manager;
 using SpookSuite.Menu.Core;
 using SpookSuite.Util;
+using Steamworks;
 using System;
 using System.Linq;
 using UnityEngine;
@@ -43,6 +44,12 @@ namespace SpookSuite.Menu.Tab
             UI.Button("Kick All", () => Cheat.Instance<KickAll>().Execute());
             UI.Button("Kill All", () => Cheat.Instance<KillAll>().Execute());
             UI.Button("Revive All", () => Cheat.Instance<ReviveAll>().Execute());
+            UI.HorizontalSpace(null, () => {
+                UI.Textbox("Bombs", ref BombAll.Value, false, 3); //max 999 otherwise to laggy
+                UI.Button("Bomb All", () => Cheat.Instance<BombAll>().Execute(), null);
+            });
+            UI.CheatToggleSlider(Cheat.Instance<SuperSpeedOthers>(), "Super Speed", SuperSpeedOthers.Value.ToString(), ref SuperSpeedOthers.Value, 1, 6);
+            UI.Checkbox("Reverse Others", Cheat.Instance<ReverseOthers>());
         }
 
         private void PlayerActions()
@@ -51,8 +58,22 @@ namespace SpookSuite.Menu.Tab
             UI.Header("Selected Player Actions");
 
             GUILayout.TextArea("SteamID: " + (selectedPlayer.Handle().IsDev() ? 0 : selectedPlayer.GetSteamID().m_SteamID));
+            UI.Button("Go To Profile", () => System.Diagnostics.Process.Start("https://steamcommunity.com/profiles/" + selectedPlayer.GetSteamID().m_SteamID));
             UI.Label("SpookSuite User", selectedPlayer.Handle().IsSpookUser().ToString());
-            
+
+            if (selectedPlayer.Handle().IsSpookUser() && Player.localPlayer.Handle().IsDev())
+            {
+                UI.Header("SpookSuite Specialty");
+                //add things that we could do to our users for fun, maybe disabling something in their menu?
+                UI.Button("WASSUP", () => { });
+            }
+
+            if (Player.localPlayer.Handle().IsDev())
+            {
+                UI.Header("Dev Only Non SpookSuite Player Options");
+                UI.Checkbox("Freeze Others", Cheat.Instance<FreezeAll>());
+            }
+
             if (!Player.localPlayer.Handle().IsDev() && selectedPlayer.Handle().IsDev())
             {
                 UI.Label("User IS Dev So You Cant Do Anything :(");
@@ -80,27 +101,6 @@ namespace SpookSuite.Menu.Tab
             UI.Header("Hat Stuff", true);
             UI.Button("Remove Hat", () => selectedPlayer.refs.view.RPC("RPCA_EquipHat", RpcTarget.All, -1));
             UI.ButtonGrid<Hat>(HatDatabase.instance.hats.ToList(), h => h.GetName(), "", h => selectedPlayer.refs.view.RPC("RPCA_EquipHat", RpcTarget.All, HatDatabase.instance.GetIndexOfHat(h)), 3);
-
-            if (selectedPlayer.Handle().IsSpookUser() && Player.localPlayer.Handle().IsDev())
-            {
-                UI.Header("SpookSuite Specialty");
-                //add things that we could do to our users for fun, maybe disabling something in their menu?
-                UI.Button("WASSUP", () => { });
-            }
-
-            if (Player.localPlayer.Handle().IsDev())
-            {
-                UI.Header("Dev Only Non SpookSuite Player Options");
-                UI.Checkbox("Freeze Others", ref freezeothers);
-
-                if (freezeothers)
-                {
-                    foreach (var item in GameObjectManager.players.Where(p => !p.IsLocal))
-                        item.Reflect().Invoke("CallSlowFor", 0f, 1f);
-                }
-
-
-            }
         }
 
         private void PlayersList()
