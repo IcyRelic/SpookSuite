@@ -83,7 +83,7 @@ namespace SpookSuite.Util
         {
             return ItemDatabase.Instance.Objects.ToList().Find(x => x.GetName().ToLower() == name.ToLower());
         }
-
+        
         public static Item GetItemById(byte id)
         {
             return ItemDatabase.Instance.Objects.ToList().Find(x => x.id == id);

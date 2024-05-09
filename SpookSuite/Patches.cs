@@ -143,7 +143,7 @@ namespace SpookSuite
                 if (Cheat.Instance<NoClip>().Enabled && !Cheat.Instance<Invisibility>().Enabled)
                     pos = Player.localPlayer.refs.cameraPos.position;
                 else if (Cheat.Instance<Invisibility>().Enabled)
-                    pos = new Vector3(1000, 1000, 1000);
+                    pos = new Vector3(1000, 100, 1000);
                 else
                     pos = Player.localPlayer.Reflect().Invoke<Vector3>("GetRelativePosition_Rig", false, BodypartType.Hip, Vector3.zero);
 

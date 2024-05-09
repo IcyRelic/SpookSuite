@@ -5,6 +5,7 @@ namespace SpookSuite.Cheats.Core
     public abstract class ToggleCheat : Cheat
     {
         private bool _enabled;
+        private bool lastenabled;
         public bool Enabled
         {
             get => _enabled;
@@ -12,11 +13,22 @@ namespace SpookSuite.Cheats.Core
             set
             {
                 _enabled = value;
-                if (value)
-                    OnEnable();
-                else
-                    OnDisable();
+                RunOns();      
             }
+        }
+
+        private void RunOns()
+        {
+            if (!lastenabled && _enabled)
+            {
+                OnEnable();
+                lastenabled = true;
+            }
+            else if (lastenabled && !_enabled)
+            {
+                OnDisable();
+                lastenabled = false;
+            } 
         }
 
         public ToggleCheat() { }

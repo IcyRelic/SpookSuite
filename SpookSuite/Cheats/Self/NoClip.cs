@@ -16,7 +16,7 @@ namespace SpookSuite.Cheats
 
         public override void Update()
         {
-            if (Player.localPlayer is null || !Enabled || !PhotonNetwork.InRoom) return;
+            if (Player.localPlayer is null || !Enabled) return;
 
             if (movement is null) movement = Player.localPlayer.gameObject.AddComponent<KBInput>();
 
@@ -30,7 +30,6 @@ namespace SpookSuite.Cheats
 
         public override void OnDisable()
         {
-            if (!PhotonNetwork.InRoom) return; //for now while its being spammed
             Destroy(movement);
             movement = null;
             Player.localPlayer.refs.ragdoll.GetComponentsInChildren<Collider>().ToList().ForEach(c => c.enabled = true);

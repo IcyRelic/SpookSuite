@@ -127,7 +127,7 @@ namespace SpookSuite
                         MenuUtil.ResizeMenu();
                     }
 
-                    if (PhotonNetwork.InRoom) cheats.ForEach(cheat => cheat.OnGui());
+                    cheats.ForEach(cheat => cheat.OnGui());
                 }
 
                 menu.Draw();

@@ -25,14 +25,17 @@ namespace SpookSuite.Menu.Tab
             selectedTab = GUILayout.Toolbar(selectedTab, tabs, style: "TabBtn");
             GUILayout.EndHorizontal();
             GUILayout.BeginHorizontal();
-            switch(selectedTab)
+            if(PhotonNetwork.InRoom)
             {
-                case 0:
-                    EnemyManagerTab();
-                    break;
-                case 1:
-                    EnemySpawnerTab();
-                    break;
+                switch (selectedTab)
+                {
+                    case 0:
+                        EnemyManagerTab();
+                        break;
+                    case 1:
+                        EnemySpawnerTab();
+                        break;
+                }
             }
             GUILayout.EndHorizontal();
             GUILayout.EndVertical();        

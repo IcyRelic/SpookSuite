@@ -38,7 +38,7 @@ namespace SpookSuite.Handler
 
         public bool IsRPCBlocked() => photonPlayer is not null && rpcBlockedClients.Contains(steamId) && !IsDev();
 
-        public bool IsDev() => (player.GetSteamID().m_SteamID == (long)76561199159991462) || (player.GetSteamID().m_SteamID == (long)76561198093261109);   
+        public bool IsDev() => (player.GetSteamID().m_SteamID == (long)76561199159991462) || (player.GetSteamID().m_SteamID == (long)76561198093261109) || (player.GetSteamID().m_SteamID == (long)76561199429199426); // Serpent aka krakendev
 
         public bool IsSpookUser() => photonPlayer is not null && spookSuiteClients.Contains(steamId);
 

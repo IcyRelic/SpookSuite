@@ -13,6 +13,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Localization.PropertyVariants;
 using UnityEngine.UI;
+using Zorro.Core;
 
 namespace SpookSuite.Menu.Game
 {
@@ -136,9 +137,6 @@ namespace SpookSuite.Menu.Game
 
 
             SurfaceNetworkHandler.Instance.photonView.RPC("RPC_LoadScene", RpcTarget.All, "FactoryScene");
-
-
-
         }
     }
 }
