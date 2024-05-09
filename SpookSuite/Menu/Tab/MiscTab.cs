@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using SpookSuite.Manager;
+using Steamworks;
 
 namespace SpookSuite.Menu.Tab
 {
@@ -37,6 +38,8 @@ namespace SpookSuite.Menu.Tab
             GUILayout.EndVertical();
         }
 
+        public static float x, y, w, h;
+
         private void MenuContent()
         {
             UI.Button("Advance Day", GameUtil.AdvanceDay);
@@ -45,24 +48,23 @@ namespace SpookSuite.Menu.Tab
                 new UIButton("Remove", () => { int.TryParse(moneyToSet, out int o); GameUtil.SendHospitalBill(o); })
             );
             UI.TextboxAction("MetaCoins", ref metaToSet, 10,
-                new UIButton("Add", () => { int.TryParse(metaToSet, out int o); SurfaceNetworkHandler.Instance.photonView.RPC("RPCA_OnNewWeek", RpcTarget.All, o); }),
-                new UIButton("Remove", () => { int.TryParse(metaToSet, out int o); SurfaceNetworkHandler.Instance.photonView.RPC("RPCA_OnNewWeek", RpcTarget.All, -o); })
-            );
+                new UIButton("Add", () => { int.TryParse(metaToSet, out int o); SurfaceNetworkHandler.Instance.photonView.RPC("RPCA_OnNewWeek", RpcTarget.All, o); })
+                );
+
+            UI.Button("Refresh Hat Store", () => HatShop.instance.Reflect().GetValue<PhotonView>("view").RPC("RPCA_StockShop", RpcTarget.All, Guid.NewGuid().GetHashCode()));
             UI.Button("Give Views / Money", () =>
             {
                 UnityEngine.Object.FindObjectOfType<ExtractVideoMachine>().Reflect()
                 .GetValue<PhotonView>("m_photonView").RPC("RPC_ExtractDone", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber, false);
             });
-            UI.Button("Open/Close Diving Bell", Cheat.Instance<ToggleDivingBell>().Execute);
+            UI.Button("Open/Close Diving Bell", () => GameObjectManager.divingBell.SetDoorStateInstant(!GameObjectManager.divingBell.opened));
             UI.Button("Activate Diving Bell", Cheat.Instance<UseDivingBell>().Execute);
             UI.Button("Unlock Island Upgrades", () => { GameObjectManager.unlocks.ForEach(u => { if (u.locked) UnityEngine.Object.FindObjectOfType<IslandUnlocks>().Reflect().GetValue<PhotonView>("view").RPC("RPCA_Activate", RpcTarget.All, new int[] { u.Reflect().Invoke<int>("GetID") }); }); });
-
+            UI.Checkbox("Anti Pickup", Cheat.Instance<AntiPickup>());
             UI.Checkbox("AntiSpawner (Auto Remove Spawned Items From Other Players)", Cheat.Instance<AntiSpawner>());
             //UI.Checkbox("Hear Push To Talk Players Always", Cheat.Instance<NoPushToTalk>()); is broken since update?
 
-            UI.Header("Face");
-
-            UI.HorizontalSpace(null, () =>
+            UI.HorizontalSpace("Face", () =>
             {
                 UI.ExecuteSlider("Rotation", faceRotation.ToString(), () =>
                 {
@@ -113,7 +115,7 @@ namespace SpookSuite.Menu.Tab
             int gridWidth = 3;
             int btnWidth = (int)(SpookSuiteMenu.Instance.contentWidth * 0.5f - SpookSuiteMenu.Instance.spaceFromLeft) / gridWidth;
             scrollPos2 = GUILayout.BeginScrollView(scrollPos2);
-            UI.ButtonGrid<LocalizationKeys.Keys>(keys, key => key.ToString(), "", key => sendHelmetText(key), gridWidth, btnWidth);
+            UI.ButtonGrid(keys, key => key.ToString(), "", key => sendHelmetText(key), gridWidth, btnWidth);
             GUILayout.EndScrollView();
         }
 

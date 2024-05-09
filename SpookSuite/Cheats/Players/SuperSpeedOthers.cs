@@ -11,7 +11,7 @@ namespace SpookSuite.Cheats
         public static float Value = 1f;
         public override void Update()
         {
-            if (!Player.localPlayer.Handle().IsDev() || !Enabled)
+            if (!Enabled || Cheat.Instance<FreezeAll>().Enabled)
                 return;
 
             if (Cheat.Instance<ReverseOthers>().Enabled)

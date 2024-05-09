@@ -11,6 +11,7 @@ using System;
 using System.Linq;
 using UnityEngine;
 using Zorro.Core;
+using Steamworks;
 
 namespace SpookSuite.Menu.Tab
 {
@@ -50,16 +51,13 @@ namespace SpookSuite.Menu.Tab
             });
             UI.CheatToggleSlider(Cheat.Instance<SuperSpeedOthers>(), "Super Speed", SuperSpeedOthers.Value.ToString(), ref SuperSpeedOthers.Value, 1, 6);
             UI.Checkbox("Reverse Others", Cheat.Instance<ReverseOthers>());
+            UI.Textbox("Speed", ref OthersFly.Value, false, 2);
+            UI.Checkbox("Let Em Fly", Cheat.Instance<OthersFly>());
         }
 
         private void PlayerActions()
         {
             if (selectedPlayer is null) return;
-            UI.Header("Selected Player Actions");
-
-            GUILayout.TextArea("SteamID: " + (selectedPlayer.Handle().IsDev() ? 0 : selectedPlayer.GetSteamID().m_SteamID));
-            UI.Button("Go To Profile", () => System.Diagnostics.Process.Start("https://steamcommunity.com/profiles/" + selectedPlayer.GetSteamID().m_SteamID));
-            UI.Label("SpookSuite User", selectedPlayer.Handle().IsSpookUser().ToString());
 
             if (selectedPlayer.Handle().IsSpookUser() && Player.localPlayer.Handle().IsDev())
             {
@@ -71,8 +69,15 @@ namespace SpookSuite.Menu.Tab
             if (Player.localPlayer.Handle().IsDev())
             {
                 UI.Header("Dev Only Non SpookSuite Player Options");
+                UI.Label(SteamFriends.GetFriendPersonaName(selectedPlayer.GetSteamID()));
                 UI.Checkbox("Freeze Others", Cheat.Instance<FreezeAll>());
             }
+
+            UI.Header("Selected Player Actions");
+
+            GUILayout.TextArea("SteamID: " + (selectedPlayer.Handle().IsDev() ? 0 : selectedPlayer.GetSteamID().m_SteamID));
+            UI.Button("Go To Profile", () => System.Diagnostics.Process.Start("https://steamcommunity.com/profiles/" + selectedPlayer.GetSteamID().m_SteamID));
+            UI.Label("SpookSuite User", selectedPlayer.Handle().IsSpookUser().ToString());
 
             if (!Player.localPlayer.Handle().IsDev() && selectedPlayer.Handle().IsDev())
             {
@@ -97,6 +102,9 @@ namespace SpookSuite.Menu.Tab
 
             UI.Button("Force Sit", () => { Sittable s = GameObjectManager.sittables.GetRandom(); selectedPlayer.refs.view.RPC("RPCA_Sit", RpcTarget.All, s.Reflect().GetValue<PhotonView>("view").ViewID, s.Reflect().GetValue<int>("seatID")); });
             UI.Button("Heal", () => selectedPlayer.CallHeal(100f));
+
+            UI.Button("Kick", () => { SurfaceNetworkHandler.Instance.photonView.RPC("RPC_LoadScene", selectedPlayer.PhotonPlayer(), "NewMainMenu"); });
+            UI.Button("Send Away", () => ShadowRealmHandler.instance.Reflect().GetValue<PhotonView>("view").RPC("RPCA_AddRealm", RpcTarget.All, 2, ShadowRealmHandler.instance.Reflect().Invoke<int>("GetSpotID"),selectedPlayer.refs.view.ViewID));
 
             UI.Header("Hat Stuff", true);
             UI.Button("Remove Hat", () => selectedPlayer.refs.view.RPC("RPCA_EquipHat", RpcTarget.All, -1));

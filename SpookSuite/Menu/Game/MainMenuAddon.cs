@@ -14,6 +14,7 @@ using UnityEngine.Events;
 using UnityEngine.Localization.PropertyVariants;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Zorro.Core;
 
 namespace SpookSuite.Menu.Game
 {
@@ -26,7 +27,6 @@ namespace SpookSuite.Menu.Game
         private Transform page;
         private Canvas canvas;
         private MainMenuMainPage main;
-
 
         private void Awake()
         {
@@ -135,9 +135,6 @@ namespace SpookSuite.Menu.Game
 
 
             SurfaceNetworkHandler.Instance.photonView.RPC("RPC_LoadScene", RpcTarget.All, "FactoryScene");
-
-
-
         }
     }
 }

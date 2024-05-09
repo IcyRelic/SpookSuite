@@ -11,6 +11,5 @@ namespace SpookSuite.Cheats
             PhotonNetwork.CurrentRoom.SetMasterClient(PhotonNetwork.LocalPlayer.IsMasterClient ?
                 PlayerHandler.instance.playersAlive.Find(x => x.GetSteamID() != Player.localPlayer.GetSteamID()).PhotonPlayer() : Player.localPlayer.PhotonPlayer());
         }
-
     }
 }

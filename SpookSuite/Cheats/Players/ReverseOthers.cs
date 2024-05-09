@@ -11,7 +11,7 @@ namespace SpookSuite.Cheats
 
         public override void Update()
         {
-            if (!Enabled) return;
+            if (!Enabled || Cheat.Instance<FreezeAll>().Enabled) return;
 
             if (Cheat.Instance<SuperSpeedOthers>().Enabled)
                 Speed = -SuperSpeedOthers.Value;
