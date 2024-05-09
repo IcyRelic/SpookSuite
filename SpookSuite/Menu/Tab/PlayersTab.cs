@@ -88,7 +88,7 @@ namespace SpookSuite.Menu.Tab
             if (!selectedPlayer.IsLocal)
                 UI.Button("Block RPCs", () => selectedPlayer.Handle().ToggleRPCBlock(), selectedPlayer.Handle().IsRPCBlocked() ? "UnBlock" : "Block");
 
-            UI.Button("Teleport", () => { PhotonNetwork.Instantiate("Player", selectedPlayer.data.groundPos, new Quaternion(0f, 0f, 0f, 0f)); }, "Teleport");
+            UI.Button("Teleport", () => { Player.localPlayer.Reflect().Invoke("Teleport", selectedPlayer.refs.cameraPos.position, new Vector3(0, 0, 0)); }, "Teleport");
 
             UI.Button("Spawn Bomb", () => GameUtil.SpawnItem(GameUtil.GetItemByName("bomb").id, selectedPlayer.refs.cameraPos.position), "Bomb");
             UI.Button("Freeze", () => selectedPlayer.Reflect().Invoke("CallSlowFor", 0f, 4f), "Freeze");
