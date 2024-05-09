@@ -1,4 +1,4 @@
-v1.1.1
+v1.2.0
 - Support for newest update
 - Added Give Meta Coins
 - Added Unlock All Upgrades
@@ -11,7 +11,7 @@ v1.1.1
 - Added Reverse
 - Removed Goo Em
 
-v1.1
+v1.1.0
 - Spinbot
 - Smooth AF RainbowFace
 - Face Editor
@@ -31,5 +31,5 @@ v1.1
 - Added toggle for Anti Spawner
 - Added Menu Panic Button (Press END on you keyboard, menu will not turn back on after this is pressed, even when reinjected)
 
-v1.0
+v1.0.0
 - Release

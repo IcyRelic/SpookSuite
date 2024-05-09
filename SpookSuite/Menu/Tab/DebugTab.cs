@@ -51,6 +51,12 @@ namespace SpookSuite.Menu.Tab
             UI.Button("Log RPCS", () => { foreach (string s in PhotonNetwork.PhotonServerSettings.RpcList) Debug.Log(s); });
             UI.Header("Debugging Cheats");
             UI.Checkbox("Log Player Prefs", ref logPlayerPrefs);
+            
+            UI.Button("Teleport All Items", () => {
+                GameObjectManager.pickups.ForEach(x => GameUtil.TeleportItem(x));
+            });
+            
+            
             UI.Button("Use Diving Bell dontcare", () => GameObjectManager.divingBellButton.Interact(Player.localPlayer));
             UI.Button("Use Diving Bell Underground", () => GameObjectManager.divingBell.GoUnderground());
             UI.Button("Use Diving Bell Surface", () => GameObjectManager.divingBell.GoToSurface());

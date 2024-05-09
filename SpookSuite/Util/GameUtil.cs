@@ -1,5 +1,6 @@
 ﻿using ExitGames.Client.Photon.StructWrapping;
 using Photon.Pun;
+using Photon.Voice;
 using SpookSuite.Manager;
 using System;
 using System.Collections.Generic;
@@ -25,8 +26,21 @@ namespace SpookSuite.Util
 
         public static bool DoesItemExist(Item i) => PickupHandler.Instance.Reflect().GetValue<List<Pickup>>("m_pickup").Find(p => p.itemInstance.item.GetName() == i.GetName()) is not null;
         public static bool DoesItemExist(string i) => PickupHandler.Instance.Reflect().GetValue<List<Pickup>>("m_pickup").Find(p => p.itemInstance.item.GetName() == i) is not null;
-        public static bool DoesItemExist(Pickup i) => PickupHandler.Instance.Reflect().GetValue<List<Pickup>>("m_pickup").Find(p => p == i) is not null; 
+        public static bool DoesItemExist(Pickup i) => PickupHandler.Instance.Reflect().GetValue<List<Pickup>>("m_pickup").Find(p => p == i) is not null;
 
+        public static void TeleportItem(Pickup item) => TeleportItem(item, (Player.localPlayer.refs.cameraPos.position + Player.localPlayer.transform.forward));
+        public static void TeleportItem(Pickup item, Vector3 pos)
+        {
+            pos.y += 1;
+
+            Rigidbody rb = item.Reflect().GetValue<Rigidbody>("m_rigidbody");
+
+            rb.transform.position = pos;
+
+            //item.ForceSync();
+
+            item.m_photonView.RPC("RPC_ForceSync", RpcTarget.All, pos, (object)Random.rotation);
+        }
         public static void SpawnItem(byte itemId, bool equip = false, bool drone = false, int amount = 1) => SpawnItem(itemId, Player.localPlayer.refs.cameraPos.position, equip, drone, amount);
         public static void SpawnItem(byte itemId, Vector3 spawnPos, bool equip = false, bool drone = false, int amount = 1)
         {

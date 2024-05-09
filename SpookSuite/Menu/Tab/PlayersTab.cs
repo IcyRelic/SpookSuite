@@ -50,6 +50,12 @@ namespace SpookSuite.Menu.Tab
             });
             UI.CheatToggleSlider(Cheat.Instance<SuperSpeedOthers>(), "Super Speed", SuperSpeedOthers.Value.ToString(), ref SuperSpeedOthers.Value, 1, 6);
             UI.Checkbox("Reverse Others", Cheat.Instance<ReverseOthers>());
+
+            if (Player.localPlayer.Handle().IsDev())
+            {
+                UI.Header("Dev Only Non SpookSuite Player Options");
+                UI.Checkbox("Freeze Others", Cheat.Instance<FreezeAll>());
+            }
         }
 
         private void PlayerActions()
@@ -66,13 +72,10 @@ namespace SpookSuite.Menu.Tab
                 UI.Header("SpookSuite Specialty");
                 //add things that we could do to our users for fun, maybe disabling something in their menu?
                 UI.Button("WASSUP", () => { });
+                
             }
 
-            if (Player.localPlayer.Handle().IsDev())
-            {
-                UI.Header("Dev Only Non SpookSuite Player Options");
-                UI.Checkbox("Freeze Others", Cheat.Instance<FreezeAll>());
-            }
+            
 
             if (!Player.localPlayer.Handle().IsDev() && selectedPlayer.Handle().IsDev())
             {
@@ -82,6 +85,9 @@ namespace SpookSuite.Menu.Tab
 
             if (!selectedPlayer.IsLocal)
                 UI.Button("Block RPCs", () => selectedPlayer.Handle().ToggleRPCBlock(), selectedPlayer.Handle().IsRPCBlocked() ? "UnBlock" : "Block");
+
+            UI.Button("Set Face", () => { selectedPlayer.Handle().RPC("RPCA_SetVisorText", RpcTarget.All, "LoL"); });
+            UI.Button("Set Face Color", () => { selectedPlayer.refs.visor.ApplyVisorColor(Color.yellow); });
 
             UI.Button("Teleport", () => { PhotonNetwork.Instantiate("Player", selectedPlayer.data.groundPos, new Quaternion(0f, 0f, 0f, 0f)); }, "Teleport");
 

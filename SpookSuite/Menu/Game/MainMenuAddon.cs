@@ -3,7 +3,7 @@ using Photon.Pun;
 using Photon.Realtime;
 using SpookSuite.Cheats;
 using SpookSuite.Cheats.Core;
-using SpookSuite.Handler;
+using SpookSuite.Components;
 using SpookSuite.Util;
 using Steamworks;
 using System.Collections;
@@ -12,7 +12,6 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.Localization.PropertyVariants;
-using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 namespace SpookSuite.Menu.Game
@@ -26,14 +25,15 @@ namespace SpookSuite.Menu.Game
         private Transform page;
         private Canvas canvas;
         private MainMenuMainPage main;
-
+        private static GameObject btnToCopy;
 
         private void Awake()
         {
             canvas = FindObjectOfType<Canvas>();
             page = GameObject.Find("MainPage").transform;
             main = FindObjectOfType<MainMenuMainPage>();
-            
+            btnToCopy = main.quitButton.gameObject;
+
             CreateButtons();
             joinFriendBtn.onClick.AddListener(new UnityAction(this.OnJoinFriendButtonClicked));
             joinRandomBtn.onClick.AddListener(new UnityAction(this.OnJoinRandomButtonClicked));
@@ -48,14 +48,14 @@ namespace SpookSuite.Menu.Game
 
         private void CreateButtons()
         {
-            viewLobbiesBtn = CreateBtnCopy("viewLobbiesBtn", "View Lobbies", 450).GetComponent<Button>();
-            joinFriendBtn = CreateBtnCopy("JoinFriendBtn", "Join Friend", 375).GetComponent<Button>();
-            joinRandomBtn = CreateBtnCopy("joinRandomBtn", "Join Random Private", 300).GetComponent<Button>();
+            viewLobbiesBtn = CreateBtnCopy("viewLobbiesBtn", "View Lobbies", 450, page).GetComponent<Button>();
+            joinFriendBtn = CreateBtnCopy("JoinFriendBtn", "Join Friend", 375, page).GetComponent<Button>();
+            joinRandomBtn = CreateBtnCopy("joinRandomBtn", "Join Random Private", 300, page).GetComponent<Button>();
         }
 
-        private GameObject CreateBtnCopy(string name, string btnText, float y)
+        public static GameObject CreateBtnCopy(string name, string btnText, float y, Transform parent)
         {
-            GameObject go = Instantiate(main.quitButton.gameObject, page);
+            GameObject go = Instantiate(btnToCopy, parent);
             Destroy(go.GetComponentInChildren<GameObjectLocalizer>());
 
             go.name = name;
@@ -99,6 +99,7 @@ namespace SpookSuite.Menu.Game
         private void OnViewLobbiesButtonClicked()
         {
             Modal.ShowError("Feature Coming Soon!", "This feature is currently in development and will be available in a future update.");
+            //SpookPageUI.TransitionToPage<MainMenuViewLobbiesPage>();
         }
 
         internal IEnumerator JoinRandomPrivateGame()
