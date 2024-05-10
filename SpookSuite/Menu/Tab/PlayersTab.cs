@@ -41,7 +41,11 @@ namespace SpookSuite.Menu.Tab
 
         private void GeneralActions()
         {
-            if (!PhotonNetwork.InRoom) return;
+            if (!PhotonNetwork.InRoom)
+            {
+                UI.Header("You must join a game for the players tab to work.");
+                return;
+            }
 
             UI.Header("ALL Players");
             UI.Button("Kick All", () => Cheat.Instance<KickAll>().Execute());
