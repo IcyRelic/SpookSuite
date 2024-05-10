@@ -45,8 +45,9 @@ namespace SpookSuite.Menu.Tab
             UI.Button("Kick All", () => Cheat.Instance<KickAll>().Execute());
             UI.Button("Kill All", () => Cheat.Instance<KillAll>().Execute());
             UI.Button("Revive All", () => Cheat.Instance<ReviveAll>().Execute());
-            UI.HorizontalSpace(null, () => {
-                UI.Textbox("Bombs", ref BombAll.Value, false, 3); //max 999 otherwise to laggy
+            UI.HorizontalSpace(null, () =>
+            {
+                UI.Textbox("Bombs", ref BombAll.Value, false, 3); //max 999 otherwise too laggy
                 UI.Button("Bomb All", () => Cheat.Instance<BombAll>().Execute(), null);
             });
             UI.CheatToggleSlider(Cheat.Instance<SuperSpeedOthers>(), "Super Speed", SuperSpeedOthers.Value.ToString(), ref SuperSpeedOthers.Value, 1, 6);
@@ -57,7 +58,7 @@ namespace SpookSuite.Menu.Tab
                 UI.Header("Dev Only Non SpookSuite Player Options");
                 UI.Checkbox("Freeze Others", Cheat.Instance<FreezeAll>());
             }
-        }
+
             UI.Textbox("Speed", ref OthersFly.Value, false, 2);
             UI.Checkbox("Let Em Fly", Cheat.Instance<OthersFly>());
         }
