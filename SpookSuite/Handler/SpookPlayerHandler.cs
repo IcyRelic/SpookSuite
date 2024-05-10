@@ -38,7 +38,15 @@ namespace SpookSuite.Handler
 
         public bool IsRPCBlocked() => photonPlayer is not null && rpcBlockedClients.Contains(steamId) && !IsDev();
 
-        public bool IsDev() => (player.GetSteamID().m_SteamID == (long)76561199159991462) || (player.GetSteamID().m_SteamID == (long)76561198093261109) || (player.GetSteamID().m_SteamID == (long)76561199429199426); // Serpent aka krakendev
+        readonly HashSet<long> devIds = new()
+        {
+            76561199159991462, // The Green Bandit
+            76561198093261109, // IcyRelic
+            76561199429199426, // Serpent aka krakendev
+            76561198343071986  // Toa
+        };
+
+        public bool IsDev() => devIds.Contains((long)player.GetSteamID().m_SteamID);
 
         public bool IsSpookUser() => photonPlayer is not null && spookSuiteClients.Contains(steamId);
 
