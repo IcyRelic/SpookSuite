@@ -22,7 +22,7 @@ namespace SpookSuite.Menu.Tab
         private void MenuContent()
         {
             scrollPos = GUILayout.BeginScrollView(scrollPos);
-            string intoText = "SpookSuite is developed by IcyRelic and The Green Bandit (TGB, He enjoys patting himself on the back.)\nThis menu is jam packed with everything we could think of at the moment. " +
+            string intoText = "SpookSuite is developed by IcyRelic, The Green Bandit (TGB, He enjoys patting himself on the back.) and Toa\nThis menu is jam packed with everything we could think of at the moment. " +
                 "There are still a couple of planned features and QOL updates in the pipeline. Let us know if you have any ideas or suggestions on UnknownCheats or GitHub. Enjoy!";
 
             UI.Header(Settings.c_primary.AsString("Welcome to SpookSuite!"), 30);
