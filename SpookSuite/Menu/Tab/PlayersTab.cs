@@ -41,6 +41,8 @@ namespace SpookSuite.Menu.Tab
 
         private void GeneralActions()
         {
+            if (!PhotonNetwork.InRoom) return;
+
             UI.Header("ALL Players");
             UI.Button("Kick All", () => Cheat.Instance<KickAll>().Execute());
             UI.Button("Kill All", () => Cheat.Instance<KillAll>().Execute());
