@@ -114,7 +114,7 @@ namespace SpookSuite.Menu.Tab
             UI.Button("Tase", () => selectedPlayer.Reflect().Invoke("CallTakeDamageAndTase", 1f, 5f));
 
             UI.Button("Force Sit", () => { Sittable s = GameObjectManager.sittables.GetRandom(); selectedPlayer.refs.view.RPC("RPCA_Sit", RpcTarget.All, s.Reflect().GetValue<PhotonView>("view").ViewID, s.Reflect().GetValue<int>("seatID")); });
-            UI.Button("Heal", () => selectedPlayer.CallHeal(100f));
+            UI.Button("Heal", () => selectedPlayer.refs.view.RPC("RPCA_Heal", RpcTarget.All, 100f));
 
             UI.Button("Kick", () => { SurfaceNetworkHandler.Instance.photonView.RPC("RPC_LoadScene", selectedPlayer.PhotonPlayer(), "NewMainMenu"); });
             UI.Button("Send Away", () => ShadowRealmHandler.instance.Reflect().GetValue<PhotonView>("view").RPC("RPCA_AddRealm", RpcTarget.All, 2, ShadowRealmHandler.instance.Reflect().Invoke<int>("GetSpotID"),selectedPlayer.refs.view.ViewID));
