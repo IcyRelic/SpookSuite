@@ -8,9 +8,14 @@ namespace SpookSuite.Cheats
 
         public override void Update()
         {
-            if (Player.localPlayer is null) return;
+            if (Player.localPlayer is null || !Enabled) return;
            
-            Player.localPlayer.gameObject.GetComponent<PlayerController>().jumpForceOverTime = Enabled ? Value : 0.6f;
+            Player.localPlayer.gameObject.GetComponent<PlayerController>().jumpForceOverTime = Value;
+        }
+
+        public override void OnDisable()
+        {
+            Player.localPlayer.refs.controller.jumpForceOverTime = .6f;
         }
     }
 }

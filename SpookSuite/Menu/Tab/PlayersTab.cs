@@ -66,7 +66,7 @@ namespace SpookSuite.Menu.Tab
             }
 
             UI.Textbox("Speed", ref OthersFly.Value, false, 2);
-            UI.Checkbox("Let Em Fly", Cheat.Instance<OthersFly>());
+            UI.CheatToggleSlider(Cheat.Instance<OthersFly>(), "Allow Flying", OthersFly.Value.ToString(), ref OthersFly.Value, 1, 30);
         }
 
         private void PlayerActions()

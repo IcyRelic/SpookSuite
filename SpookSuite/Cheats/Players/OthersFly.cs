@@ -12,7 +12,7 @@ namespace SpookSuite.Cheats
 {
     internal class OthersFly : ToggleCheat
     {
-        public static int Value;
+        public static float Value;
         public override void Update()
         {
             if (!Enabled) return;
