@@ -20,7 +20,6 @@ namespace SpookSuite.Menu.Tab
         private Vector2 scrollPos2 = Vector2.zero;
         private string searchText = "";
         private string moneyToSet = "0";
-        private string viewsToSet = "";
         private string metaToSet = "0";
         private float faceSize = .035f;
         private string faceText = "SS";
@@ -67,13 +66,11 @@ namespace SpookSuite.Menu.Tab
             );
 
             UI.Button("Refresh Hat Store", () => HatShop.instance.Reflect().GetValue<PhotonView>("view").RPC("RPCA_StockShop", RpcTarget.All, Guid.NewGuid().GetHashCode()));
-            UI.TextboxAction("Views", ref viewsToSet, 10,
-            new UIButton("Add", () => { int.TryParse(viewsToSet, out int o); UnityEngine.Object.FindObjectOfType<ExtractVideoMachine>().Reflect()
-                .GetValue<PhotonView>("m_photonView").RPC("RPC_Failed", RpcTarget.All, o, 0);
-            }),
-            new UIButton("Remove", () => { int.TryParse(viewsToSet, out int o); UnityEngine.Object.FindObjectOfType<ExtractVideoMachine>().Reflect()
-                .GetValue<PhotonView>("m_photonView").RPC("RPC_Failed", RpcTarget.All, -o, 0);
-            }));
+            UI.Button("Give Views / Money", () =>
+            {
+                UnityEngine.Object.FindObjectOfType<ExtractVideoMachine>().Reflect()
+                .GetValue<PhotonView>("m_photonView").RPC("RPC_ExtractDone", RpcTarget.All, PhotonNetwork.LocalPlayer.ActorNumber, false);
+            });
             UI.Button("Open/Close Diving Bell", () => GameObjectManager.divingBell.SetDoorStateInstant(!GameObjectManager.divingBell.opened));
             UI.Button("Activate Diving Bell", Cheat.Instance<UseDivingBell>().Execute);
             UI.Button("Unlock Island Upgrades", () => { GameObjectManager.unlocks.ForEach(u => { if (u.locked) UnityEngine.Object.FindObjectOfType<IslandUnlocks>().Reflect().GetValue<PhotonView>("view").RPC("RPCA_Activate", RpcTarget.All, new int[] { u.Reflect().Invoke<int>("GetID") }); }); });
