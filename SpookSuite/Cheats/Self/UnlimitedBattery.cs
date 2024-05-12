@@ -1,4 +1,4 @@
-﻿using SpookSuite.Cheats.Core;
+using SpookSuite.Cheats.Core;
 using SpookSuite.Util;
 
 namespace SpookSuite.Cheats
@@ -22,6 +22,12 @@ namespace SpookSuite.Cheats
 
             if (item.GetComponent<ShockStick>() is not null)
                 battery = item.GetComponent<ShockStick>().Reflect().GetValue<BatteryEntry>("m_batteryEntry");
+
+            if (item.GetComponent<RescueHook>() is not null)
+                battery = item.GetComponent<RescueHook>().Reflect().GetValue<BatteryEntry>("m_batteryEntry");
+
+            if (item.GetComponent<NorgGun>() is not null)
+                battery = item.GetComponent<NorgGun>().Reflect().GetValue<BatteryEntry>("m_batteryEntry");
 
             if (item.GetComponent<PartyPopper>() is not null)
             {

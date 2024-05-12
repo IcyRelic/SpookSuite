@@ -15,7 +15,7 @@ namespace SpookSuite.Cheats
 
         public override void OnDisable()
         {
-            Player.localPlayer.gameObject.GetComponent<PlayerController>().movementForce = 10f;
+            Player.localPlayer.gameObject.GetComponent<PlayerController>().movementForce = 17f;
         }
     }
 }
