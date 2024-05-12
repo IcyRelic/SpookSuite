@@ -87,7 +87,8 @@ namespace SpookSuite.Cheats
         }
         private void DisplayMonsters()
         {
-            DisplayObjects(GameObjectManager.monsters, monster => monster.name, monster => Settings.c_espMonsters);
+            //                                                             7 to remove the (Clone) tag
+            DisplayObjects(GameObjectManager.enemyPlayer, monster => monster.name.Remove(7), monster => Settings.c_espMonsters);
         }
     }
 }
