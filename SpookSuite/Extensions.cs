@@ -22,11 +22,12 @@ namespace SpookSuite
             { typeof(long), new TryParseDelegate<long>(long.TryParse) },
         };
 
+        public static string Subtract(this string s, int num) => s.Substring(0, s.Length - num);
+
         public static Camera GetCamera(this MainCamera mainCamera)
         {
             return mainCamera.Reflect().GetValue<Camera>("cam");
         }
-
         public static Vector3 GetClosestMonster(this Vector3 point) => GameObjectManager.monsters.OrderBy(x => Vector3.Distance(x.transform.position, point)).FirstOrDefault().transform.position;
 
         public static string GetName(this Item item)

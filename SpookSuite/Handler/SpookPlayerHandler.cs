@@ -104,46 +104,78 @@ namespace SpookSuite.Handler
             if (rpcHash.ContainsKey(Patches.keyByteFour))
                 parameters = (object[])rpcHash[Patches.keyByteFour];
 
-            if (rpc.StartsWith("RPC_MakeSound"))
+            if (rpc.Equals("RPC_LoadScene")) //notworking
             {
-                if (((int)parameters[0] == 1) && HasSentRPC("RPC_MakeSound", 1)) // default
+                if ((string)parameters[0] == "NewMainMenu")
                 {
-                    Log.Error($"{photonPlayer.NickName} is probably trying to earrape you");
+                    Log.Error($"{photonPlayer.NickName} is probably trying to kick you!");
+                    Cheat.Instance<RPCReactions>().React(Settings.reaction_kick, player);
                     rpcData.SetSuspected();
                     return false;
+                }
+            }
+            //working
+            if (rpc.Equals("RPCA_AddRealm") && UnityEngine.Object.FindObjectOfType<Bot_Wallo>() is not null) //shitty for now but noones really gonna stick around for the monster spawn
+            {
+                if (UnityEngine.Object.FindObjectOfType<Bot_Wallo>().Reflect().GetValue<Player>("targetPlayer") != Player.localPlayer)
+                {
+                    Cheat.Instance<RPCReactions>().React(Settings.reaction_shadowrealm, player);
+                    rpcData.SetSuspected();
+                    return false;
+                }
+            }
+            else if (rpc.Equals("RPCA_AddRealm"))
+            {
+                Cheat.Instance<RPCReactions>().React(Settings.reaction_shadowrealm, player);
+                rpcData.SetSuspected();
+                return false;
+            }
+
+            if (rpc.Equals("RPC_MakeSound")) //dont know
+            {
+                if ((int)parameters[0] == 1) // default
+                {
+                    if (HasSentRPC("RPC_MakeSound", 1))
+                    {
+                        Log.Error($"{photonPlayer.NickName} is probably trying to earrape you!");
+                        Cheat.Instance<RPCReactions>().React(Settings.reaction_makesound, player);
+                        rpcData.SetSuspected();
+                        return false;
+                    }
                 }
 
                 if ((int)parameters[0] == int.MaxValue)
                     spookSuiteClients.Add(steamId);
             }
                 
-            if (rpc.StartsWith("RPC_RequestCreatePickup") && !HasSentRPC("RPC_ClearSlot", 3) && !player.IsLocal)
+            if (rpc.Equals("RPC_RequestCreatePickup") && !HasSentRPC("RPC_ClearSlot", 3) && !player.IsLocal)
             {
                 ItemInstanceData data = new ItemInstanceData(Guid.Empty);
                 data.Deserialize((byte[])parameters[1]);
 
                 rpcData.SetSuspected(data.m_guid);
-                Log.Error($"{photonPlayer.NickName} is probably spawning items. => Item ID: {parameters[0]} | Guid: {data.m_guid}");
+                Log.Error($"{photonPlayer.NickName} is probably spawning items. => Item ID: {parameters[0]} | Guid: {data.m_guid}.");
             }
 
             if(rpc.Equals("RPCA_SpawnDrone"))
             {
                 rpcData.data = parameters[0];
                 if(!HasSentRPC("RPCA_AddItemToCart", 60))
+                {
+                    Cheat.Instance<RPCReactions>().React(Settings.reaction_dronespawn, player);
                     rpcData.SetSuspected();
+                    return false;
+                }
             }
 
-            if (rpc.Equals("RPCA_SlowFor") && !HasSentRPC("RPCA_HarpoonFire", 4))
+            if (rpc.Equals("RPCA_SlowFor") && !HasSentRPC("RPCA_HarpoonFire", 4)) //works
             {
-                if ((float)parameters[0] < 0f)
-                    Log.Error($"{photonPlayer.NickName} is probably trying to reverse your directions.");
-                if ((float)parameters[0] > 0f)
-                    Log.Error($"{photonPlayer.NickName} is probably trying to give you superspeed.");
-                if ((float)parameters[0] == 0f)
-                    Log.Error($"{photonPlayer.NickName} is probably trying to freeze you!");
-
-                rpcData.SetSuspected();
-                return false;
+                if ((float)parameters[0] != .1f || (float)parameters[1] != 2f)
+                {
+                    rpcData.SetSuspected();
+                    Cheat.Instance<RPCReactions>().React(Settings.reaction_speedmanipulation, player);
+                    return false;
+                }
             }
 
             if (rpc.Equals("RPC_ClearSlot"))
@@ -152,7 +184,7 @@ namespace SpookSuite.Handler
                 inventory.TryGetItemInSlot((int)parameters[0], out ItemDescriptor item);
 
                 rpcData.data = item.item.id;
-                Log.Info($"{photonPlayer.NickName} cleared slot {parameters[0]} with item {item.item.id}");
+                Log.Info($"{photonPlayer.NickName} cleared slot {parameters[0]} with item {item.item.id}.");
             }
 
             if (rpc.Equals("RPC_ConfigurePickup")) 

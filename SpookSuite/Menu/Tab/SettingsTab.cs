@@ -1,7 +1,10 @@
-﻿using SpookSuite.Cheats.Core;
+﻿using SpookSuite.Cheats;
+using SpookSuite.Cheats.Core;
 using SpookSuite.Menu.Core;
 using SpookSuite.Util;
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace SpookSuite.Menu.Tab
@@ -24,6 +27,11 @@ namespace SpookSuite.Menu.Tab
         private string s_ItemEsp = Settings.c_espItems.GetHexCode();
         private string s_MonsterEsp = Settings.c_espMonsters.GetHexCode();
         private string s_DivingBellEsp = Settings.c_espDivingBells.GetHexCode();
+        private bool dropdown_makesound = false;
+        private bool dropdown_dronespawn = false;
+        private bool dropdown_speedmanipulation = false;
+        private bool dropdown_kick = false;
+        private bool dropdown_shadowrealm = false;
 
         public override void Draw()
         {
@@ -92,6 +100,42 @@ namespace SpookSuite.Menu.Tab
             UI.TextboxAction("Diving Bell", ref s_DivingBellCham, 8,
                 new UIButton("Set", () => SetColor(ref Settings.c_chamDivingBell, s_DivingBellCham))
             );
+
+            UI.Header("Reactions");
+            UI.Checkbox("Toggle", Cheat.Instance<RPCReactions>());
+
+            ReactionSetter("Sound Spam", ref Settings.reaction_makesound, ref dropdown_makesound);
+            ReactionSetter("Drone Spawning", ref Settings.reaction_dronespawn, ref dropdown_dronespawn);
+            ReactionSetter("Speed Manipulation", ref Settings.reaction_speedmanipulation, ref dropdown_speedmanipulation);
+            ReactionSetter("Kick", ref Settings.reaction_kick, ref dropdown_kick);
+            ReactionSetter("Shadow Realm", ref Settings.reaction_shadowrealm, ref dropdown_shadowrealm);
+        }
+
+        private void ReactionSetter(string label, ref RPCReactions.reactionType reaction, ref bool drop)
+        {
+            RPCReactions.reactionType r = reaction;
+
+            Dropdown(label, ref drop,
+                new UIButton("None", () => r = RPCReactions.reactionType.none, r == RPCReactions.reactionType.none ? new GUIStyle(GUI.skin.button) { fontStyle = FontStyle.Bold} : null),
+                new UIButton("Kick", () => r = RPCReactions.reactionType.kick, r == RPCReactions.reactionType.kick ? new GUIStyle(GUI.skin.button) { fontStyle = FontStyle.Bold } : null),
+                new UIButton("Disconnect", () => r = RPCReactions.reactionType.disconnect, r == RPCReactions.reactionType.disconnect ? new GUIStyle(GUI.skin.button) { fontStyle = FontStyle.Bold } : null),
+                new UIButton("Clown Em", () => r = RPCReactions.reactionType.clownem, r == RPCReactions.reactionType.clownem ? new GUIStyle(GUI.skin.button) { fontStyle = FontStyle.Bold } : null)
+                );
+
+            reaction = r;
+        }
+
+        private void Dropdown(string label, ref bool drop, params UIButton[] buttons)
+        {
+            if (!drop)
+            {
+                if (GUILayout.Button("< " + label, new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter} )) drop = true;
+            }
+            if (drop)
+            {
+                if (GUILayout.Button("^ " + label, new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter })) drop = false;
+                buttons.ToList().ForEach(b => b.Draw());
+            }
         }
 
         private void SetColor(ref RGBAColor color, string hexCode)

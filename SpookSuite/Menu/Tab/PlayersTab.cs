@@ -101,8 +101,6 @@ namespace SpookSuite.Menu.Tab
             UI.Button("Set Face", () => { selectedPlayer.Handle().RPC("RPCA_SetVisorText", RpcTarget.All, "LoL"); });
             UI.Button("Set Face Color", () => { selectedPlayer.refs.visor.ApplyVisorColor(Color.yellow); });
 
-            UI.Button("Teleport", () => { PhotonNetwork.Instantiate("Player", selectedPlayer.data.groundPos, new Quaternion(0f, 0f, 0f, 0f)); }, "Teleport");
-
             UI.Button("Spawn Bomb", () => GameUtil.SpawnItem(GameUtil.GetItemByName("bomb").id, selectedPlayer.refs.cameraPos.position), "Bomb");
             UI.Button("Freeze", () => selectedPlayer.Reflect().Invoke("CallSlowFor", 0f, 4f), "Freeze");
             

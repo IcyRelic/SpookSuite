@@ -12,7 +12,7 @@ namespace SpookSuite.Menu.Tab
 
         private Vector2 scrollPos = Vector2.zero;
         private Vector2 scrollPos2 = Vector2.zero;
-        public static Bot selectedEnemy;
+        public static Player selectedEnemy;
         public static string selectedSpawnEnemy;
 
         public int selectedTab = 0;
@@ -111,13 +111,13 @@ namespace SpookSuite.Menu.Tab
             GUILayout.Space(25);
             scrollPos = GUILayout.BeginScrollView(scrollPos);
 
-            foreach (Bot monster in GameObjectManager.monsters)
+            foreach (Player monster in GameObjectManager.enemyPlayer)
             {
                 if (selectedEnemy is null) selectedEnemy = monster;
 
                 if (selectedEnemy.GetInstanceID() == monster.GetInstanceID()) GUI.contentColor = Settings.c_espMonsters.GetColor();
 
-                if (GUILayout.Button(monster.name, GUI.skin.label)) selectedEnemy = monster;
+                if (GUILayout.Button(monster.name.Subtract(7), GUI.skin.label)) selectedEnemy = monster;
 
                 GUI.contentColor = Settings.c_menuText.GetColor();
             }

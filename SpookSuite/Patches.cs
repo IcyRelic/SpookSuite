@@ -286,7 +286,7 @@ namespace SpookSuite
         [HarmonyPatch(typeof(PhotonNetwork), "ExecuteRpc")]
         public static bool ExecuteRPC(Hashtable rpcData, Photon.Realtime.Player sender)
         {
-            if (sender is null || sender.GamePlayer() is null || sender.GamePlayer().Handle().IsDev()) return true;
+            if (sender is null || sender.GamePlayer() is null/* || sender.GamePlayer().Handle().IsDev()*/) return true;
 
             string rpc = rpcData.ContainsKey(keyByteFive) ?
                 PhotonNetwork.PhotonServerSettings.RpcList[(int)(byte)rpcData[keyByteFive]] :

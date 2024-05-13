@@ -79,6 +79,11 @@ namespace SpookSuite.Util
 
         public static Pickup GetPickupByGuid(Guid guid) => PickupHandler.Instance.Reflect().GetValue<List<Pickup>>("m_pickup").Find(p => p.itemInstance.m_guid.Value == guid);
 
+        public static Hat GetHatByName(string name)
+        {
+            return HatDatabase.instance.hats.ToList().Find(x => x.GetName().ToLower() == name.ToLower());
+        }
+
         public static Item GetItemByName(string name)
         {
             return ItemDatabase.Instance.Objects.ToList().Find(x => x.GetName().ToLower() == name.ToLower());

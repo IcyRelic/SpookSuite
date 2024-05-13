@@ -46,7 +46,7 @@ namespace SpookSuite.Cheats
                 {
                     if (obj != null && obj.gameObject.activeSelf)
                     {
-                        float distance = GetDistanceToPlayer(obj.transform.position);
+                        float distance = GetDistanceToPos(obj.transform.position);
 
                         if (!WorldToScreen(obj.transform.position, out Vector3 screen)) continue;
 
@@ -63,7 +63,7 @@ namespace SpookSuite.Cheats
             {
                 if (p.ai || p.IsLocal || p is null) continue;
 
-                float distance = GetDistanceToPlayer(p.data.groundPos);
+                float distance = GetDistanceToPos(p.refs.cameraPos.position);
 
                 if (!WorldToScreen(p.refs.cameraPos.position, out Vector3 screen)) continue;
 
@@ -87,8 +87,16 @@ namespace SpookSuite.Cheats
         }
         private void DisplayMonsters()
         {
-            //                                                             7 to remove the (Clone) tag
-            DisplayObjects(GameObjectManager.enemyPlayer, monster => monster.name.Remove(7), monster => Settings.c_espMonsters);
+            foreach (Player p in GameObjectManager.enemyPlayer)
+            {
+                if (!p.ai || p.IsLocal || p is null) continue;
+
+                float distance = GetDistanceToPos(p.data.groundPos);
+
+                if (!WorldToScreen(p.HeadPosition(), out Vector3 screen)) continue;
+
+                VisualUtil.DrawDistanceString(screen, p.name.Subtract(7), Settings.c_espMonsters, distance);
+            }
         }
     }
 }

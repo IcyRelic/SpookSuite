@@ -40,6 +40,16 @@ namespace SpookSuite
         public static RGBAColor c_chamPlayers = new RGBAColor(238, 111, 255, 0.1f);
         public static RGBAColor c_chamDivingBell = new RGBAColor(238, 111, 255, 0.1f);
 
+        /* *    
+         * Reaction Settings
+         * */
+
+        public static RPCReactions.reactionType reaction_makesound = RPCReactions.reactionType.none;
+        public static RPCReactions.reactionType reaction_dronespawn = RPCReactions.reactionType.none;
+        public static RPCReactions.reactionType reaction_speedmanipulation = RPCReactions.reactionType.none;
+        public static RPCReactions.reactionType reaction_kick = RPCReactions.reactionType.none;
+        public static RPCReactions.reactionType reaction_shadowrealm = RPCReactions.reactionType.none;
+
         internal class Changelog
         {
             public static List<string> changes;
@@ -108,7 +118,8 @@ namespace SpookSuite
                 JObject settings = new JObject();
                 JObject colors = new JObject();
                 JObject cheatSettings = new JObject();
-                
+                JObject reactions = new JObject();
+
                 colors["MenuText"] = JsonConvert.SerializeObject(c_menuText);
                 colors["ESPPlayers"] = JsonConvert.SerializeObject(c_espPlayers);
                 colors["ESPItems"] = JsonConvert.SerializeObject(c_espItems);
@@ -118,6 +129,12 @@ namespace SpookSuite
                 colors["ChamItems"] = JsonConvert.SerializeObject(c_chamItems);
                 colors["ChamMonsters"] = JsonConvert.SerializeObject(c_chamMonsters);
                 colors["ChamDivingBell"] = JsonConvert.SerializeObject(c_chamDivingBell);
+
+                reactions["ReactionMakeSound"] = JsonConvert.SerializeObject(reaction_makesound);
+                reactions["ReactionDroneSpawn"] = JsonConvert.SerializeObject(reaction_dronespawn);
+                reactions["ReactionSpeedManipulation"] = JsonConvert.SerializeObject(reaction_speedmanipulation);
+                reactions["ReactionKick"] = JsonConvert.SerializeObject(reaction_kick);
+                reactions["ReactionShadowRealm"] = JsonConvert.SerializeObject(reaction_shadowrealm);
 
                 settings["MenuFontSize"] = i_menuFontSize.ToString();
                 settings["MenuWidth"] = i_menuWidth.ToString();
@@ -143,6 +160,7 @@ namespace SpookSuite
                 json["CheatSettings"] = cheatSettings;
                 json["Colors"] = colors;
                 json["MenuSettings"] = settings;
+                json["Reactions"] = reactions;
 
                 File.WriteAllText(conf, json.ToString());
             }
@@ -238,6 +256,8 @@ namespace SpookSuite
                         ChamESP.displayLasers = bool.Parse(chamsLasersToken.ToString());
                 }
 
+
+
                 Debug.Log("Loading Colors...");
                 if (json.TryGetValue("Colors", out JToken colorsToken))
                 {
@@ -253,6 +273,14 @@ namespace SpookSuite
                         c_espMonsters = JsonConvert.DeserializeObject<RGBAColor>(espMonstersToken.ToString());
                     if (colors.TryGetValue("ESPDivingBells", out JToken espDivingBellsToken))
                         c_espDivingBells = JsonConvert.DeserializeObject<RGBAColor>(espDivingBellsToken.ToString());
+                    if (colors.TryGetValue("ChamPlayers", out JToken chamPlayersToken))
+                        c_chamPlayers = JsonConvert.DeserializeObject<RGBAColor>(chamPlayersToken.ToString());
+                    if (colors.TryGetValue("ChamItems", out JToken chamItemsToken))
+                        c_chamItems = JsonConvert.DeserializeObject<RGBAColor>(espDivingBellsToken.ToString());
+                    if (colors.TryGetValue("ChamMonsters", out JToken chamMonstersToken))
+                        c_chamMonsters = JsonConvert.DeserializeObject<RGBAColor>(espDivingBellsToken.ToString());
+                    if (colors.TryGetValue("ChamDivingBell", out JToken chamDivingBellToken))
+                        c_chamDivingBell = JsonConvert.DeserializeObject<RGBAColor>(espDivingBellsToken.ToString());
                 }
 
                 Debug.Log("Loading Menu Settings...");
@@ -272,7 +300,23 @@ namespace SpookSuite
                         i_textboxWidth = int.Parse(textboxWidthToken.ToString());
                     if (settings.TryGetValue("MenuAlpha", out JToken menuAlphaToken))
                         f_menuAlpha = float.Parse(menuAlphaToken.ToString());
+                }
 
+                Debug.Log("Loading Reaction Settings...");
+                if (json.TryGetValue("Reactions", out JToken reactionsToken))
+                {
+                    JObject reactions = reactionsToken.ToObject<JObject>();
+
+                    if (reactions.TryGetValue("ReactionMakeSound", out JToken reactionMakeSoundToken))
+                        reaction_makesound = JsonConvert.DeserializeObject<RPCReactions.reactionType>(reactionMakeSoundToken.ToString());
+                    if (reactions.TryGetValue("ReactionDroneSpawn", out JToken reactionDroneSpawnToken))
+                        reaction_dronespawn = JsonConvert.DeserializeObject<RPCReactions.reactionType>(reactionDroneSpawnToken.ToString());
+                    if (reactions.TryGetValue("ReactionSpeedManipulation", out JToken reactionSpeedManipulationToken))
+                        reaction_speedmanipulation = JsonConvert.DeserializeObject<RPCReactions.reactionType>(reactionSpeedManipulationToken.ToString());
+                    if (reactions.TryGetValue("ReactionKick", out JToken reactionKickToken))
+                        reaction_kick = JsonConvert.DeserializeObject<RPCReactions.reactionType>(reactionKickToken.ToString());
+                    if (reactions.TryGetValue("ReactionShadowRealm", out JToken reactionShadowRealmToken))
+                        reaction_shadowrealm = JsonConvert.DeserializeObject<RPCReactions.reactionType>(reactionShadowRealmToken.ToString());
                 }
             }
 

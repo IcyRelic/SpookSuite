@@ -2,9 +2,7 @@ using Photon.Pun;
 using SpookSuite.Cheats;
 using SpookSuite.Cheats.Core;
 using SpookSuite.Menu.Core;
-using SpookSuite.Util;
 using System;
-using System.Linq;
 using UnityEngine;
 
 namespace SpookSuite.Menu.Tab
@@ -14,7 +12,10 @@ namespace SpookSuite.Menu.Tab
         public SelfTab() : base("Self") { }
 
         private Vector2 scrollPos = Vector2.zero;
-        private string s_faceColor = "";
+        private float faceSize = .035f;
+        private string faceText = "SS";
+        private float faceRotation = 0;
+
         public override void Draw()
         {   
             GUILayout.BeginVertical(GUILayout.Width(SpookSuiteMenu.Instance.contentWidth * 0.5f - SpookSuiteMenu.Instance.spaceFromLeft));
@@ -43,6 +44,44 @@ namespace SpookSuite.Menu.Tab
 
             UI.Textbox("Spoofed Name", ref NameSpoof.Value, length: 100, onChanged: NameSpoof.OnValueChanged);
             UI.Checkbox("Use Spoofed Name", Cheat.Instance<NameSpoof>());
+
+            UI.HorizontalSpace("Face", () =>
+            {
+                UI.ExecuteSlider("Rotation", faceRotation.ToString(), () =>
+                {
+                    if (!Player.localPlayer.refs.visor)
+                        return;
+
+                    PlayerVisor v = Player.localPlayer.refs.visor;
+                    v.SetAllFaceSettings(v.hue.Value, v.visorColorIndex, v.visorFaceText.text, faceRotation, v.FaceSize); //doesnt check limit
+                }, ref faceRotation, 0, 360);
+            });
+
+            UI.HorizontalSpace(null, () =>
+            {
+                UI.Textbox("Text", ref faceText, false, 3);
+                UI.Button("Set", () => Player.localPlayer.refs.view.RPC("RPCA_SetVisorText", RpcTarget.All, faceText));
+            });
+
+            UI.HorizontalSpace(null, () =>
+            {
+                UI.ExecuteSlider("Size", faceSize.ToString(), () =>
+                {
+                    if (!Player.localPlayer.refs.visor)
+                        return;
+
+                    PlayerVisor v = Player.localPlayer.refs.visor;
+                    v.SetAllFaceSettings(v.hue.Value, v.visorColorIndex, v.visorFaceText.text, v.FaceRotation, faceSize); //doesnt check limit
+                }, ref faceSize, .001f, 1f);
+                UI.Button("Reset", () =>
+                {
+                    if (!Player.localPlayer.refs.visor)
+                        return;
+
+                    PlayerVisor v = Player.localPlayer.refs.visor;
+                    v.SetAllFaceSettings(v.hue.Value, v.visorColorIndex, v.visorFaceText.text, v.FaceRotation, 0.035f);
+                });
+            });
         }
 
         private void Toggles()
