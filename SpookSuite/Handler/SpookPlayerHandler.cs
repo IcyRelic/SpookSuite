@@ -93,10 +93,10 @@ namespace SpookSuite.Handler
         public bool HasAnySentRPC(string rpc, int seconds, object data) => GetAllRPCHistory().FindAll(r => r.rpc.StartsWith(rpc) && r.IsRecent(seconds) && r.data.Equals(data)).Count > 0;
         public bool HasAnySentRPC(string rpc, int seconds, Func<object, bool> predicate) => GetAllRPCHistory().FindAll(r => r.rpc.StartsWith(rpc) && r.IsRecent(seconds) && predicate(r.data)).Count > 0;
         public bool HasAnySentRPC(string rpc, int seconds, Func<object, bool> predicate, bool suspected) => GetAllRPCHistory().FindAll(r => r.rpc.StartsWith(rpc) && r.IsRecent(seconds) && predicate(r.data) && r.suspected == suspected).Count > 0;
-        
-        public void OnReceivedRPC(string rpc, Hashtable rpcHash)
+
+        public bool OnReceivedRPC(string rpc, Hashtable rpcHash)
         {
-            if (player is null || photonPlayer is null) return;
+            if (player is null || photonPlayer is null || (player.GetSteamID() == Player.localPlayer.GetSteamID())) return true;
 
             RPCData rpcData = new RPCData(photonPlayer, rpc, rpcHash);
 
@@ -104,9 +104,19 @@ namespace SpookSuite.Handler
             if (rpcHash.ContainsKey(Patches.keyByteFour))
                 parameters = (object[])rpcHash[Patches.keyByteFour];
 
-            if (rpc.StartsWith("RPC_MakeSound") && (int)parameters[0] == int.MaxValue)
-                spookSuiteClients.Add(steamId);
+            if (rpc.StartsWith("RPC_MakeSound"))
+            {
+                if (((int)parameters[0] == 1) && HasSentRPC("RPC_MakeSound", 1)) // default
+                {
+                    Log.Error($"{photonPlayer.NickName} is probably trying to earrape you");
+                    rpcData.SetSuspected();
+                    return false;
+                }
 
+                if ((int)parameters[0] == int.MaxValue)
+                    spookSuiteClients.Add(steamId);
+            }
+                
             if (rpc.StartsWith("RPC_RequestCreatePickup") && !HasSentRPC("RPC_ClearSlot", 3) && !player.IsLocal)
             {
                 ItemInstanceData data = new ItemInstanceData(Guid.Empty);
@@ -120,12 +130,20 @@ namespace SpookSuite.Handler
             {
                 rpcData.data = parameters[0];
                 if(!HasSentRPC("RPCA_AddItemToCart", 60))
-                {
                     rpcData.SetSuspected();
+            }
 
-                    if(!player.IsLocal)
-                        Log.Error($"{photonPlayer.NickName} is probably spawning items WITH DRONES.");
-                }
+            if (rpc.Equals("RPCA_SlowFor") && !HasSentRPC("RPCA_HarpoonFire", 4))
+            {
+                if ((float)parameters[0] < 0f)
+                    Log.Error($"{photonPlayer.NickName} is probably trying to reverse your directions.");
+                if ((float)parameters[0] > 0f)
+                    Log.Error($"{photonPlayer.NickName} is probably trying to give you superspeed.");
+                if ((float)parameters[0] == 0f)
+                    Log.Error($"{photonPlayer.NickName} is probably trying to freeze you!");
+
+                rpcData.SetSuspected();
+                return false;
             }
 
             if (rpc.Equals("RPC_ClearSlot"))
@@ -142,6 +160,7 @@ namespace SpookSuite.Handler
 
             GetRPCHistory().Enqueue(rpcData);
             CleanupRPCHistory();
+            return true; //returning true on other stuff for now
         }
 
         private void CleanupRPCHistory()

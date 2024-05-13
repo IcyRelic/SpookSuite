@@ -137,18 +137,6 @@
     <Reference Include="Unity.Timeline">
       <HintPath>Resources\BaseGame\Unity.Timeline.dll</HintPath>
     </Reference>
-    <Reference Include="Unity.VisualScripting.Antlr3.Runtime">
-      <HintPath>Resources\BaseGame\Unity.VisualScripting.Antlr3.Runtime.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.Core">
-      <HintPath>Resources\BaseGame\Unity.VisualScripting.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.Flow">
-      <HintPath>Resources\BaseGame\Unity.VisualScripting.Flow.dll</HintPath>
-    </Reference>
-    <Reference Include="Unity.VisualScripting.State">
-      <HintPath>Resources\BaseGame\Unity.VisualScripting.State.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEngine">
       <HintPath>Resources\BaseGame\UnityEngine.dll</HintPath>
     </Reference>
