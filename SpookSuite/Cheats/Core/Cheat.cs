@@ -43,7 +43,7 @@ namespace SpookSuite.Cheats.Core
             screen.y = Screen.height - screen.y;
             return screen.z > 0.0;
         }
-        protected float GetDistanceToPlayer(Vector3 position)
+        protected float GetDistanceToPos(Vector3 position)
         {
             return (float)Math.Round((double)Vector3.Distance(Player.localPlayer.refs.cameraPos.position, position));
         }

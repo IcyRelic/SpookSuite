@@ -66,28 +66,21 @@ namespace SpookSuite.Cheats
                     Log.Error($"Spawned Item Detected. => ItemID: {itemID} Suspected: {suspected?.rpc} Guid: {data.m_guid} | Spawned By: {suspected?.sender.NickName}");
 
                     if(Enabled) InvokeRemoveSpawn(data);
-                    else Log.Warning($"AntiSpawning Disabled; Allowing Spawn => {data.m_guid}");
-
-
-                    
+                    else Log.Warning($"AntiSpawning Disabled; Allowing Spawn => {data.m_guid}");                  
                 }
                 else Log.Warning($"Host Spawn Detected As Good Spawn => {data.m_guid}");
             }
             else Log.Warning($"Good Spawn => {data.m_guid}");
         }
 
-
         private void InvokeRemoveSpawn(ItemInstanceData data)
         {
             SpookSuite.Invoke(() =>
             {
-
                 Pickup pickup = GameUtil.GetPickupByGuid(data.m_guid);
 
                 Log.Error($"Sending RPC_Remove for spawned item {data.m_guid}");
                 pickup.m_photonView.RPC("RPC_Remove", RpcTarget.MasterClient);
-
-
             }, 1f);
         }
     }

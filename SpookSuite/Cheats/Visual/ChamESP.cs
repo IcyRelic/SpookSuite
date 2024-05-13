@@ -61,7 +61,7 @@ namespace SpookSuite.Cheats
 
                     if (transform is null) return;
 
-                    float distance = GetDistanceToPlayer(transform.position);
+                    float distance = GetDistanceToPos(transform.position);
                     RGBAColor c = colorSelector((T)o);
                     c.a = opacity;
                     o.GetChamHandler().ProcessCham(distance, c);
