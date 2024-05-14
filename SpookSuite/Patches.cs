@@ -93,7 +93,7 @@ namespace SpookSuite
             if (param.m_nLobbiesMatching == 0U)
             {
                 Debug.LogError("Found No Matches hosting Retrying 1");
-                MainMenuHandler.SteamLobbyHandler.Reflect().SetValue("m_Joining", false);
+                MainMenuHandler.SteamLobbyHandler.Reflect().SetValue("m_isJoining", false);
                 MainMenuHandler.SteamLobbyHandler.JoinRandom();
                 return false;
             }
@@ -142,7 +142,8 @@ namespace SpookSuite
                 return false;
             }
             Debug.LogError("Found No Matches hosting Retyring 2");
-            MainMenuHandler.SteamLobbyHandler.Reflect().SetValue("m_Joining", false);
+            MainMenuHandler.SteamLobbyHandler.Reflect().SetValue("m_isJoining", false);
+            MainMenuHandler.SteamLobbyHandler.Reflect().SetValue("m_Joined", false);
             MainMenuHandler.SteamLobbyHandler.JoinRandom();
 
             return false;

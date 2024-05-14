@@ -49,6 +49,8 @@ namespace SpookSuite
         public static RPCReactions.reactionType reaction_speedmanipulation = RPCReactions.reactionType.none;
         public static RPCReactions.reactionType reaction_kick = RPCReactions.reactionType.none;
         public static RPCReactions.reactionType reaction_shadowrealm = RPCReactions.reactionType.none;
+        public static RPCReactions.reactionType reaction_crash = RPCReactions.reactionType.none;
+        public static RPCReactions.reactionType reaction_blackscreen = RPCReactions.reactionType.none;
 
         internal class Changelog
         {
@@ -135,6 +137,8 @@ namespace SpookSuite
                 reactions["ReactionSpeedManipulation"] = JsonConvert.SerializeObject(reaction_speedmanipulation);
                 reactions["ReactionKick"] = JsonConvert.SerializeObject(reaction_kick);
                 reactions["ReactionShadowRealm"] = JsonConvert.SerializeObject(reaction_shadowrealm);
+                reactions["ReactionCrash"] = JsonConvert.SerializeObject(reaction_crash);
+                reactions["ReactionBlackScreen"] = JsonConvert.SerializeObject(reaction_blackscreen);
 
                 settings["MenuFontSize"] = i_menuFontSize.ToString();
                 settings["MenuWidth"] = i_menuWidth.ToString();
@@ -165,19 +169,14 @@ namespace SpookSuite
                 File.WriteAllText(conf, json.ToString());
             }
 
-
             public static void LoadConfig()
             {
                 CreateConfigIfNotExists();
 
                 string jsonStr = File.ReadAllText(config);
-
-
                 JObject json = JObject.Parse(jsonStr);
 
-
                 Debug.Log("Loading Keybinds...");
-
                 if (json.TryGetValue("KeyBinds", out JToken keybindsToken))
                 {
                     Cheat.instances.ForEach(c => c.keybind = c.defaultKeybind);
@@ -193,7 +192,6 @@ namespace SpookSuite
                 }
 
                 Debug.Log("Loading Toggles...");
-
                 if (json.TryGetValue("Toggles", out JToken togglesToken))
                 {
                     foreach (var item in togglesToken.ToObject<Dictionary<string, string>>())
@@ -212,7 +210,6 @@ namespace SpookSuite
                 }
 
                 Debug.Log("Loading Values...");
-
                 if (json.TryGetValue("Values", out JToken valuesToken))
                 {
                     foreach (var item in valuesToken.ToObject<Dictionary<string, string>>())
@@ -255,8 +252,6 @@ namespace SpookSuite
                     if (cheatSettings.TryGetValue("ChamsLasers", out JToken chamsLasersToken))
                         ChamESP.displayLasers = bool.Parse(chamsLasersToken.ToString());
                 }
-
-
 
                 Debug.Log("Loading Colors...");
                 if (json.TryGetValue("Colors", out JToken colorsToken))
@@ -317,6 +312,10 @@ namespace SpookSuite
                         reaction_kick = JsonConvert.DeserializeObject<RPCReactions.reactionType>(reactionKickToken.ToString());
                     if (reactions.TryGetValue("ReactionShadowRealm", out JToken reactionShadowRealmToken))
                         reaction_shadowrealm = JsonConvert.DeserializeObject<RPCReactions.reactionType>(reactionShadowRealmToken.ToString());
+                    if (reactions.TryGetValue("ReactionCrash", out JToken reactionCrashToken))
+                        reaction_crash = JsonConvert.DeserializeObject<RPCReactions.reactionType>(reactionCrashToken.ToString());
+                    if (reactions.TryGetValue("ReactionBlackScreen", out JToken reactionBlackScreen))
+                        reaction_blackscreen = JsonConvert.DeserializeObject<RPCReactions.reactionType>(reactionBlackScreen.ToString());
                 }
             }
 
@@ -329,7 +328,6 @@ namespace SpookSuite
 
                 LoadConfig();
             }
-
         }
     }
 }

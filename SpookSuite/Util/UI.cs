@@ -113,6 +113,19 @@ namespace SpookSuite
             GUILayout.EndHorizontal();
         }
 
+        public static void Dropdown(string label, ref bool drop, params UIButton[] buttons)
+        {
+            if (!drop)
+            {
+                if (GUILayout.Button("< " + label, new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter })) drop = true;
+            }
+            if (drop)
+            {
+                if (GUILayout.Button("^ " + label, new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter })) drop = false;
+                buttons.ToList().ForEach(b => b.Draw());
+            }
+        }
+
         public static void Checkbox(string header, ToggleCheat cheat)
         {
             GUILayout.BeginHorizontal();

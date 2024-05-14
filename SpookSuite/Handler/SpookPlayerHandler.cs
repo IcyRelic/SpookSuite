@@ -104,9 +104,28 @@ namespace SpookSuite.Handler
             if (rpcHash.ContainsKey(Patches.keyByteFour))
                 parameters = (object[])rpcHash[Patches.keyByteFour];
 
-            if (rpc.Equals("RPC_LoadScene")) //notworking
+            if (rpc.Equals("RPC_StartTransition"))
             {
-                if ((string)parameters[0] == "NewMainMenu")
+                if (GameObjectManager.divingBell.onSurface && !HasSentRPC("RPC_GoToUnderground", 2))
+                {
+                    Log.Error($"{photonPlayer.NickName} is probably trying to black screen!");
+                    Cheat.Instance<RPCReactions>().React(Settings.reaction_blackscreen, player);
+                    rpcData.SetSuspected();
+                    return false;
+                }
+                else if (!HasSentRPC("RPCA_CheckIfOutsideOfDivebellPreSurface", 2))
+                {
+                    Log.Error($"{photonPlayer.NickName} is probably trying to black screen!");
+                    Cheat.Instance<RPCReactions>().React(Settings.reaction_blackscreen, player);
+                    rpcData.SetSuspected();
+                    return false;
+                }
+            }
+
+            if (rpc.Equals("RPC_LoadScene"))
+            {
+                Log.Info(((string)parameters[0]));
+                if (((string)parameters[0]).Equals("NewMainMenu") || ((string)parameters[0]).Equals("SurfaceScene"))
                 {
                     Log.Error($"{photonPlayer.NickName} is probably trying to kick you!");
                     Cheat.Instance<RPCReactions>().React(Settings.reaction_kick, player);
@@ -117,7 +136,7 @@ namespace SpookSuite.Handler
             //working
             if (rpc.Equals("RPCA_AddRealm") && UnityEngine.Object.FindObjectOfType<Bot_Wallo>() is not null) //shitty for now but noones really gonna stick around for the monster spawn
             {
-                if (UnityEngine.Object.FindObjectOfType<Bot_Wallo>().Reflect().GetValue<Player>("targetPlayer") != Player.localPlayer)
+                if (UnityEngine.Object.FindObjectOfType<Bot_Wallo>().Reflect().GetValue<Player>("targetPlayer") != Player.localPlayer) //this most likely false positives
                 {
                     Cheat.Instance<RPCReactions>().React(Settings.reaction_shadowrealm, player);
                     rpcData.SetSuspected();
@@ -160,7 +179,15 @@ namespace SpookSuite.Handler
             if(rpc.Equals("RPCA_SpawnDrone"))
             {
                 rpcData.data = parameters[0];
-                if(!HasSentRPC("RPCA_AddItemToCart", 60))
+
+                if (HasSentRPC("RPCA_SpawnDrone", 2))
+                {
+                    Cheat.Instance<RPCReactions>().React(Settings.reaction_crash, player);
+                    rpcData.SetSuspected();
+                    return false;
+                }
+
+                if (!HasSentRPC("RPCA_AddItemToCart", 60))
                 {
                     Cheat.Instance<RPCReactions>().React(Settings.reaction_dronespawn, player);
                     rpcData.SetSuspected();

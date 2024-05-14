@@ -32,6 +32,8 @@ namespace SpookSuite.Menu.Tab
         private bool dropdown_speedmanipulation = false;
         private bool dropdown_kick = false;
         private bool dropdown_shadowrealm = false;
+        private bool dropdown_crash = false;
+        private bool dropdown_blackscreen = false;
 
         public override void Draw()
         {
@@ -108,14 +110,16 @@ namespace SpookSuite.Menu.Tab
             ReactionSetter("Drone Spawning", ref Settings.reaction_dronespawn, ref dropdown_dronespawn);
             ReactionSetter("Speed Manipulation", ref Settings.reaction_speedmanipulation, ref dropdown_speedmanipulation);
             ReactionSetter("Kick", ref Settings.reaction_kick, ref dropdown_kick);
+            ReactionSetter("Crash", ref Settings.reaction_crash, ref dropdown_crash);
             ReactionSetter("Shadow Realm", ref Settings.reaction_shadowrealm, ref dropdown_shadowrealm);
+            ReactionSetter("Black Screen", ref Settings.reaction_blackscreen, ref dropdown_blackscreen);
         }
 
         private void ReactionSetter(string label, ref RPCReactions.reactionType reaction, ref bool drop)
         {
             RPCReactions.reactionType r = reaction;
 
-            Dropdown(label, ref drop,
+            UI.Dropdown(label, ref drop,
                 new UIButton("None", () => r = RPCReactions.reactionType.none, r == RPCReactions.reactionType.none ? new GUIStyle(GUI.skin.button) { fontStyle = FontStyle.Bold} : null),
                 new UIButton("Kick", () => r = RPCReactions.reactionType.kick, r == RPCReactions.reactionType.kick ? new GUIStyle(GUI.skin.button) { fontStyle = FontStyle.Bold } : null),
                 new UIButton("Disconnect", () => r = RPCReactions.reactionType.disconnect, r == RPCReactions.reactionType.disconnect ? new GUIStyle(GUI.skin.button) { fontStyle = FontStyle.Bold } : null),
@@ -123,19 +127,6 @@ namespace SpookSuite.Menu.Tab
                 );
 
             reaction = r;
-        }
-
-        private void Dropdown(string label, ref bool drop, params UIButton[] buttons)
-        {
-            if (!drop)
-            {
-                if (GUILayout.Button("< " + label, new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter} )) drop = true;
-            }
-            if (drop)
-            {
-                if (GUILayout.Button("^ " + label, new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter })) drop = false;
-                buttons.ToList().ForEach(b => b.Draw());
-            }
         }
 
         private void SetColor(ref RGBAColor color, string hexCode)
