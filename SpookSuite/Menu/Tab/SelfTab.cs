@@ -75,6 +75,7 @@ namespace SpookSuite.Menu.Tab
                 }, ref faceSize, .001f, 1f);
                 UI.Button("Reset", () =>
                 {
+                    faceSize = .035f;
                     if (!Player.localPlayer.refs.visor)
                         return;
 

@@ -31,7 +31,6 @@ namespace SpookSuite
             harmonyLoaded = true;
         }
 
-
         public static void Unload() => Object.Destroy(Load);
     }
 }

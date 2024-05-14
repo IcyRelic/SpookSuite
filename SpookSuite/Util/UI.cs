@@ -252,7 +252,6 @@ namespace SpookSuite
             GUILayout.EndHorizontal();
         }
 
-
         public static void TextboxAction<T>(string label, ref T value, int length = -1, params UIButton[] buttons) where T : struct, IConvertible, IComparable<T>
         {
             GUILayout.BeginHorizontal();

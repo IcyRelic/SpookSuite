@@ -123,7 +123,9 @@ namespace SpookSuite.Menu.Tab
                 new UIButton("None", () => r = RPCReactions.reactionType.none, r == RPCReactions.reactionType.none ? new GUIStyle(GUI.skin.button) { fontStyle = FontStyle.Bold} : null),
                 new UIButton("Kick", () => r = RPCReactions.reactionType.kick, r == RPCReactions.reactionType.kick ? new GUIStyle(GUI.skin.button) { fontStyle = FontStyle.Bold } : null),
                 new UIButton("Disconnect", () => r = RPCReactions.reactionType.disconnect, r == RPCReactions.reactionType.disconnect ? new GUIStyle(GUI.skin.button) { fontStyle = FontStyle.Bold } : null),
-                new UIButton("Clown Em", () => r = RPCReactions.reactionType.clownem, r == RPCReactions.reactionType.clownem ? new GUIStyle(GUI.skin.button) { fontStyle = FontStyle.Bold } : null)
+                new UIButton("Clown Em", () => r = RPCReactions.reactionType.clownem, r == RPCReactions.reactionType.clownem ? new GUIStyle(GUI.skin.button) { fontStyle = FontStyle.Bold } : null),
+                new UIButton("Send Away", () => r = RPCReactions.reactionType.shadowrealm, r == RPCReactions.reactionType.shadowrealm ? new GUIStyle(GUI.skin.button) { fontStyle = FontStyle.Bold } : null)
+
                 );
 
             reaction = r;

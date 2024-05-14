@@ -115,7 +115,7 @@ namespace SpookSuite.Menu.Tab
             UI.Button("Heal", () => selectedPlayer.refs.view.RPC("RPCA_Heal", RpcTarget.All, 100f));
 
             UI.Button("Kick", () => { SurfaceNetworkHandler.Instance.photonView.RPC("RPC_LoadScene", selectedPlayer.PhotonPlayer(), "NewMainMenu"); });
-            UI.Button("Send Away", () => ShadowRealmHandler.instance.Reflect().GetValue<PhotonView>("view").RPC("RPCA_AddRealm", RpcTarget.All, 2, ShadowRealmHandler.instance.Reflect().Invoke<int>("GetSpotID"),selectedPlayer.refs.view.ViewID));
+            UI.Button("Send Away", () => ShadowRealmHandler.instance.TeleportPlayerToRandomRealm(selectedPlayer));
 
             UI.Header("Hat Stuff", true);
             UI.Button("Remove Hat", () => selectedPlayer.refs.view.RPC("RPCA_EquipHat", RpcTarget.All, -1));
