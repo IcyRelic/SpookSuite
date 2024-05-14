@@ -56,7 +56,6 @@ namespace SpookSuite.Menu.Tab
                 GameObjectManager.pickups.ForEach(x => GameUtil.TeleportItem(x));
             });
             
-            
             UI.Button("Use Diving Bell dontcare", () => GameObjectManager.divingBellButton.Interact(Player.localPlayer));
             UI.Button("Use Diving Bell Underground", () => GameObjectManager.divingBell.GoUnderground());
             UI.Button("Use Diving Bell Surface", () => GameObjectManager.divingBell.GoToSurface());

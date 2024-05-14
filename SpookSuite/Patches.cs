@@ -55,6 +55,30 @@ namespace SpookSuite
             Log.Error("Connection Detected!");
             NameSpoof.TrySetNickname();
         }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(SteamLobbyHandler), "JoinRandom")]
+        public static bool JoinRandom(SteamLobbyHandler __instance)
+        {
+            if (!Cheat.Instance<JoinWithPlugins>().Enabled)
+                return true;
+
+            if (__instance.Reflect().GetValue<bool>("m_isJoining") || __instance.Reflect().GetValue<bool>("m_joined"))
+            {
+                Debug.Log("Already Joining");
+                return true;
+            }
+            __instance.Reflect().SetValue("m_isJoining", true);
+            string pchValueToMatch = new BuildVersion(Application.version).ToMatchmaking();
+            SteamMatchmaking.AddRequestLobbyListStringFilter("ContentWarningVersion", pchValueToMatch, ELobbyComparison.k_ELobbyComparisonEqual);
+            SteamMatchmaking.AddRequestLobbyListResultCountFilter(10);
+            SteamAPICall_t hAPICall = SteamMatchmaking.RequestLobbyList();
+
+            __instance.Reflect().GetValue<CallResult<LobbyMatchList_t>>("m_OnMatchListCallResult").Set(hAPICall, null);
+            return false;
+        }
+
+
         [HarmonyPrefix]
         [HarmonyPatch(typeof(SteamLobbyHandler), "OnMatchListReceived")]
         public static bool OnMatchListReceived(SteamLobbyHandler __instance, LobbyMatchList_t param, bool biofailure)

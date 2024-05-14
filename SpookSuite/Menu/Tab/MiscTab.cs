@@ -72,6 +72,7 @@ namespace SpookSuite.Menu.Tab
             UI.Button("Activate Diving Bell", Cheat.Instance<UseDivingBell>().Execute);
             UI.Button("Unlock Island Upgrades", () => { GameObjectManager.unlocks.ForEach(u => { if (u.locked) UnityEngine.Object.FindObjectOfType<IslandUnlocks>().Reflect().GetValue<PhotonView>("view").RPC("RPCA_Activate", RpcTarget.All, new int[] { u.Reflect().Invoke<int>("GetID") }); }); });
             UI.Checkbox("Anti Pickup", Cheat.Instance<AntiPickup>());
+            UI.Checkbox("Join Lobbies With Plugins", Cheat.Instance<JoinWithPlugins>());
             UI.Checkbox("AntiSpawner (Auto Remove Spawned Items From Other Players)", Cheat.Instance<AntiSpawner>());
             //UI.Checkbox("Hear Push To Talk Players Always", Cheat.Instance<NoPushToTalk>()); is broken since update?
         }
