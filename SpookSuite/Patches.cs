@@ -63,7 +63,7 @@ namespace SpookSuite
             if (!Cheat.Instance<JoinWithPlugins>().Enabled)
                 return true;
 
-            if (__instance.Reflect().GetValue<bool>("m_isJoining") || __instance.Reflect().GetValue<bool>("m_joined"))
+            if (__instance.Reflect().GetValue<bool>("m_isJoining") || __instance.Reflect().GetValue<bool>("m_Joined"))
             {
                 Debug.Log("Already Joining");
                 return true;
