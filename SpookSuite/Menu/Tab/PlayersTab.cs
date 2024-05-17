@@ -12,6 +12,9 @@ using System.Linq;
 using UnityEngine;
 using Zorro.Core;
 using Steamworks;
+using System.Drawing;
+using ExitGames.Client.Photon;
+using Photon.Voice.Unity;
 
 namespace SpookSuite.Menu.Tab
 {
@@ -22,7 +25,8 @@ namespace SpookSuite.Menu.Tab
         private Vector2 scrollPos = Vector2.zero;
         private Vector2 scrollPos2 = Vector2.zero;
         public static Player selectedPlayer = null;
-        public static bool freezeothers;
+        public static string faceText = "SS";
+        public static string faceColor = "000000";
         public int num;
 
         public override void Draw()
@@ -41,16 +45,11 @@ namespace SpookSuite.Menu.Tab
 
         private void GeneralActions()
         {
-            if (!PhotonNetwork.InRoom)
-            {
-                UI.Header("You must join a game for the players tab to work.");
-                return;
-            }
-
             UI.Header("ALL Players");
             UI.Button("Kick All", () => Cheat.Instance<KickAll>().Execute());
             UI.Button("Kill All", () => Cheat.Instance<KillAll>().Execute());
             UI.Button("Revive All", () => Cheat.Instance<ReviveAll>().Execute());
+            UI.Button("Limbo Others", () => Limbo.AddPlayers(GameObjectManager.players.Where(p => !p.IsLocal).ToList()));
             UI.HorizontalSpace(null, () =>
             {
                 UI.Textbox("Bombs", ref BombAll.Value, false, 3); //max 999 otherwise too laggy
@@ -77,10 +76,8 @@ namespace SpookSuite.Menu.Tab
             {
                 UI.Header("SpookSuite Specialty");
                 //add things that we could do to our users for fun, maybe disabling something in their menu?
-                UI.Button("WASSUP", () => { });
-                
-            }
-       
+                UI.Button("WASSUP", () => { });           
+            }     
 
             UI.Header("Selected Player Actions");
 
@@ -98,9 +95,15 @@ namespace SpookSuite.Menu.Tab
                 UI.Button("Block RPCs", () => selectedPlayer.Handle().ToggleRPCBlock(), selectedPlayer.Handle().IsRPCBlocked() ? "UnBlock" : "Block");
 
             UI.Button("Teleport", () => { Player.localPlayer.Reflect().Invoke("Teleport", selectedPlayer.refs.cameraPos.position, new Vector3(0, 0, 0)); }, "Teleport");
-            UI.Button("Set Face", () => { selectedPlayer.Handle().RPC("RPCA_SetVisorText", RpcTarget.All, "LoL"); });
-            UI.Button("Set Face Color", () => { selectedPlayer.refs.visor.ApplyVisorColor(Color.yellow); });
-
+            UI.TextboxAction("Face Text", ref faceText, 3, new UIButton("Set", () => selectedPlayer.Handle().RPC("RPCA_SetVisorText", RpcTarget.All, faceText)));
+            UI.TextboxAction("Face Color", ref faceColor, 8,
+                new UIButton("Set", () =>
+                {
+                    while (faceColor.Length < 6) faceColor += "0";
+                    selectedPlayer.refs.visor.ApplyVisorColor(new RGBAColor(faceColor).GetColor());
+                }
+            ));
+            UI.Button("test", () => PhotonNetwork.RaiseEvent(20, selectedPlayer.photonView.Owner.ActorNumber, RaiseEventOptions.Default, SendOptions.SendReliable));
             UI.Button("Spawn Bomb", () => GameUtil.SpawnItem(GameUtil.GetItemByName("bomb").id, selectedPlayer.refs.cameraPos.position), "Bomb");
             UI.Button("Freeze", () => selectedPlayer.Reflect().Invoke("CallSlowFor", 0f, 4f), "Freeze");
             
@@ -112,10 +115,16 @@ namespace SpookSuite.Menu.Tab
             UI.Button("Tase", () => selectedPlayer.Reflect().Invoke("CallTakeDamageAndTase", 1f, 5f));
 
             UI.Button("Force Sit", () => { Sittable s = GameObjectManager.sittables.GetRandom(); selectedPlayer.refs.view.RPC("RPCA_Sit", RpcTarget.All, s.Reflect().GetValue<PhotonView>("view").ViewID, s.Reflect().GetValue<int>("seatID")); });
-            UI.Button("Heal", () => selectedPlayer.refs.view.RPC("RPCA_Heal", RpcTarget.All, 100f));
+            UI.Button("Heal", () => selectedPlayer.Handle().RPC("RPCA_Heal", RpcTarget.All, 100f));
 
             UI.Button("Kick", () => { SurfaceNetworkHandler.Instance.photonView.RPC("RPC_LoadScene", selectedPlayer.PhotonPlayer(), "NewMainMenu"); });
             UI.Button("Send Away", () => ShadowRealmHandler.instance.TeleportPlayerToRandomRealm(selectedPlayer));
+            UI.HorizontalSpace("Limbo", () => 
+            {
+                UI.Button("Add To Limbo", () => Limbo.limboList.Add(selectedPlayer)); 
+                UI.Button("Remove From Limbo", () => Limbo.limboList.Remove(selectedPlayer));
+            });
+
 
             UI.Header("Hat Stuff", true);
             UI.Button("Remove Hat", () => selectedPlayer.refs.view.RPC("RPCA_EquipHat", RpcTarget.All, -1));

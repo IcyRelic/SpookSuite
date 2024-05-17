@@ -41,6 +41,7 @@ namespace SpookSuite.Menu.Core
             tabs.Add(new MiscTab());
             tabs.Add(new EnemyTab());
             tabs.Add(new ItemTab());
+            tabs.Add(new LobbyTab());
 
             Resize();
             selectedTab = tabs.IndexOf(tabs.Where(x => x.name == "Start").First());

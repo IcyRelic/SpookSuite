@@ -122,21 +122,20 @@ namespace SpookSuite.Handler
                 }
             }
 
-            if (rpc.Equals("RPC_LoadScene"))
+            //if (rpc.Equals("RPC_LoadScene"))
+            //{
+            //    if (((string)parameters[0]).Equals("NewMainMenu") || ((string)parameters[0]).Equals("SurfaceScene"))
+            //    {
+            //        Log.Error($"{photonPlayer.NickName} is probably trying to kick you!");
+            //        Cheat.Instance<RPCReactions>().React(Settings.reaction_kick, player);
+            //        rpcData.SetSuspected();
+            //        return false;
+            //    }
+            //}
+
+            if (rpc.Equals("RPCA_AddRealm") && UnityEngine.Object.FindObjectOfType<Bot_Wallo>() is not null)
             {
-                Log.Info(((string)parameters[0]));
-                if (((string)parameters[0]).Equals("NewMainMenu") || ((string)parameters[0]).Equals("SurfaceScene"))
-                {
-                    Log.Error($"{photonPlayer.NickName} is probably trying to kick you!");
-                    Cheat.Instance<RPCReactions>().React(Settings.reaction_kick, player);
-                    rpcData.SetSuspected();
-                    return false;
-                }
-            }
-            //working
-            if (rpc.Equals("RPCA_AddRealm") && UnityEngine.Object.FindObjectOfType<Bot_Wallo>() is not null) //shitty for now but noones really gonna stick around for the monster spawn
-            {
-                if (UnityEngine.Object.FindObjectOfType<Bot_Wallo>().Reflect().GetValue<Player>("targetPlayer") != Player.localPlayer) //this most likely false positives
+                if (UnityEngine.Object.FindObjectOfType<Bot_Wallo>().Reflect().GetValue<Player>("targetPlayer") != Player.localPlayer)
                 {
                     Cheat.Instance<RPCReactions>().React(Settings.reaction_shadowrealm, player);
                     rpcData.SetSuspected();
@@ -150,9 +149,9 @@ namespace SpookSuite.Handler
                 return false;
             }
 
-            if (rpc.Equals("RPC_MakeSound")) //dont know
+            if (rpc.Equals("RPC_MakeSound"))
             {
-                if ((int)parameters[0] == 1) // default
+                if ((int)parameters[0] == 1)
                 {
                     if (HasSentRPC("RPC_MakeSound", 1))
                     {
@@ -195,7 +194,7 @@ namespace SpookSuite.Handler
                 }
             }
 
-            if (rpc.Equals("RPCA_SlowFor") && !HasSentRPC("RPCA_HarpoonFire", 4)) //works
+            if (rpc.Equals("RPCA_SlowFor") && !HasSentRPC("RPCA_HarpoonFire", 4))
             {
                 if ((float)parameters[0] != .1f || (float)parameters[1] != 2f)
                 {
@@ -219,7 +218,7 @@ namespace SpookSuite.Handler
 
             GetRPCHistory().Enqueue(rpcData);
             CleanupRPCHistory();
-            return true; //returning true on other stuff for now
+            return true;
         }
 
         private void CleanupRPCHistory()

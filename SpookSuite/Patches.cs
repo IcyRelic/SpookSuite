@@ -7,8 +7,6 @@ using SpookSuite.Cheats.Core;
 using SpookSuite.Components;
 using SpookSuite.Handler;
 using SpookSuite.Util;
-using System;
-using System.Collections.Generic;
 using Unity.Collections;
 using Unity.Mathematics;
 using UnityEngine;
@@ -18,18 +16,13 @@ using Zorro.Core;
 using Zorro.UI;
 using SpookSuite.Menu.Tab;
 using Steamworks;
+using SpookSuite.Menu.Game;
 
-using Object = UnityEngine.Object;
-using System.Net;
 namespace SpookSuite
 {
     [HarmonyPatch]
     internal static class Patches
     {
-        public static List<byte> waitingForItemSpawn = new List<byte>();
-        public static List<Guid> allowedBombs = new List<Guid>();
-        public static bool SpawnBigSlap = false;
-
         internal static readonly object keyByteZero = (object)(byte)0;
         internal static readonly object keyByteOne = (object)(byte)1;
         internal static readonly object keyByteTwo = (object)(byte)2;
@@ -41,7 +34,7 @@ namespace SpookSuite
         internal static readonly object keyByteEight = (object)(byte)8;
 
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(ConnectionStateHandler), nameof(ConnectionStateHandler.Disconnect))]
+        [HarmonyPatch(typeof(ConnectionStateHandler), "Disconnect")]
         public static void Disconnect()
         {
             Log.Info("Disconnect Detected!");
@@ -49,7 +42,7 @@ namespace SpookSuite
         }
 
         [HarmonyPostfix]
-        [HarmonyPatch(typeof(LoadBalancingClient), nameof(LoadBalancingClient.OpJoinOrCreateRoom))]
+        [HarmonyPatch(typeof(LoadBalancingClient), "OpJoinOrCreateRoom")]
         public static void Connect()
         {
             Log.Error("Connection Detected!");
@@ -60,13 +53,20 @@ namespace SpookSuite
         [HarmonyPatch(typeof(SteamLobbyHandler), "JoinRandom")]
         public static bool JoinRandom(SteamLobbyHandler __instance)
         {
+            Modal.Show("Continue", "If you get inf loading use this otherwise click yes.", new ModalOption[] { new ModalOption("Yes"), new ModalOption("No", () =>
+            {
+                __instance.Reflect().SetValue("m_isJoining", false);
+                __instance.Reflect().SetValue("m_Joined", false);
+                SpookPageUI.TransitionToPage<MainMenuMainPage>();
+            })});
+
             if (!Cheat.Instance<JoinWithPlugins>().Enabled)
                 return true;
 
             if (__instance.Reflect().GetValue<bool>("m_isJoining") || __instance.Reflect().GetValue<bool>("m_Joined"))
             {
                 Debug.Log("Already Joining");
-                return true;
+                return false;
             }
             __instance.Reflect().SetValue("m_isJoining", true);
             string pchValueToMatch = new BuildVersion(Application.version).ToMatchmaking();
@@ -78,97 +78,26 @@ namespace SpookSuite
             return false;
         }
 
-
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(SteamLobbyHandler), "OnMatchListReceived")]
-        public static bool OnMatchListReceived(SteamLobbyHandler __instance, LobbyMatchList_t param, bool biofailure)
-        {
-            return true;
-
-            if (biofailure)
-            {
-                Debug.LogError("Matchlist Biofail");
-                return true;
-            }
-            if (param.m_nLobbiesMatching == 0U)
-            {
-                Debug.LogError("Found No Matches hosting Retrying 1");
-                MainMenuHandler.SteamLobbyHandler.Reflect().SetValue("m_isJoining", false);
-                MainMenuHandler.SteamLobbyHandler.JoinRandom();
-                return false;
-            }
-            List<ValueTuple<CSteamID, int>> list = new List<ValueTuple<CSteamID, int>>();
-            int num = 0;
-            while ((long)num < (long)((ulong)param.m_nLobbiesMatching))
-            {
-                CSteamID lobbyByIndex = SteamMatchmaking.GetLobbyByIndex(num);
-                string lobbyData = SteamMatchmaking.GetLobbyData(lobbyByIndex, "ContentWarningVersion");
-                string lobbyData2 = SteamMatchmaking.GetLobbyData(lobbyByIndex, "PhotonRegion");
-                int numLobbyMembers = SteamMatchmaking.GetNumLobbyMembers(lobbyByIndex);
-                int lobbyMemberLimit = SteamMatchmaking.GetLobbyMemberLimit(lobbyByIndex);
-                string[] array = new string[10];
-                array[0] = "Checking Lobby: ";
-                int num2 = 1;
-                CSteamID csteamID = lobbyByIndex;
-                array[num2] = csteamID.ToString();
-                array[2] = " GameVersion: ";
-                array[3] = lobbyData;
-                array[4] = "Region: ";
-                array[5] = lobbyData2;
-                array[6] = "Number of players: ";
-                array[7] = numLobbyMembers.ToString();
-                array[8] = " / ";
-                array[9] = lobbyMemberLimit.ToString();
-                VerboseDebug.Log(string.Concat(array));
-                for (int i = 0; i < numLobbyMembers; i++)
-                {
-                    string str = "Checking Steam User In Lobby ";
-                    csteamID = SteamMatchmaking.GetLobbyMemberByIndex(lobbyByIndex, i);
-                    VerboseDebug.Log(str + csteamID.m_SteamID.ToString());
-                }
-                string cloudRegion = PhotonNetwork.CloudRegion;
-                bool flag = !string.IsNullOrEmpty(lobbyData2) && lobbyData2 == cloudRegion;
-                if (lobbyData == new BuildVersion(Application.version).ToMatchmaking() && flag && numLobbyMembers < 4)
-                {
-                    list.Add(new ValueTuple<CSteamID, int>(lobbyByIndex, num));
-                }
-                num++;
-            }
-            Debug.Log("Received SteamLobby Matchlist: " + param.m_nLobbiesMatching.ToString() + " Matching: " + list.Count.ToString());
-            if (list.Count > 0)
-            {
-                CSteamID lobbyByIndex2 = SteamMatchmaking.GetLobbyByIndex(list.GetRandom<ValueTuple<CSteamID, int>>().Item2);
-                __instance.Reflect().Invoke("JoinLobby", lobbyByIndex2);
-                return false;
-            }
-            Debug.LogError("Found No Matches hosting Retyring 2");
-            MainMenuHandler.SteamLobbyHandler.Reflect().SetValue("m_isJoining", false);
-            MainMenuHandler.SteamLobbyHandler.Reflect().SetValue("m_Joined", false);
-            MainMenuHandler.SteamLobbyHandler.JoinRandom();
-
-            return false;
-        }
-
         private static float rot = 1;
         [HarmonyPrefix]
         [HarmonyPatch(typeof(PlayerSyncer), "OnPhotonSerializeView")] //the only reason this patch is like this is incase we want to add any other features that require spoofing
         public static bool OnPhotonSerializeView(PlayerSyncer __instance, ref PhotonStream stream, ref PhotonMessageInfo info)
         {
-            if (!__instance.Reflect().GetValue<Player>("player").IsLocal || !PhotonNetwork.InRoom)
+            if (!__instance.Reflect().GetValue<Player>("player").IsLocal || !PhotonNetwork.InRoom || !SpawnHandler.Instance.Reflect().GetValue<bool>("m_Spawned"))
                 return true;
 
             if (stream.IsWriting)
             {
                 rot += Spinbot.Value;
-                if(rot > 360)
-                    rot = rot - 360;
+                if (rot > 360)
+                    rot = 0;
 
                 Vector3 pos = new Vector3();
 
                 if (Cheat.Instance<NoClip>().Enabled && !Cheat.Instance<Invisibility>().Enabled)
                     pos = Player.localPlayer.refs.cameraPos.position;
                 else if (Cheat.Instance<Invisibility>().Enabled)
-                    pos = new Vector3(1000, 100, 1000);
+                    pos = new Vector3(1000, 99, 1000);
                 else
                     pos = Player.localPlayer.Reflect().Invoke<Vector3>("GetRelativePosition_Rig", false, BodypartType.Hip, Vector3.zero);
 
@@ -200,13 +129,13 @@ namespace SpookSuite
                 binarySerializer.WriteByte(FloatCompression.CompressZeroOne(Player.localPlayer.data.microphoneValue)); //earrape?
                 binarySerializer.WriteByte((byte)playerSyncerBoolFlag);
                 binarySerializer.WriteByte((Player.localPlayer.data.selectedItemSlot == -1) ? byte.MaxValue : ((byte)Player.localPlayer.data.selectedItemSlot));
-                
+
                 byte[] obj = binarySerializer.buffer.ToByteArray();
                 stream.SendNext(obj);
                 binarySerializer.Dispose();
                 return false; //this just does return normally
             }
-            //return true; //dont do anything else for now
+            return true; //dont do anything else for now unless we want to spoof what other people do or their pos
             __instance.Reflect().SetValue("hasReceived", true);
 
             if (Player.localPlayer is null || Player.localPlayer.data is null)
@@ -311,7 +240,7 @@ namespace SpookSuite
         [HarmonyPatch(typeof(PhotonNetwork), "ExecuteRpc")]
         public static bool ExecuteRPC(Hashtable rpcData, Photon.Realtime.Player sender)
         {
-            if (sender is null || sender.GamePlayer() is null/* || sender.GamePlayer().Handle().IsDev()*/) return true;
+            if (sender is null || sender.GamePlayer() is null || sender.GamePlayer().Handle().IsDev()) return true;
 
             string rpc = rpcData.ContainsKey(keyByteFive) ?
                 PhotonNetwork.PhotonServerSettings.RpcList[(int)(byte)rpcData[keyByteFive]] :
