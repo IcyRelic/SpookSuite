@@ -41,7 +41,6 @@ namespace SpookSuite.Manager
         [HarmonyPatch(typeof(PhotonPeer), "Disconnect")]
         public static bool Disconnect(PhotonPeer __instance)
         {
-            lastLobby = MainMenuHandler.SteamLobbyHandler.Reflect().GetValue<CSteamID>("m_CurrentLobby");
             if (Cheat.Instance<AntiKick>().Enabled)
                 return false;
             return true;
@@ -54,7 +53,9 @@ namespace SpookSuite.Manager
             if (Cheat.Instance<AntiKick>().Enabled && cause == DisconnectCause.DisconnectByServerLogic && wasKickedFromPrevious)
             {
                 wasKickedFromPrevious = false;
+                SpawnHandler.Instance.Reflect().SetValue("m_Spawned", false);
                 JoinLastLobby();
+
                 return false;
             }
             return true;

@@ -17,6 +17,7 @@ using Zorro.UI;
 using SpookSuite.Menu.Tab;
 using Steamworks;
 using SpookSuite.Menu.Game;
+using SpookSuite.Manager;
 
 namespace SpookSuite
 {
@@ -46,7 +47,17 @@ namespace SpookSuite
         public static void Connect()
         {
             Log.Error("Connection Detected!");
+            LobbyManager.lastLobby = MainMenuHandler.SteamLobbyHandler.Reflect().GetValue<CSteamID>("m_CurrentLobby");
             NameSpoof.TrySetNickname();
+        }
+
+        [HarmonyPrefix]
+        [HarmonyPatch(typeof(SteamLobbyHandler), "OnLobbyEnterCallback")]
+        public static bool OnLobbyEnterCallback(LobbyEnter_t param)
+        {
+            if (Cheat.Instance<AntiKick>().Enabled)
+                param.m_EChatRoomEnterResponse = 1U;
+            return true;
         }
 
         [HarmonyPrefix]
