@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.UIElements;
 
 namespace SpookSuite
 {
@@ -116,9 +118,7 @@ namespace SpookSuite
         public static void Dropdown(string label, ref bool drop, params UIButton[] buttons)
         {
             if (!drop)
-            {
                 if (GUILayout.Button("< " + label, new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter })) drop = true;
-            }
             if (drop)
             {
                 if (GUILayout.Button("^ " + label, new GUIStyle(GUI.skin.label) { alignment = TextAnchor.MiddleCenter })) drop = false;
@@ -179,6 +179,35 @@ namespace SpookSuite
                 executable.Invoke();
 
             GUILayout.EndHorizontal();
+        }
+
+        //public static void Box(string title, Vector2 size, Action options)
+        //{
+        //    Rect rect = GUILayoutUtility.GetRect(size.x, size.y);
+        //    GUI.Box(rect, title);
+        //    GUILayout.BeginArea(rect);
+        //    GUILayout.BeginVertical();
+        //    options.Invoke();
+        //    GUILayout.EndVertical();
+        //    GUILayout.EndArea();
+        //}
+
+        //public static void Box(string title, Vector2 size, Action options, ref Vector2 scroller)
+        //{
+        //    Rect rect = new Rect(GUILayoutUtility.GetLastRect().x, GUILayoutUtility.GetLastRect().y, size.x, size.y);
+        //    GUI.Box(rect, title);
+
+        //    GUILayout.BeginVertical(GUILayout.Width(size.x), GUILayout.Height(size.y));
+        //    GUILayout.Space(25f);
+        //    ScrollView(ref scroller, options);
+        //    GUILayout.EndVertical();
+        //}
+
+        public static void ScrollView(ref Vector2 scroller, Action options)
+        {
+            scroller = GUILayout.BeginScrollView(scroller);
+            options.Invoke();
+            GUILayout.EndScrollView();
         }
 
         public static void Button(string header, Action action, string btnText = "Execute")

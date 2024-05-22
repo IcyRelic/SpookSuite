@@ -7,6 +7,9 @@ using System.Collections.Generic;
 using Zorro.Core;
 using SpookSuite.Manager;
 using SpookSuite.Handler;
+using SpookSuite.Components;
+using SpookSuite.Cheats;
+using SpookSuite.Cheats.Core;
 
 namespace SpookSuite.Menu.Tab
 {
@@ -24,6 +27,19 @@ namespace SpookSuite.Menu.Tab
             MenuContent();
             GUILayout.EndVertical();          
         }
+        public float x = 1600, y = 10, w = 300, h = 100;
+        public void RectEdit(string title, ref Rect rect)
+        {
+            UI.HorizontalSpace(title, () =>
+            {
+                UI.Textbox("X", ref x, false);
+                UI.Textbox("Y", ref y, false);
+                UI.Textbox("W", ref w, false);
+                UI.Textbox("H", ref h, false);
+            });
+            Notifications.defaultRect = new Rect (x, y, w, h);
+        }
+
         private void MenuContent()
         {
             scrollPos = GUILayout.BeginScrollView(scrollPos);
@@ -43,14 +59,32 @@ namespace SpookSuite.Menu.Tab
             UI.Button("Set Lobby Private", () => SetPublic(false));
             UI.Button("Set Lobby Joinable", () => SetJoinable(true));
             UI.Button("Set Lobby NonJoinable", () => SetJoinable(false));
+
+            UI.Header("Notifcations Stuff");
+            UI.Checkbox("Notifcations", Cheat.Instance<Notifications>());
+            RectEdit("Default Rect", ref Notifications.defaultRect);
+            UI.Textbox("Spacing", ref Notifications.spacing, false);
+            UI.Textbox("Width", ref Notifications.width, false);
+            UI.Textbox("Height", ref Notifications.height, false);
+            UI.Button("Test Info", () => { Notifications.PushNotifcation(new Notifcation("Title", "Info", NotificationType.Info)); });
+            UI.Button("Test Warning", () => { Notifications.PushNotifcation(new Notifcation("Title", "Warning", NotificationType.Warning)); });
+            UI.Button("Test Error", () => { Notifications.PushNotifcation(new Notifcation("Title", "Error", NotificationType.Error)); });
+            UI.Button("Test Dev", () => { Notifications.PushNotifcation(new Notifcation("Title", "Dev", NotificationType.Dev)); });
+            UI.Button("Clear ALL", () => { Log.Info($"Cleared {Notifications.notifcations.Count}"); Notifications.notifcations.Clear(); });
+
             UI.Header("Scene Tools");
             UI.Button("Load Factory", () => LoadScene("FactoryScene"));
             UI.Button("Load Harbour", () => LoadScene("HarbourScene"));
             UI.Button("Load Mines", () => LoadScene("MinesScene"));
             UI.Button("Load Surface", () => LoadScene("SurfaceScene"));
-            UI.Button("Log RPCS", () => { foreach (string s in PhotonNetwork.PhotonServerSettings.RpcList) Debug.Log(s); });
+         
             UI.Header("Debugging Cheats");
+
             UI.Checkbox("Log Player Prefs", ref logPlayerPrefs);
+            UI.Button("Log RPCS", () => { foreach (string s in PhotonNetwork.PhotonServerSettings.RpcList) Debug.Log(s); });
+
+            UI.Button("Load Main Menu", () => LoadScene("NewMainMenu"));
+            UI.Button("Switch To Main Menu", () => SpookPageUI.TransitionToPage<MainMenuMainPage>());
             
             UI.Button("Teleport All Items", () => {
                 GameObjectManager.pickups.ForEach(x => GameUtil.TeleportItem(x));

@@ -109,42 +109,42 @@ namespace SpookSuite.Handler
                 if (GameObjectManager.divingBell.onSurface && !HasSentRPC("RPC_GoToUnderground", 2))
                 {
                     Log.Error($"{photonPlayer.NickName} is probably trying to black screen!");
-                    Cheat.Instance<RPCReactions>().React(Settings.reaction_blackscreen, player);
+                    Cheat.Instance<RPCReactions>().React(Settings.reaction_blackscreen, player, "black screen");
                     rpcData.SetSuspected();
                     return false;
                 }
                 else if (!HasSentRPC("RPCA_CheckIfOutsideOfDivebellPreSurface", 2))
                 {
                     Log.Error($"{photonPlayer.NickName} is probably trying to black screen!");
-                    Cheat.Instance<RPCReactions>().React(Settings.reaction_blackscreen, player);
+                    Cheat.Instance<RPCReactions>().React(Settings.reaction_blackscreen, player, "black screen");
                     rpcData.SetSuspected();
                     return false;
                 }
             }
 
-            //if (rpc.Equals("RPC_LoadScene"))
-            //{
-            //    if (((string)parameters[0]).Equals("NewMainMenu") || ((string)parameters[0]).Equals("SurfaceScene"))
-            //    {
-            //        Log.Error($"{photonPlayer.NickName} is probably trying to kick you!");
-            //        Cheat.Instance<RPCReactions>().React(Settings.reaction_kick, player);
-            //        rpcData.SetSuspected();
-            //        return false;
-            //    }
-            //}
+            if (rpc.Equals("RPC_LoadScene"))
+            {
+                if (((string)parameters[0]).Equals("NewMainMenu") || ((string)parameters[0]).Equals("SurfaceScene"))
+                {
+                    Log.Error($"{photonPlayer.NickName} is probably trying to kick you!");
+                    Cheat.Instance<RPCReactions>().React(Settings.reaction_kick, player, "kick");
+                    rpcData.SetSuspected();
+                    return false;
+                }
+            }
 
             if (rpc.Equals("RPCA_AddRealm") && UnityEngine.Object.FindObjectOfType<Bot_Wallo>() is not null)
             {
                 if (UnityEngine.Object.FindObjectOfType<Bot_Wallo>().Reflect().GetValue<Player>("targetPlayer") != Player.localPlayer)
                 {
-                    Cheat.Instance<RPCReactions>().React(Settings.reaction_shadowrealm, player);
+                    Cheat.Instance<RPCReactions>().React(Settings.reaction_shadowrealm, player, "shadow realm");
                     rpcData.SetSuspected();
                     return false;
                 }
             }
             else if (rpc.Equals("RPCA_AddRealm"))
             {
-                Cheat.Instance<RPCReactions>().React(Settings.reaction_shadowrealm, player);
+                Cheat.Instance<RPCReactions>().React(Settings.reaction_shadowrealm, player, "shadow realm");
                 rpcData.SetSuspected();
                 return false;
             }
@@ -156,14 +156,17 @@ namespace SpookSuite.Handler
                     if (HasSentRPC("RPC_MakeSound", 1))
                     {
                         Log.Error($"{photonPlayer.NickName} is probably trying to earrape you!");
-                        Cheat.Instance<RPCReactions>().React(Settings.reaction_makesound, player);
+                        Cheat.Instance<RPCReactions>().React(Settings.reaction_makesound, player, "earrape");
                         rpcData.SetSuspected();
                         return false;
                     }
                 }
 
-                if ((int)parameters[0] == int.MaxValue)
+                if (((int)parameters[0] == int.MaxValue) && !spookSuiteClients.Contains(steamId))
+                {
+                    Notifications.PushNotifcation(new Notifcation("Spooksuite User!", $"{photonPlayer.NickName} is a spooksuite user, adding them."));
                     spookSuiteClients.Add(steamId);
+                }
             }
                 
             if (rpc.Equals("RPC_RequestCreatePickup") && !HasSentRPC("RPC_ClearSlot", 3) && !player.IsLocal)
@@ -181,14 +184,14 @@ namespace SpookSuite.Handler
 
                 if (HasSentRPC("RPCA_SpawnDrone", 2))
                 {
-                    Cheat.Instance<RPCReactions>().React(Settings.reaction_crash, player);
+                    Cheat.Instance<RPCReactions>().React(Settings.reaction_crash, player, "crash");
                     rpcData.SetSuspected();
                     return false;
                 }
 
                 if (!HasSentRPC("RPCA_AddItemToCart", 60))
                 {
-                    Cheat.Instance<RPCReactions>().React(Settings.reaction_dronespawn, player);
+                    Cheat.Instance<RPCReactions>().React(Settings.reaction_dronespawn, player, "earrape");
                     rpcData.SetSuspected();
                     return false;
                 }
@@ -199,7 +202,7 @@ namespace SpookSuite.Handler
                 if ((float)parameters[0] != .1f || (float)parameters[1] != 2f)
                 {
                     rpcData.SetSuspected();
-                    Cheat.Instance<RPCReactions>().React(Settings.reaction_speedmanipulation, player);
+                    Cheat.Instance<RPCReactions>().React(Settings.reaction_speedmanipulation, player, "is probably tryting to manipulate your speed!", true);
                     return false;
                 }
             }

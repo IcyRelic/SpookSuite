@@ -1,13 +1,12 @@
-﻿using Photon.Pun;
-using SpookSuite.Cheats.Core;
+﻿using SpookSuite.Cheats.Core;
 using SpookSuite.Handler;
 using SpookSuite.Util;
-using System.Linq;
 
 namespace SpookSuite.Cheats
 {
-    internal class RPCReactions : ToggleCheat
+    internal class RPCReactions : ToggleCheat, IVariableCheat<bool>
     {
+        public static bool Value = true;
         public enum reactionType
         {
             none,
@@ -17,8 +16,10 @@ namespace SpookSuite.Cheats
             shadowrealm
         }
 
-        public void React(reactionType reaction, Player sender)
+        public void React(reactionType reaction, Player sender, string reactiondesc, bool usealtreaction = false)
         {
+            if (Value) Notifications.PushNotifcation(new Notifcation("Reactions", sender.PhotonPlayer().NickName + (usealtreaction ? reactiondesc : $"is probably trying to {reactiondesc} you!"), NotificationType.Warning));
+
             switch (reaction)
             {
                 case reactionType.none: return;

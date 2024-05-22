@@ -15,7 +15,7 @@ namespace SpookSuite.Util
         public static List<string> monterNames;
         private static bool OverridingPhotonLocalPlayer = false;
 
-        public static void LoadMonterNames()
+        public static void LoadMonsterNames()
         {
             monterNames = new List<string>();
             GameObject[] enemies = Resources.LoadAll<GameObject>("").Where(x => x.GetComponent<Player>() != null && x.GetComponent<Player>().ai).ToArray();

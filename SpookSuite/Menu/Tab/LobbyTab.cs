@@ -25,16 +25,15 @@ namespace SpookSuite.Menu.Tab
         public override void Draw()
         {
             GUILayout.BeginVertical(GUILayout.Width(SpookSuiteMenu.Instance.contentWidth * 0.3f - SpookSuiteMenu.Instance.spaceFromLeft));
-            scrollPos = GUILayout.BeginScrollView(scrollPos);
             Lobbies();
-            GUILayout.EndScrollView();
             GUILayout.EndVertical();
 
             GUILayout.BeginVertical(GUILayout.Width(SpookSuiteMenu.Instance.contentWidth * 0.7f - SpookSuiteMenu.Instance.spaceFromLeft));
-            scrollPos2 = GUILayout.BeginScrollView(scrollPos2);
-            GeneralActions();
-            LobbyActions();
-            GUILayout.EndScrollView();
+            UI.ScrollView(ref scrollPos, () =>
+            {
+                GeneralActions();
+                LobbyActions();
+            });
             GUILayout.EndVertical();
         }
 
@@ -44,6 +43,7 @@ namespace SpookSuite.Menu.Tab
             float height = SpookSuiteMenu.Instance.contentHeight - 20;
 
             UI.Button("Refresh", () => {
+                lobbyList.Clear();
                 matchList = CallResult<LobbyMatchList_t>.Create(new CallResult<LobbyMatchList_t>.APIDispatchDelegate(MatchListReceived));
                 matchList.Set(SteamMatchmaking.RequestLobbyList());
             }, null);
@@ -54,32 +54,31 @@ namespace SpookSuite.Menu.Tab
             GUILayout.BeginVertical(GUILayout.Width(width), GUILayout.Height(height));
 
             GUILayout.Space(25);
-            scrollPos = GUILayout.BeginScrollView(scrollPos);
+            UI.ScrollView(ref scrollPos2, () => {
+                foreach (CSteamID lobby in lobbyList)
+                {
+                    if (!lobby.IsValid()) selectedLobby = lobby;
+                    if (selectedLobby.m_SteamID == lobby.m_SteamID) GUI.contentColor = Settings.c_espPlayers.GetColor();
+                    if (GUILayout.Button($"{SteamMatchmaking.GetNumLobbyMembers(lobby)}/{SteamMatchmaking.GetLobbyMemberLimit(lobby)}" + (SteamMatchmaking.GetLobbyData(lobby, "PrivateMatch").Equals("true") ? "Private" : ""), GUI.skin.label)) selectedLobby = lobby;
 
-            foreach (CSteamID lobby in lobbyList)
-            {
-                if (!lobby.IsValid()) selectedLobby = lobby;
-                if (selectedLobby.m_SteamID == lobby.m_SteamID) GUI.contentColor = Settings.c_espPlayers.GetColor();
-                if (GUILayout.Button($"{SteamMatchmaking.GetNumLobbyMembers(lobby)}/{SteamMatchmaking.GetLobbyMemberLimit(lobby)}" + (SteamMatchmaking.GetLobbyData(lobby, "PrivateMatch").Equals("true") ? "Private" : ""), GUI.skin.label)) selectedLobby = lobby;
-
-                GUI.contentColor = Settings.c_menuText.GetColor();
-            }
-
-            GUILayout.EndScrollView();
-            GUILayout.EndVertical();
+                    GUI.contentColor = Settings.c_menuText.GetColor();
+                }
+            });
+           
         }
 
         private void LobbyActions()
         {
             UI.Header("Lobby Actions");
-            UI.Button("Leave", ConnectionStateHandler.Instance.Disconnect);
+            UI.Button("Join", () => LobbyManager.JoinLobby(selectedLobby));
         }
 
         private void GeneralActions()
         {
             UI.Header("General Actions");
             UI.Checkbox("AntiKick", Cheat.Instance<AntiKick>());
-            UI.Button("Rejoin Previous", LobbyManager.JoinLastLobby);
+            UI.Button("Rejoin Previous", () => SpookSuite.Instance.StartCoroutine(LobbyManager.JoinLastLobby()));
+            UI.Button("Leave Current", ConnectionStateHandler.Instance.Disconnect);
         }
 
         internal void MatchListReceived(LobbyMatchList_t param, bool biofailure)

@@ -55,7 +55,7 @@ namespace SpookSuite.Menu.Tab
                 new UIButton("Save Settings", () => Settings.Config.SaveConfig()),
                 new UIButton("Reload Settings", () => Settings.Config.LoadConfig())
             );
-
+            UI.Checkbox("Notifcations", Cheat.Instance<Notifications>());
             UI.NumSelect("Font Size", ref Settings.i_menuFontSize, 5, 30);
             UI.Slider("Menu Opacity", Settings.f_menuAlpha.ToString("0.00"), ref Settings.f_menuAlpha, 0.1f, 1f);
             UI.Button("Resize Menu", () => MenuUtil.BeginResizeMenu(), "Resize");
@@ -105,6 +105,7 @@ namespace SpookSuite.Menu.Tab
 
             UI.Header("Reactions");
             UI.Checkbox("Toggle", Cheat.Instance<RPCReactions>());
+            UI.Checkbox("Notify On Reaction", ref RPCReactions.Value);
 
             ReactionSetter("Sound Spam", ref Settings.reaction_makesound, ref dropdown_makesound);
             ReactionSetter("Drone Spawning", ref Settings.reaction_dronespawn, ref dropdown_dronespawn);

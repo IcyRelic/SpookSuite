@@ -61,7 +61,7 @@ namespace SpookSuite
         private void LoadCheats()
         {
             Settings.Changelog.ReadChanges();
-            GameUtil.LoadMonterNames();
+            GameUtil.LoadMonsterNames();
             cheats = new List<ToggleCheat>();
             menu = new SpookSuiteMenu();
             foreach (Type type in Assembly.GetExecutingAssembly().GetTypes().Where(t => String.Equals(t.Namespace, "SpookSuite.Cheats", StringComparison.Ordinal) && t.IsSubclassOf(typeof(Cheat))))
@@ -74,7 +74,17 @@ namespace SpookSuite
             }
 
             Settings.Config.SaveDefaultConfig();
-            Settings.Config.LoadConfig();
+            try
+            {
+                Settings.Config.LoadConfig();
+            }
+            catch (Exception e)
+            {
+                Log.Error(e);
+                Modal.Show("Spooksuite Error!", "Seems there has been in issue in loading your settings,\n" +
+                " would you like to try resetting your settings to fix it?",
+                new ModalOption[] { new ModalOption("Yes", Settings.Config.RegenerateConfig), new ModalOption("No") });
+            }         
         }
         
         
@@ -127,9 +137,9 @@ namespace SpookSuite
                         MenuUtil.ResizeMenu();
                     }
 
-                    cheats.ForEach(cheat => cheat.OnGui());
+                    
                 }
-
+                cheats.ForEach(cheat => { if (cheat.Enabled) cheat.OnGui(); });
                 menu.Draw();
             }
             catch (Exception e)

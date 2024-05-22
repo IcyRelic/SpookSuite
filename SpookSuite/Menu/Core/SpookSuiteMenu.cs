@@ -32,7 +32,7 @@ namespace SpookSuite.Menu.Core
         public SpookSuiteMenu()
         {
             instance = this;
-            if(DebugMode.Value) DebugMode.AddDebugTabs();
+            if(DebugMode.Value) DebugMode.AddDebugTabs(); //yes we see u editing this, no we dont care as its mainly useless
             tabs.Add(new StartTab());
             tabs.Add(new SettingsTab());
             tabs.Add(new SelfTab());
