@@ -1,13 +1,10 @@
 ﻿using Photon.Pun;
 using SpookSuite.Cheats;
 using SpookSuite.Cheats.Core;
-using SpookSuite.Handler;
 using SpookSuite.Manager;
 using SpookSuite.Menu.Core;
 using Steamworks;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using UnityEngine;
 using Zorro.Core;
 
@@ -77,7 +74,7 @@ namespace SpookSuite.Menu.Tab
         {
             UI.Header("General Actions");
             UI.Checkbox("AntiKick", Cheat.Instance<AntiKick>());
-            UI.Button("Rejoin Previous", () => SpookSuite.Instance.StartCoroutine(LobbyManager.JoinLastLobby()));
+            UI.Button("Rejoin Previous", LobbyManager.JoinLastLobby);
             UI.Button("Leave Current", ConnectionStateHandler.Instance.Disconnect);
         }
 
