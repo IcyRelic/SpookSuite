@@ -21,6 +21,10 @@ namespace SpookSuite.Cheats
         private string description = "";
         private NotificationType type = NotificationType.Info;
         private int life = 500; //5s
+        public Rect lastRect = new Rect(1600, 10, 300, 100);
+        public Rect desiredRect = new Rect(1600, 10, 300, 100);
+        public Rect currentRect = new Rect(1600, 10, 300, 100);
+        private int originalLife = 500;
         public Notifcation(string Title, string Descriptor)
         {
             title = Title;
@@ -33,36 +37,48 @@ namespace SpookSuite.Cheats
             description = Descriptor;
             type = Type;
         }
+        public Notifcation(string Title, string Descriptor, NotificationType Type, int Life) //put 1 for 1 sec, 2 for 2 sec etc
+        {
+            title = Title;
+            description = Descriptor;
+            type = Type;
+            originalLife = Life * 100;
+            life = Life * 100;
+        }
 
         public NotificationType GetType() => type;
         public string GetTitle() => title;
+
+        public int GetLife() => life;
 
         public void Draw(int id)
         {
             UI.HorizontalSpace(null, () =>
             {
                 if (life <= 0)
+                {
+                    //desiredRect.y =;
                     Notifications.notifcations.Remove(this);
+                }
                 else
                     life = life - 1;
             });
             UI.Label(description);
-            //line showing life
+            GUILayout.HorizontalSlider(life, 0, originalLife);
         }
     }
 
     internal class Notifications : ToggleCheat
     {
-        private static Rect windowRect = new Rect(1600, 10, 300, 100);
         public static Rect defaultRect = new Rect(1600, 10, 300, 100);
         public static List<Notifcation> notifcations = new List<Notifcation>();
-        public static int width = 300, height = 100, spacing = 110;
+        public static int width = 300, height = 100, spacing = 110, animSpeed = 2;
 
         public static void PushNotifcation(Notifcation notifcation)
         {
             notifcations.Add(notifcation);
         }
-
+        
         public static string GetNotifcationType(Notifcation noti)
         {
             switch (noti.GetType())
@@ -82,12 +98,42 @@ namespace SpookSuite.Cheats
             //GUI.color = new Color(1f, 1f, 1f, 1);
             for (int i = 0; i < notifcations.Count; i++)
             {
-                Notifcation current = notifcations[i];
+                Notifcation current = notifcations[i];               
                 if (current != notifcations.First())
-                    windowRect = new Rect(windowRect.x, windowRect.y + spacing, width, height);
+                {
+                    Notifcation last = notifcations[i - 1];
+                    current.lastRect = last.desiredRect;
+
+                    if (current.currentRect.y < last.currentRect.y)
+                        current.currentRect = last.currentRect;
+
+                    if (current.currentRect.y < current.desiredRect.y)
+                    {
+                        if (current.currentRect.y + animSpeed > current.desiredRect.y)
+                            current.currentRect.y = current.desiredRect.y;
+                        else
+                            current.currentRect.y += animSpeed;
+                    }
+                    else if (current.currentRect.y > current.desiredRect.y) 
+                        current.currentRect.y = current.desiredRect.y;
+
+                    current.desiredRect = new Rect(last.currentRect.x, last.currentRect.y + spacing, width, height);
+                }
                 else
-                    windowRect = defaultRect;
-                GUILayout.Window(100 + i, windowRect, new GUI.WindowFunction(current.Draw), $"{GetNotifcationType(current)} {current.GetTitle()}");
+                {
+                    //current.currentRect = defaultRect;
+                    current.desiredRect = current.lastRect;
+                    if (current.currentRect.y > current.desiredRect.y)
+                    {
+                        if (current.currentRect.y - animSpeed < current.desiredRect.y)
+                            current.currentRect.y = current.desiredRect.y;
+                        else
+                            current.currentRect.y -= animSpeed;
+                    }
+                    else if (current.currentRect.y < current.desiredRect.y)
+                        current.currentRect.y = current.desiredRect.y;
+                }
+                GUILayout.Window(100 + i, current.currentRect, new GUI.WindowFunction(current.Draw), $"{GetNotifcationType(current)} {current.GetTitle()}");
             }
         }
     }
