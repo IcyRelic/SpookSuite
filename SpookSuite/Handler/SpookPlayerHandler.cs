@@ -106,14 +106,7 @@ namespace SpookSuite.Handler
 
             if (rpc.Equals("RPC_StartTransition"))
             {
-                if (GameObjectManager.divingBell.onSurface && !HasSentRPC("RPC_GoToUnderground", 2))
-                {
-                    Log.Error($"{photonPlayer.NickName} is probably trying to black screen!");
-                    Cheat.Instance<RPCReactions>().React(Settings.reaction_blackscreen, player, "black screen");
-                    rpcData.SetSuspected();
-                    return false;
-                }
-                else if (!HasSentRPC("RPCA_CheckIfOutsideOfDivebellPreSurface", 2))
+                if (GameObjectManager.divingBell.opened || (GameObjectManager.divingBell.StateMachine.CurrentState is not DivingBellReadyState)) //this tpc is not received
                 {
                     Log.Error($"{photonPlayer.NickName} is probably trying to black screen!");
                     Cheat.Instance<RPCReactions>().React(Settings.reaction_blackscreen, player, "black screen");

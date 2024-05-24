@@ -49,7 +49,7 @@ namespace SpookSuite.Menu.Tab
             GUI.Box(rect, "Lobby List");
 
             GUILayout.BeginVertical(GUILayout.Width(width), GUILayout.Height(height));
-
+            
             GUILayout.Space(25);
             UI.ScrollView(ref scrollPos2, () => {
                 foreach (CSteamID lobby in lobbyList)
@@ -61,7 +61,7 @@ namespace SpookSuite.Menu.Tab
                     GUI.contentColor = Settings.c_menuText.GetColor();
                 }
             });
-           
+            GUILayout.EndVertical();
         }
 
         private void LobbyActions()
@@ -74,7 +74,7 @@ namespace SpookSuite.Menu.Tab
         {
             UI.Header("General Actions");
             UI.Checkbox("AntiKick", Cheat.Instance<AntiKick>());
-            UI.Button("Rejoin Previous", LobbyManager.JoinLastLobby);
+            //UI.Button("Rejoin Previous", LobbyManager.JoinLastLobby);
             UI.Button("Leave Current", ConnectionStateHandler.Instance.Disconnect);
         }
 
