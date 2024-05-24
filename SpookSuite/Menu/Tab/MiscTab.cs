@@ -44,21 +44,11 @@ namespace SpookSuite.Menu.Tab
                 new UIButton("Add", () => { int.TryParse(moneyToSet, out int o); GameUtil.SendHospitalBill(-o); }),
                 new UIButton("Remove", () => { int.TryParse(moneyToSet, out int o); GameUtil.SendHospitalBill(o); })
             );
-            UI.TextboxAction("MetaCoins (min. 50)", ref metaToSet, 10,
+            UI.TextboxAction("MetaCoins (mult 50)", ref metaToSet, 10,
                 new UIButton("Add", () =>
                 {
-                    int.TryParse(metaToSet, out int o);
-                    /*
-                     * We divide the input by 50 because RPCA_OnNewWeek multiplies the input by 50 for some reason.
-                     * I don't know why RPCA_OnNewWeek multiplies the input by 50 so this is the only solution I can think of.
-                     * If you have a better solution or want to change something, feel free to do so.
-                     * - Toa
-                    */
-                    if (o >= 50)
-                    {
-                        o /= 50;
+                    if (int.TryParse(metaToSet, out int o))
                         SurfaceNetworkHandler.Instance.photonView.RPC("RPCA_OnNewWeek", RpcTarget.All, o);
-                    }
                 })
             );
 
