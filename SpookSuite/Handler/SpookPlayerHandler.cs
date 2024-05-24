@@ -175,7 +175,7 @@ namespace SpookSuite.Handler
             {
                 rpcData.data = parameters[0];
 
-                if (HasSentRPC("RPCA_SpawnDrone", 2))
+                if (HasSentRPC("RPCA_SpawnDrone", 1))
                 {
                     Cheat.Instance<RPCReactions>().React(Settings.reaction_crash, player, "crash");
                     rpcData.SetSuspected();
@@ -195,7 +195,7 @@ namespace SpookSuite.Handler
                 if ((float)parameters[0] != .1f || (float)parameters[1] != 2f)
                 {
                     rpcData.SetSuspected();
-                    Cheat.Instance<RPCReactions>().React(Settings.reaction_speedmanipulation, player, "is probably tryting to manipulate your speed!", true);
+                    Cheat.Instance<RPCReactions>().React(Settings.reaction_speedmanipulation, player, "is probably trying to manipulate your speed!", true);
                     return false;
                 }
             }

@@ -73,8 +73,8 @@ namespace SpookSuite.Menu.Tab
         private void GeneralActions()
         {
             UI.Header("General Actions");
-            UI.Checkbox("AntiKick", Cheat.Instance<AntiKick>());
-            //UI.Button("Rejoin Previous", LobbyManager.JoinLastLobby);
+            UI.Checkbox("AntiKick (Experimental)", Cheat.Instance<AntiKick>());
+            UI.Button("Rejoin Previous", LobbyManager.JoinLastLobby);
             UI.Button("Leave Current", ConnectionStateHandler.Instance.Disconnect);
         }
 

@@ -66,8 +66,7 @@ namespace SpookSuite.Menu.Tab
                 UI.Checkbox("Freeze Others", Cheat.Instance<FreezeAll>());
             }
 
-            UI.Textbox("Speed", ref OthersFly.Value, false, 2);
-            UI.CheatToggleSlider(Cheat.Instance<OthersFly>(), "Allow Flying", OthersFly.Value.ToString(), ref OthersFly.Value, 1, 30);
+            UI.CheatToggleSlider(Cheat.Instance<OthersFly>(), "Give Flight", OthersFly.Value.ToString(), ref OthersFly.Value, 1, 30);
         }
 
         private void PlayerActions()

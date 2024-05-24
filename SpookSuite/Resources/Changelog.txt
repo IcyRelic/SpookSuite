@@ -1,3 +1,22 @@
+v1.3.0
+- Added AntiPickup
+- Added AntiKick (Experimental, still being worked on)
+- Added RollingFace
+- Added GiveFlight
+- Added Limbo Stuff
+- Fixed Dying In Invis
+- Added Kick Individually
+- Added SendAway
+- Teleport works way better
+- Monster ESP Displays Names
+- Fixed UnlimitedBattery for newer items
+- Added Protections
+- Added Notifications
+- Added Reactions
+- Moved Face Stuff To Self
+- Added Join Lobbies With Plugins
+- Added Preventative Measure Against Inf Loading
+
 v1.2.0
 - Support for newest update
 - Added Give Meta Coins
