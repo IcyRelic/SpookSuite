@@ -324,7 +324,7 @@ namespace SpookSuite
                 if (HasConfig()) File.Delete(config);
                 File.Copy(defaultConf, config);
 
-                Cheat.instances.ForEach(c => c.keybind = KeyCode.None);
+                Cheat.instances.ForEach(c => c.keybind = c.defaultKeybind);
 
                 LoadConfig();
             }

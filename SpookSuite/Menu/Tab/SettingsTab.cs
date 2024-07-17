@@ -51,7 +51,7 @@ namespace SpookSuite.Menu.Tab
         private void MenuContent()
         {
             UI.Actions(
-                new UIButton("Reset Settings", () => Settings.Config.RegenerateConfig()),
+                new UIButton("Reset Settings", () => Cheat.Instance<ResetMenu>().Execute()),
                 new UIButton("Save Settings", () => Settings.Config.SaveConfig()),
                 new UIButton("Reload Settings", () => Settings.Config.LoadConfig())
             );

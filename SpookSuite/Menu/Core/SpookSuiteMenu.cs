@@ -4,6 +4,7 @@ using SpookSuite.Util;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using SpookSuite.Cheats.Core;
 
 namespace SpookSuite.Menu.Core
 {
@@ -105,7 +106,9 @@ namespace SpookSuite.Menu.Core
             string text = "IcyRelic & TGB";
 
             GUI.Label(new Rect(windowRect.width - watermark.CalcSize(new GUIContent(text)).x - 10, windowRect.height - watermark.CalcSize(new GUIContent(text)).y - 10, watermark.CalcSize(new GUIContent(text)).x, watermark.CalcSize(new GUIContent(text)).y), text, watermark);
-
+            GUIStyle info = new GUIStyle(GUI.skin.label) { fontSize = 10, fontStyle = FontStyle.Bold };
+            string infotext = ("Open/Close: " + Cheat.Instance<ToggleMenuCheat>().keybind.ToString() + ", Reset: " + Cheat.Instance<ResetMenu>().keybind.ToString());
+            GUI.Label(new Rect(10, -10, info.CalcSize(new GUIContent(infotext)).x, info.CalcSize(new GUIContent(infotext)).y), infotext, info);
             GUI.color = new Color(1f, 1f, 1f, Settings.f_menuAlpha);
 
             GUILayout.BeginVertical();
