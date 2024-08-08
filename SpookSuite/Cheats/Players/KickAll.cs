@@ -1,6 +1,7 @@
 ﻿using Photon.Pun;
 using SpookSuite.Cheats.Core;
 using SpookSuite.Handler;
+using SpookSuite.Manager;
 
 namespace SpookSuite.Cheats
 {
@@ -8,8 +9,8 @@ namespace SpookSuite.Cheats
     {
         public override void Execute()
         {
-            PhotonNetwork.CurrentRoom.SetMasterClient(PhotonNetwork.LocalPlayer.IsMasterClient ?
-                PlayerHandler.instance.playersAlive.Find(x => x.GetSteamID() != Player.localPlayer.GetSteamID()).PhotonPlayer() : Player.localPlayer.PhotonPlayer());
+            SurfaceNetworkHandler.Instance.photonView.RPC("RPC_LoadScene", PhotonNetwork.LocalPlayer.IsMasterClient ?
+                GameObjectManager.players.Find(p => p != Player.localPlayer).PhotonPlayer() : PhotonNetwork.MasterClient, "NewMainMenu");
         }
     }
 }

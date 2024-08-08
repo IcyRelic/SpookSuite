@@ -61,7 +61,7 @@ namespace SpookSuite
         }
 
         [HarmonyPrefix]
-        [HarmonyPatch(typeof(SteamLobbyHandler), "JoinRandom")]
+        [HarmonyPatch(typeof(MainMenuHandler), "JoinRandom")]
         public static bool JoinRandom(SteamLobbyHandler __instance)
         {
             Modal.Show("Continue", "If you get inf loading use this otherwise click yes.", new ModalOption[] { new ModalOption("Yes"), new ModalOption("No", () =>
@@ -201,51 +201,53 @@ namespace SpookSuite
             return false;
         }
 
-        //player prefs stuff, track what is being saved across sessions
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(PlayerPrefs), "GetInt", [typeof(string), typeof(int)])]
-        public static void GetInt(string key, int defaultValue, ref int __result)
-        {
-            if (DebugTab.logPlayerPrefs)
-                Log.Info($"Get Int called on {key} result is: {__result}");
-        }
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(PlayerPrefs), "SetInt")]
-        public static void SetInt(string key, int value)
-        {
-            if (DebugTab.logPlayerPrefs)
-                Log.Info($"Set Int called on {key} with arg {value}");
-        }
+        //NOTE - Seems to want to throw exception no idea what changed to make it mad
 
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(PlayerPrefs), "GetFloat", [typeof(string), typeof(float)])]
-        public static void GetFloat(string key, float defaultValue, ref float __result)
-        {
-            if (DebugTab.logPlayerPrefs)
-                Log.Info($"Get Int called on {key} result is: {__result}");
-        }
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(PlayerPrefs), "SetFloat")]
-        public static void SetFloat(string key, float value)
-        {
-            if (DebugTab.logPlayerPrefs)
-                Log.Info($"Set Float called on {key} with arg {value}");
-        }
+        ////player prefs stuff, track what is being saved across sessions
+        //[HarmonyPrefix]
+        //[HarmonyPatch(typeof(PlayerPrefs), "GetInt", [typeof(string), typeof(int)])]
+        //public static void GetInt(string key, int defaultValue, ref int __result)
+        //{
+        //    if (DebugTab.logPlayerPrefs)
+        //        Log.Info($"Get Int called on {key} result is: {__result}");
+        //}
+        //[HarmonyPrefix]
+        //[HarmonyPatch(typeof(PlayerPrefs), "SetInt")]
+        //public static void SetInt(string key, int value)
+        //{
+        //    if (DebugTab.logPlayerPrefs)
+        //        Log.Info($"Set Int called on {key} with arg {value}");
+        //}
 
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(PlayerPrefs), "GetString", [typeof(string), typeof(string)])]
-        public static void GetString(string key, string defaultValue, ref string __result)
-        {
-            if (DebugTab.logPlayerPrefs)
-                Log.Info($"Get String called on {key} result is: {__result}");
-        }
-        [HarmonyPrefix]
-        [HarmonyPatch(typeof(PlayerPrefs), "SetString")]
-        public static void SetString(string key, string value)
-        {
-            if (DebugTab.logPlayerPrefs)
-                Log.Info($"Set Float called on {key} with arg {value}");
-        }
+        //[HarmonyPrefix]
+        //[HarmonyPatch(typeof(PlayerPrefs), "GetFloat", [typeof(string), typeof(float)])]
+        //public static void GetFloat(string key, float defaultValue, ref float __result)
+        //{
+        //    if (DebugTab.logPlayerPrefs)
+        //        Log.Info($"Get Int called on {key} result is: {__result}");
+        //}
+        //[HarmonyPrefix]
+        //[HarmonyPatch(typeof(PlayerPrefs), "SetFloat")]
+        //public static void SetFloat(string key, float value)
+        //{
+        //    if (DebugTab.logPlayerPrefs)
+        //        Log.Info($"Set Float called on {key} with arg {value}");
+        //}
+
+        //[HarmonyPrefix]
+        //[HarmonyPatch(typeof(PlayerPrefs), "GetString", [typeof(string), typeof(string)])]
+        //public static void GetString(string key, string defaultValue, ref string __result)
+        //{
+        //    if (DebugTab.logPlayerPrefs)
+        //        Log.Info($"Get String called on {key} result is: {__result}");
+        //}
+        //[HarmonyPrefix]
+        //[HarmonyPatch(typeof(PlayerPrefs), "SetString")]
+        //public static void SetString(string key, string value)
+        //{
+        //    if (DebugTab.logPlayerPrefs)
+        //        Log.Info($"Set Float called on {key} with arg {value}");
+        //}
 
         [HarmonyPrefix]
         [HarmonyPatch(typeof(PhotonNetwork), "ExecuteRpc")]
