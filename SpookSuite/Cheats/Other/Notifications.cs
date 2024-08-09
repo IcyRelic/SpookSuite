@@ -55,11 +55,8 @@ namespace SpookSuite.Cheats
         {
             UI.HorizontalSpace(null, () =>
             {
-                if (life <= 0)
-                {
-                    //desiredRect.y =;
+                if (life <= 0 && currentRect.y == desiredRect.y)
                     Notifications.notifcations.Remove(this);
-                }
                 else
                     life = life - 1;
             });
@@ -74,10 +71,7 @@ namespace SpookSuite.Cheats
         public static List<Notifcation> notifcations = new List<Notifcation>();
         public static int width = 300, height = 100, spacing = 110, animSpeed = 2;
 
-        public static void PushNotifcation(Notifcation notifcation)
-        {
-            notifcations.Add(notifcation);
-        }
+        public static void PushNotifcation(Notifcation notifcation) => notifcations.Add(notifcation);
         
         public static string GetNotifcationType(Notifcation noti)
         {
