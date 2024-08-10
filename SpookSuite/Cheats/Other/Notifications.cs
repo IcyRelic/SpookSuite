@@ -1,4 +1,5 @@
-﻿using SpookSuite.Cheats.Core;
+﻿using JetBrains.Annotations;
+using SpookSuite.Cheats.Core;
 using SpookSuite.Util;
 using System;
 using System.Collections.Generic;
@@ -72,7 +73,8 @@ namespace SpookSuite.Cheats
         public static int width = 300, height = 100, spacing = 110, animSpeed = 2;
 
         public static void PushNotifcation(Notifcation notifcation) => notifcations.Add(notifcation);
-        
+        public static void PushNotifcation(string title, string desc = "") => notifcations.Add(new Notifcation(title, desc));
+
         public static string GetNotifcationType(Notifcation noti)
         {
             switch (noti.GetType())

@@ -1,6 +1,8 @@
 ﻿using ExitGames.Client.Photon.StructWrapping;
 using Photon.Pun;
 using Photon.Voice;
+using SpookSuite.Cheats;
+using SpookSuite.Handler;
 using SpookSuite.Manager;
 using System;
 using System.Collections.Generic;
@@ -49,12 +51,12 @@ namespace SpookSuite.Util
             {
                 if (!ShopHandler.Instance) return;
 
-                byte[] items = new byte[amount];
+                if (equip) Notifications.PushNotifcation(new Notifcation("Spawn Item", "Cannot equip a drone spawned item!"));
 
+                byte[] items = new byte[amount];
                 for (int i = 0; i < amount; i++) items[i] = (byte)itemId;
 
                 bool b = GameObjectManager.allowedDroneSpawns.TryGetValue((byte) itemId, out object[] x);
-                
                 if (b) x[1] = (int)x[1] + amount;
                 else x = new object[] { equip, amount };
 
@@ -72,7 +74,10 @@ namespace SpookSuite.Util
                     byte[] array = data.Serialize(false);
                     Debug.Log($"Spawning item {itemId} at {spawnPos} => equip: {equip}"); 
                     GameObjectManager.allowedSpawns.Add(data.m_guid, equip);
-                    Player.localPlayer.refs.view.RPC("RPC_RequestCreatePickup", RpcTarget.MasterClient, (object)itemId, (object)array, (object)spawnPos, (object)Random.rotation);
+                    if (!equip)
+                        Player.localPlayer.refs.view.RPC("RPC_RequestCreatePickup", RpcTarget.MasterClient, (object)itemId, (object)array, (object)spawnPos, (object)Random.rotation);
+                    else
+                        if (Player.localPlayer.TryGetInventory(out var o)) if (o.TryGetFeeSlot(out var s)) o.SyncAddToSlot(s.SlotID, new ItemDescriptor(GetItemById(itemId), data));
                 }                                    
             }
         }
