@@ -95,7 +95,12 @@ namespace SpookSuite.Menu.Tab
                 });
                 return;
             }
-            UI.Button("Spawn Monster", () => MonsterSpawner.SpawnMonster(selectedSpawnEnemy));
+            UI.Button($"Spawn {selectedSpawnEnemy}", () => MonsterSpawner.SpawnMonster(selectedSpawnEnemy));
+            UI.Button($"Spawn {selectedSpawnEnemy} Randomly", () => {
+                RoundSpawner rs = Object.FindObjectOfType<RoundSpawner>();
+                //rs.Reflect().Invoke("SpawnMonstersOutOfSight", new List<IBudgetCost>() { });
+                });
+            
         }
 
         private void LivingEnemyList()

@@ -1,8 +1,5 @@
-﻿using ExitGames.Client.Photon.StructWrapping;
-using Photon.Pun;
-using Photon.Voice;
+﻿using Photon.Pun;
 using SpookSuite.Cheats;
-using SpookSuite.Handler;
 using SpookSuite.Manager;
 using System;
 using System.Collections.Generic;

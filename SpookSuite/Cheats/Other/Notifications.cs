@@ -21,11 +21,11 @@ namespace SpookSuite.Cheats
         private string title = "";
         private string description = "";
         private NotificationType type = NotificationType.Info;
-        private int life = 500; //5s
+        private float life = 500; //5s
         public Rect lastRect = new Rect(1600, 10, 300, 100);
         public Rect desiredRect = new Rect(1600, 10, 300, 100);
         public Rect currentRect = new Rect(1600, 10, 300, 100);
-        private int originalLife = 500;
+        private float originalLife = 500;
         public Notifcation(string Title, string Descriptor)
         {
             title = Title;
@@ -38,31 +38,28 @@ namespace SpookSuite.Cheats
             description = Descriptor;
             type = Type;
         }
-        public Notifcation(string Title, string Descriptor, NotificationType Type, int Life) //put 1 for 1 sec, 2 for 2 sec etc
+        public Notifcation(string Title, string Descriptor, NotificationType Type, float Life) //put 1 for 1 sec, 2 for 2 sec etc rework so life is 90 if one
         {
             title = Title;
             description = Descriptor;
             type = Type;
-            originalLife = Life * 100;
-            life = Life * 100;
+            originalLife = Life * 100f;
+            life = Life * 100f;
         }
 
         public NotificationType GetType() => type;
         public string GetTitle() => title;
 
-        public int GetLife() => life;
+        public float GetLife() => life;
 
         public void Draw(int id)
         {
-            UI.HorizontalSpace(null, () =>
-            {
-                if (life <= 0 && currentRect.y == desiredRect.y)
-                    Notifications.notifcations.Remove(this);
-                else
-                    life = life - 1;
-            });
+            if (life <= 0 && currentRect.y == desiredRect.y)
+                Notifications.notifcations.Remove(this);
+            else
+                life = life - .9f;
             UI.Label(description);
-            GUILayout.HorizontalSlider(life, 0, originalLife);
+            GUI.DrawTexture(new Rect(5, 75, life, 5), Texture2D.whiteTexture); //make me not go off the notification!
         }
     }
 
@@ -71,9 +68,8 @@ namespace SpookSuite.Cheats
         public static Rect defaultRect = new Rect(1600, 10, 300, 100);
         public static List<Notifcation> notifcations = new List<Notifcation>();
         public static int width = 300, height = 100, spacing = 110, animSpeed = 2;
-
         public static void PushNotifcation(Notifcation notifcation) => notifcations.Add(notifcation);
-        public static void PushNotifcation(string title, string desc = "") => notifcations.Add(new Notifcation(title, desc));
+        public static void PushNotifcation(string title, string desc = "", NotificationType type = NotificationType.Info, float life = 5) => notifcations.Add(new Notifcation(title, desc, type, life));
 
         public static string GetNotifcationType(Notifcation noti)
         {

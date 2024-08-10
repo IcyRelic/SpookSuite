@@ -17,6 +17,8 @@ namespace SpookSuite.Menu.Tab
     {
         public DebugTab() : base("Debug", true) { }
         private ulong steamLobbyId = 0;
+        private string customNotification = "";
+        private string customNotificationDesc = "";
         private int steamLobbyIndex = 0;
         private Vector2 scrollPos = Vector2.zero;
         private CallResult<LobbyMatchList_t> matchList;
@@ -70,6 +72,8 @@ namespace SpookSuite.Menu.Tab
             UI.Button("Test Warning", () => { Notifications.PushNotifcation(new Notifcation("Title", "Warning", NotificationType.Warning)); });
             UI.Button("Test Error", () => { Notifications.PushNotifcation(new Notifcation("Title", "Error", NotificationType.Error)); });
             UI.Button("Test Dev", () => { Notifications.PushNotifcation(new Notifcation("Title", "Dev", NotificationType.Dev)); });
+            UI.HorizontalSpace(null, () => { UI.Textbox("Title", ref customNotification); UI.Textbox("Desc", ref customNotificationDesc);
+                UI.Button("Test Custom", () => Notifications.PushNotifcation(new Notifcation(customNotification, customNotificationDesc, NotificationType.Info))); });
             UI.Button("Clear ALL", () => { Log.Info($"Cleared {Notifications.notifcations.Count}"); Notifications.notifcations.Clear(); });
 
             UI.Header("Scene Tools");
