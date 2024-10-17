@@ -1,5 +1,7 @@
 ﻿using HarmonyLib;
+using Mono.Cecil.Cil;
 using Photon.Pun;
+using SpookSuite.Cheats;
 using SpookSuite.Cheats.Core;
 using SpookSuite.Components;
 using SpookSuite.Handler;
@@ -121,12 +123,12 @@ namespace SpookSuite
         }
 
         public void OnGUI()
-        {
+        { 
             try
             {
                 if (Event.current.type == EventType.Repaint)
                 {
-                    VisualUtil.DrawString(new Vector2(5f, 2f), "SpookSuite", new RGBAColor(128, 0, 255, 1f), centered: false, bold: true, fontSize: 16);
+                    VisualUtil.DrawString(new Vector2(5f, 2f), "SpookSuite| " + "Open / Close: " + Cheat.Instance<ToggleMenuCheat>().keybind.ToString() + ", Reset: " + Cheat.Instance<ResetMenu>().keybind.ToString(), new RGBAColor(128, 0, 255, 1f), centered: false, bold: true, fontSize: 16);
 
                     if (MenuUtil.resizing)
                     {
