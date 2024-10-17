@@ -78,7 +78,7 @@ namespace SpookSuite.Menu.Tab
                 UI.Header("SpookSuite Specialty");
                 //add things that we could do to our users for fun, maybe disabling something in their menu?
                 UI.Button("WASSUP", () => { });           
-            }     
+            }
 
             UI.Header("Selected Player Actions");
 
@@ -88,9 +88,9 @@ namespace SpookSuite.Menu.Tab
 
             if (!Player.localPlayer.Handle().IsDev() && selectedPlayer.Handle().IsDev())
             {
-                UI.Label("User IS Dev So You Cant Do Anything :(");
+                UI.Label("User IS Dev So You Cant Do Anything :)");
                 return;
-            }
+            } 
 
             if (!selectedPlayer.IsLocal)
                 UI.Button("Block RPCs", () => selectedPlayer.Handle().ToggleRPCBlock(), selectedPlayer.Handle().IsRPCBlocked() ? "UnBlock" : "Block");
@@ -122,10 +122,9 @@ namespace SpookSuite.Menu.Tab
             UI.Button("Send Away", () => ShadowRealmHandler.instance.TeleportPlayerToRandomRealm(selectedPlayer));
             UI.HorizontalSpace("Limbo", () => 
             {
-                UI.Button("Add To Limbo", () => Limbo.limboList.Add(selectedPlayer)); 
-                UI.Button("Remove From Limbo", () => Limbo.limboList.Remove(selectedPlayer));
+                UI.Button("Add To Limbo", () => { if (!Limbo.limboList.Contains(selectedPlayer)) Limbo.limboList.Add(selectedPlayer); Log.Info(Limbo.limboList.Count); }); 
+                UI.Button("Remove From Limbo", () => { Limbo.limboList.Remove(selectedPlayer); Log.Info(Limbo.limboList.Count); });
             });
-
 
             UI.Header("Hat Stuff", true);
             UI.Button("Remove Hat", () => selectedPlayer.refs.view.RPC("RPCA_EquipHat", RpcTarget.All, -1));

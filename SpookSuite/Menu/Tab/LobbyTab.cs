@@ -38,30 +38,30 @@ namespace SpookSuite.Menu.Tab
         {
             float width = SpookSuiteMenu.Instance.contentWidth * 0.3f - SpookSuiteMenu.Instance.spaceFromLeft * 2;
             float height = SpookSuiteMenu.Instance.contentHeight - 20;
+            //fuck this shit, idc about it at all
+            //UI.Button("Refresh", () => {
+            //    lobbyList.Clear();
+            //    matchList = CallResult<LobbyMatchList_t>.Create(new CallResult<LobbyMatchList_t>.APIDispatchDelegate(MatchListReceived));
+            //    matchList.Set(SteamMatchmaking.RequestLobbyList());
+            //}, null);
 
-            UI.Button("Refresh", () => {
-                lobbyList.Clear();
-                matchList = CallResult<LobbyMatchList_t>.Create(new CallResult<LobbyMatchList_t>.APIDispatchDelegate(MatchListReceived));
-                matchList.Set(SteamMatchmaking.RequestLobbyList());
-            }, null);
+            //Rect rect = new Rect(0, 30, width, height);
+            //GUI.Box(rect, "Lobby List");
 
-            Rect rect = new Rect(0, 0, width, height);
-            GUI.Box(rect, "Lobby List");
-
-            GUILayout.BeginVertical(GUILayout.Width(width), GUILayout.Height(height));
+            //GUILayout.BeginVertical(GUILayout.Width(width), GUILayout.Height(height));
             
-            GUILayout.Space(25);
-            UI.ScrollView(ref scrollPos2, () => {
-                foreach (CSteamID lobby in lobbyList)
-                {
-                    if (!lobby.IsValid()) selectedLobby = lobby;
-                    if (selectedLobby.m_SteamID == lobby.m_SteamID) GUI.contentColor = Settings.c_espPlayers.GetColor();
-                    if (GUILayout.Button($"{SteamMatchmaking.GetNumLobbyMembers(lobby)}/{SteamMatchmaking.GetLobbyMemberLimit(lobby)}" + (SteamMatchmaking.GetLobbyData(lobby, "PrivateMatch").Equals("true") ? "Private" : ""), GUI.skin.label)) selectedLobby = lobby;
+            //GUILayout.Space(25);
+            //UI.ScrollView(ref scrollPos2, () => {
+            //    foreach (CSteamID lobby in lobbyList)
+            //    {
+            //        if (!lobby.IsValid()) selectedLobby = lobby;
+            //        if (selectedLobby.m_SteamID == lobby.m_SteamID) GUI.contentColor = Settings.c_espPlayers.GetColor();
+            //        if (GUILayout.Button($"{SteamMatchmaking.GetNumLobbyMembers(lobby)}/{SteamMatchmaking.GetLobbyMemberLimit(lobby)}" + (SteamMatchmaking.GetLobbyData(lobby, "PrivateMatch").Equals("true") ? "Private" : ""), GUI.skin.label)) selectedLobby = lobby;
 
-                    GUI.contentColor = Settings.c_menuText.GetColor();
-                }
-            });
-            GUILayout.EndVertical();
+            //        GUI.contentColor = Settings.c_menuText.GetColor();
+            //    }
+            //});
+            //GUILayout.EndVertical();
         }
 
         private void LobbyActions()

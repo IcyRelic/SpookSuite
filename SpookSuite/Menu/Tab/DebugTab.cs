@@ -46,6 +46,12 @@ namespace SpookSuite.Menu.Tab
         {
             scrollPos = GUILayout.BeginScrollView(scrollPos);
 
+            if (!Player.localPlayer.Handle().IsDev())
+            {
+                UI.Header("WARNING! \n Expect nothing in this tab to work. This tab is for the developers to test shit. Do not complain about anything here not working. \nThank You", true);
+                GUI.Box(new Rect(0, 73, SpookSuiteMenu.Instance.contentWidth, -5), "");
+            }
+
             UI.Header("Debugging Info");
 
             if (PhotonNetwork.InRoom)
