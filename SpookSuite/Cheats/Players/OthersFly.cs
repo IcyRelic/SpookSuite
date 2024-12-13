@@ -25,8 +25,8 @@ namespace SpookSuite.Cheats
                 if (p.input.movementInput.y < 0) input -= p.refs.cameraPos.forward * Value;
                 if (p.input.movementInput.x > 0) input += p.refs.cameraPos.right * Value;
                 if (p.input.movementInput.x < 0) input -= p.refs.cameraPos.right * Value;
-                if (p.input.jumpIsPressed) input += p.refs.cameraPos.up * Value;
-                if (p.input.crouchIsPressed) input -= p.refs.cameraPos.up * Value;
+                if (p.input.jumpWasPressed) input += p.refs.cameraPos.up * Value;
+                if (p.input.crouchWasPressed) input -= p.refs.cameraPos.up * Value;
 
                 if (input.Equals(Vector3.zero))
                     return;

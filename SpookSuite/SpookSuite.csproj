@@ -38,6 +38,12 @@
     <Reference Include="Assembly-CSharp">
       <HintPath>Resources\BaseGame\Assembly-CSharp.dll</HintPath>
     </Reference>
+    <Reference Include="LocalizationAssembly">
+      <HintPath>Resources\BaseGame\LocalizationAssembly.dll</HintPath>
+    </Reference>
+    <Reference Include="ModalAssembly">
+      <HintPath>Resources\BaseGame\ModalAssembly.dll</HintPath>
+    </Reference>
     <Reference Include="com.rlabrecque.steamworks.net">
       <HintPath>..\..\..\..\SteamLibrary\steamapps\common\Content Warning\Content Warning_Data\Managed\com.rlabrecque.steamworks.net.dll</HintPath>
     </Reference>
